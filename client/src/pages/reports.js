@@ -63,8 +63,11 @@ export class Reports extends Component {
     // console.log(value)
     this.setState({ current: value });
     console.log(this.state.current);
-    console.log(value)
+    console.log(this.state.file)
+
+    if(this.state.file == null) this.setState({hidden : true})
     // this.setState({ hidden2: true });
+    else
     this.setState({ hidden: value !== 0 ? true : false });
 
   };
@@ -419,7 +422,8 @@ export class Reports extends Component {
 
                                 ]}
                                 layout={{
-                                  width: 1000, height: 700, title: 'SALES',
+                                  //width: 1000, height: 700, 
+                                  title: 'SALES',
                                   xaxis: {
                                     title: 'date(Monthly)',
                                   },
