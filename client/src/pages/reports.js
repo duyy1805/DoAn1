@@ -29,7 +29,7 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
-import { Steps } from 'antd';
+import { Steps, Descriptions } from 'antd';
 const Plot = createPlotlyComponent(Plotly);
 
 const buttonRef = React.createRef();
@@ -65,10 +65,10 @@ export class Reports extends Component {
     console.log(this.state.current);
     console.log(this.state.file)
 
-    if(this.state.file == null) this.setState({hidden : true})
+    if (this.state.file == null) this.setState({ hidden: true })
     // this.setState({ hidden2: true });
     else
-    this.setState({ hidden: value !== 0 ? true : false });
+      this.setState({ hidden: value !== 0 ? true : false });
 
   };
   handleOpenDialog = (e) => {
@@ -172,25 +172,25 @@ export class Reports extends Component {
     this.setState({ data: data })
     // console.log(this.state.data)
     Papa.parse(file, {
-        header : true,
-        skipEmptyLines: true,
-        complete: function(result) {
-          const columnArray = [];
-          const valueArray = [];
-          result.data.map((d)=> {
-              columnArray.push(Object.keys(d))
-              valueArray.push(Object.values(d))
-          });
-          // console.log(result.data)
-          console.log(columnArray[0][1])
-        }
+      header: true,
+      skipEmptyLines: true,
+      complete: function (result) {
+        const columnArray = [];
+        const valueArray = [];
+        result.data.map((d) => {
+          columnArray.push(Object.keys(d))
+          valueArray.push(Object.values(d))
+        });
+        // console.log(result.data)
+        console.log(columnArray[0][1])
+      }
     })
     var years = []
     var xx = ''
     this.state.data.map((element, index) => {
       if (index > 0)
         years.push(element.data[0])
-      else 
+      else
         xx = element.data.length
     })
     console.log(xx)
@@ -302,14 +302,14 @@ export class Reports extends Component {
         <Helmet>
           <title>Dashboard</title>
         </Helmet>
-        <div style={{ display: 'flex' }}>
-          <div style={{ width: '30%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ display: 'flex', marginLeft:'200px',marginRight:'200px' }}>
+          <div style={{flex:' 1 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Divider />
             <Steps
               current={this.state.current}
               onChange={this.onChange}
               direction="vertical"
-              style={{ width: '50%', marginTop: "100px" }}
+              style={{ marginTop: "100px" }}
               items={[
                 {
                   title: 'Step 1',
@@ -330,13 +330,15 @@ export class Reports extends Component {
               ]}
             />
           </div>
+          <div style={{flex:'5 0 0'}}>
           <LoadingOverlay
+            styles={{display:'none'}}
             active={!this.state.hidden2}
             spinner
             text='applying ARIMA and RNN algorithms'
           >
 
-            <Container maxWidth='lg'>
+            <Container >
               <Box
                 sx={{
                   backgroundColor: 'background.default',
@@ -394,8 +396,8 @@ export class Reports extends Component {
                 </Box>
                 <Box sx={{ m: 3, display: this.state.hidden ? 'none' : 'block', }}>
                   <Card>
-                    <CardContent>                      
-                      <Box sx={{ maxWidth: 1000 }}>
+                    <CardContent>
+                      <Box >
                         <Box sx={{ m: 3 }} display="flex" justifyContent="center">
                           <Grid
                             container
@@ -478,6 +480,15 @@ export class Reports extends Component {
                       </Box>
                     </CardContent>
                     <Divider />
+                    <Descriptions title="User Info">
+                      <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
+                      <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
+                      <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
+                      <Descriptions.Item label="Remark">empty</Descriptions.Item>
+                      <Descriptions.Item label="Address">
+                        No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
+                      </Descriptions.Item>
+                    </Descriptions>
                   </Card>
                 </Box>
                 {/* <Box sx={{ m: 3, display: this.state.hidden ? 'none' : 'block', }}>
@@ -612,6 +623,8 @@ export class Reports extends Component {
               </Box>
             </Container>
           </LoadingOverlay>
+          </div>
+         
         </div>
       </>
     );

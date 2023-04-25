@@ -28,7 +28,8 @@ const DashboardLayoutContent = styled('div')({
   display: 'flex',
   flex: '1 1 auto',
   flexDirection: 'column',
-  overflow: 'auto'
+  overflow: 'auto',
+  boxSizing:'border-box'
 });
 
 export const Layout = () => (
