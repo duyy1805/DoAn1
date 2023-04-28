@@ -29,7 +29,8 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
-import { Steps, Descriptions } from 'antd';
+import { Steps, Descriptions, Row, Col } from 'antd';
+import Step1 from './Step1';
 const Plot = createPlotlyComponent(Plotly);
 
 const buttonRef = React.createRef();
@@ -57,25 +58,40 @@ export class Reports extends Component {
     activeStep: 0,
     skipped: new Set(),
     current: 0,
+    column: [],
+    timeColumn: null,
+    dataColumn: null,
+    filename: '',
   }
 
   onChange = (value) => {
-    // console.log(value)
     this.setState({ current: value });
-    console.log(this.state.current);
-    console.log(this.state.file)
 
     if (this.state.file == null) this.setState({ hidden: true })
-    // this.setState({ hidden2: true });
     else
       this.setState({ hidden: value !== 0 ? true : false });
 
   };
   handleOpenDialog = (e) => {
+    console.log(e)
     if (buttonRef.current) {
       buttonRef.current.open(e);
     }
   };
+
+  handleSelectData = (event) => {
+    console.log(event.target.value)
+    this.setState({ dataColumn: event.target.value }, () => {
+      console.log(this.state.dataColumn)
+    })
+
+  }
+
+  handleSelectTime = (event) => {
+    console.log(event.target.value)
+    this.setState({ timeColumn: event.target.value })
+  }
+
   handleSelectChanege = (event) => {
     this.setState({ predicted: this.state.sales4[event.target.value].toFixed(2) })
     this.setState({ selectedDate: this.state.yearsx[event.target.value] })
@@ -89,7 +105,6 @@ export class Reports extends Component {
   handleOnFileLoad = (data, file) => {
     this.setState({ hidden2: false, file: file });
     var sales2, sales3, sales4
-    // console.log(this.state.file)
     const formData = new FormData();
     formData.append('test', 'test');
     formData.append('file', file, 'file.csv')
@@ -167,33 +182,65 @@ export class Reports extends Component {
 
   handleOnFileLoad1 = (data, file) => {
     this.setState({ file: file });
-    var sales2, sales3, sales4
-    console.log(this.state.file)
-    this.setState({ data: data })
-    // console.log(this.state.data)
+    console.log(file['name'])
+    this.setState({ filename: file['name'] })
+
+    var sales2, sales3, sales4;
+    this.setState({ data: data });
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
-      complete: function (result) {
+      complete: (result) => {
         const columnArray = [];
         const valueArray = [];
         result.data.map((d) => {
           columnArray.push(Object.keys(d))
           valueArray.push(Object.values(d))
         });
-        // console.log(result.data)
-        console.log(columnArray[0][1])
+        this.setState({ column: columnArray[0] });
+        console.log(this.state.column);
       }
     })
+    // var years = []
+    // var xx = ''
+    // this.state.data.map((element, index) => {
+    //   if (index > 0)
+    //     years.push(element.data[0])
+    //   else
+    //     xx = element.data.length
+    // })
+    // console.log(xx)
+
+    // this.setState({ years: years })
+
+    // var years2 = years.filter((item, index) => { return index > 84 })
+    // this.setState({ years2: years2 })
+
+    // var years3 = years.filter((item, index) => { return index > 92 })
+    // this.setState({ years3: years3 })
+
+
+
+    // var sales = []
+    // this.state.data.map((element, index) => {
+    //   if (index > 0)
+    //     sales.push(element.data[1])
+    // })
+    // this.setState({ sales: sales })
+    // this.setState({ hidden: false });
+
+  };
+
+  handleOnFileLoad2 = () => {
+    console.log(this.state.data)
     var years = []
     var xx = ''
     this.state.data.map((element, index) => {
       if (index > 0)
-        years.push(element.data[0])
+        years.push(element.data[this.state.timeColumn])
       else
-        xx = element.data.length
+        xx = element.data
     })
-    console.log(xx)
 
     this.setState({ years: years })
 
@@ -208,9 +255,10 @@ export class Reports extends Component {
     var sales = []
     this.state.data.map((element, index) => {
       if (index > 0)
-        sales.push(element.data[1])
+        sales.push(element.data[this.state.dataColumn])
     })
-    this.setState({ sales: sales })
+    console.log(this.state.dataColumn)
+    this.setState({ sales: sales }, () => console.log(sales))
     this.setState({ hidden: false });
 
   };
@@ -302,8 +350,8 @@ export class Reports extends Component {
         <Helmet>
           <title>Dashboard</title>
         </Helmet>
-        <div style={{ display: 'flex', marginLeft:'200px',marginRight:'200px' }}>
-          <div style={{flex:' 1 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ display: 'flex', marginLeft: '200px', marginRight: '200px' }}>
+          <div style={{ flex: ' 1 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Divider />
             <Steps
               current={this.state.current}
@@ -330,168 +378,258 @@ export class Reports extends Component {
               ]}
             />
           </div>
-          <div style={{flex:'5 0 0'}}>
-          <LoadingOverlay
-            styles={{display:'none'}}
-            active={!this.state.hidden2}
-            spinner
-            text='applying ARIMA and RNN algorithms'
-          >
+          <Step1 test={this.test} hidden={this.state.hidden}
+            selectedDate={this.state.selectedDate}
+            predicted={this.state.predicted}
+            hidden={this.state.hidden}
+            hidden2={this.state.hidden2}
+            hidden3={this.state.hidden3}
+            file={this.state.file}
+            data={this.state.data}
+            years={this.state.years}
+            yearsx={this.state.yearsx}
+            sales={this.state.sales}
+            sales2={this.state.sales2}
+            column={this.state.column}
+            selectedDate={this.state.selectedDate}
+            buttonRef={buttonRef}
+            timeColumn={this.state.timeColumn}
+            dataColumn={this.state.dataColumn}
+            handleSelectData={this.handleSelectData}
+            handleSelectTime={this.handleSelectTime}
+            handleOpenDialog={this.handleOpenDialog}
+            handleOnFileLoad1={this.handleOnFileLoad1}
+            handleOnFileLoad2={this.handleOnFileLoad2}
+            handleOnError={this.handleOnError}
+            handleOnRemoveFile={this.handleOnRemoveFile}
+            filename={this.state.filename}></Step1 >
+          {/* <div style={{ flex: '5 0 0' }}>
+            <LoadingOverlay
+              styles={{ display: 'none' }}
+              active={!this.state.hidden2}
+              spinner
+              text='applying ARIMA and RNN algorithms'
+            >
 
-            <Container >
-              <Box
-                sx={{
-                  backgroundColor: 'background.default',
-                  minHeight: '100%',
+              <Container >
+                <Box
+                  sx={{
+                    backgroundColor: 'background.default',
+                    minHeight: '100%',
 
-                }}
-              >
-                <Box >
-                  <Card sx={{ m: 0 }} >
-                    <CardContent >
-                      <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1 }}>
-                        Time Series Forecasting using ARIMA & RNN
-                      </Typography>
+                  }}
+                >
+                  <Box >
+                    <Card sx={{ m: 0 }} >
+                      <CardContent >
+                        <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1 }}>
+                          Time Series Forecasting using ARIMA & RNN
+                        </Typography>
 
-                      <Divider />
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          p: 2,
-                        }}
-                      >
-
-                        <CSVReader
-                          ref={buttonRef}
-                          onFileLoad={this.handleOnFileLoad1}
-                          onError={this.handleOnError}
-                          noClick
-                          noDrag
-                          onRemoveFile={this.handleOnRemoveFile}
-                        >
-                          {({ file }) => (
-                            <aside
-                              style={{
+                        <Divider />
+                        <div className='import-container' >
+                          <Row>
+                            <Col span={4} offset={10}><Box className='import-button'
+                              sx={{
                                 display: 'flex',
-                                flexDirection: 'row',
-                                marginBottom: 10,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                p: 2,
                               }}
                             >
-                              <Button
-                                color="primary"
-                                variant="contained"
-                                onClick={this.handleOpenDialog}
 
+                              <CSVReader
+                                ref={buttonRef}
+                                onFileLoad={this.handleOnFileLoad1}
+                                onError={this.handleOnError}
+                                noClick
+                                noDrag
+                                onRemoveFile={this.handleOnRemoveFile}
                               >
-                                Import CSV file
-                              </Button>
-                            </aside>
-                          )}
-                        </CSVReader>
-                      </Box>
+                                {({ file }) => (
+                                  <aside
+                                    style={{
+                                      display: 'flex',
+                                      flexDirection: 'row',
+                                      // marginBottom: 10,
+                                    }}
+                                  >
+                                    <Button
+                                      color="primary"
+                                      variant="contained"
+                                      onClick={this.handleOpenDialog}
 
-                    </CardContent>
-                  </Card>
-                </Box>
-                <Box sx={{ m: 3, display: this.state.hidden ? 'none' : 'block', }}>
-                  <Card>
-                    <CardContent>
-                      <Box >
-                        <Box sx={{ m: 3 }} display="flex" justifyContent="center">
-                          <Grid
-                            container
-                            spacing={0}
-                            direction="column"
-                            alignItems="center"
-                            justify="center"
-                          >
-                            <div>
-                              <Plot
-                                data={[
-                                  {
-                                    type: "scatter",
-                                    mode: "lines",
-                                    name: 'sales before prediction ',
-                                    x: this.state.years,
-                                    y: this.state.sales,
-                                    line: { color: '#17BECF' }
-                                  }
-                                  // ,
-                                  // arima_graph,
-                                  // rnn_graph
+                                    >
+                                      Import CSV file
+                                    </Button>
+                                  </aside>
+                                )}
+                              </CSVReader>
+
+                            </Box></Col>
+                            <Col ><div className='file-name' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{this.state.filename}</div></Col>
+                          </Row>
+                        </div>
 
 
-                                ]}
-                                layout={{
-                                  //width: 1000, height: 700, 
-                                  title: 'SALES',
-                                  xaxis: {
-                                    title: 'date(Monthly)',
-                                  },
-                                  yaxis: {
-                                    title: 'Time series data'
-                                  },
-                                }}
-                              />
-                            </div>
-                          </Grid>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            p: 2
+                          }}
+                        >
+                          <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <InputLabel id="time-InputLabel">Time</InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={this.state.column[this.state.timeColumn]}
+                              label="Age"
+
+                              onChange={this.handleSelectTime}
+                            >
+
+                              {this.state.column.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
+
+                            </Select>
+                            <FormHelperText>Select a time column</FormHelperText>
+                          </FormControl>
+                          <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <InputLabel id="data-InputLabel">Data</InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={this.state.column[this.state.dataColumn]}
+                              label="Age"
+
+                              onChange={this.handleSelectData}
+                            >
+
+                              {this.state.column.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
+
+                            </Select>
+                            <FormHelperText>Select a data column</FormHelperText>
+                          </FormControl>
                         </Box>
-                      </Box>
+                        <aside
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            // marginBottom: 10,
+                          }}
+                        >
+                          <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={this.handleOnFileLoad2}
 
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          p: 2
-                        }}
-                      >
-                        <FormControl sx={{ m: 1, minWidth: 120 }}>
-                          <InputLabel id="demo-simple-select-helper-label">select</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={this.state.selectedDate}
-                            label="Age"
-
-                            onChange={this.handleSelectChanege}
                           >
+                            Run
+                          </Button>
+                        </aside>
+                      </CardContent>
+                    </Card>
+                  </Box>
+                  <Box sx={{ m: 3, display: this.state.hidden ? 'none' : 'block', }}>
+                    <Card>
+                      <CardContent>
+                        <Box >
+                          <Box sx={{ m: 3 }} display="flex" justifyContent="center">
+                            <Grid
+                              container
+                              spacing={0}
+                              direction="column"
+                              alignItems="center"
+                              justify="center"
+                            >
+                              <div>
+                                <Plot
+                                  data={[
+                                    {
+                                      type: "scatter",
+                                      mode: "lines",
+                                      name: 'sales before prediction ',
+                                      x: this.state.years,
+                                      y: this.state.sales,
+                                      line: { color: '#17BECF' }
+                                    }
+                                    // ,
+                                    // arima_graph,
+                                    // rnn_graph
 
-                            {this.state.yearsx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
 
-                          </Select>
-                          <FormHelperText>select a date to make prediction</FormHelperText>
-                        </FormControl>
+                                  ]}
+                                  layout={{
+                                    //width: 1000, height: 700, 
+                                    title: 'SALES',
+                                    xaxis: {
+                                      title: 'date(Monthly)',
+                                    },
+                                    yaxis: {
+                                      title: 'Time series data'
+                                    },
+                                  }}
+                                />
+                              </div>
+                            </Grid>
+                          </Box>
+                        </Box>
 
-                      </Box>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            p: 2
+                          }}
+                        >
+                          <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <InputLabel id="demo-simple-select-helper-label">select</InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={this.state.selectedDate}
+                              label="Age"
 
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          p: 2
-                        }}
-                      >
-                        {this.state.predicted !== null &&
-                          <h3> The predicted sale is  for {this.state.selectedDate} is :
-                            {'  ' + this.state.predicted + ' DA'}
-                          </h3>
-                        }
-                      </Box>
-                    </CardContent>
-                    <Divider />
-                    <Descriptions title="User Info">
-                      <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
-                      <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
-                      <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
-                      <Descriptions.Item label="Remark">empty</Descriptions.Item>
-                      <Descriptions.Item label="Address">
-                        No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
-                      </Descriptions.Item>
-                    </Descriptions>
-                  </Card>
-                </Box>
-                {/* <Box sx={{ m: 3, display: this.state.hidden ? 'none' : 'block', }}>
+                              onChange={this.handleSelectChanege}
+                            >
+
+                              {this.state.yearsx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
+
+                            </Select>
+                            <FormHelperText>select a date to make prediction</FormHelperText>
+                          </FormControl>
+
+                        </Box>
+
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            p: 2
+                          }}
+                        >
+                          {this.state.predicted !== null &&
+                            <h3> The predicted sale is  for {this.state.selectedDate} is :
+                              {'  ' + this.state.predicted + ' DA'}
+                            </h3>
+                          }
+                        </Box>
+                      </CardContent>
+                      <Divider />
+                      <Descriptions title="User Info">
+                        <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
+                        <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
+                        <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
+                        <Descriptions.Item label="Remark">empty</Descriptions.Item>
+                        <Descriptions.Item label="Address">
+                          No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </Card>
+                  </Box> */}
+          {/* <Box sx={{ m: 3, display: this.state.hidden ? 'none' : 'block', }}>
                   <Card>
                     <CardContent>
                       <Box
@@ -620,11 +758,12 @@ export class Reports extends Component {
 
 
 
-              </Box>
-            </Container>
-          </LoadingOverlay>
-          </div>
-         
+          {/* </Box>
+              </Container>
+            </LoadingOverlay>
+
+          </div> */}
+
         </div>
       </>
     );
