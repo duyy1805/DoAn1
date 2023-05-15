@@ -38,6 +38,7 @@ export class Reports extends Component {
   state = {
     selectedDate: '',
     predicted: null,
+    hidden0: false,
     hidden: true,
     hidden2: true,
     hidden3: true,
@@ -70,7 +71,9 @@ export class Reports extends Component {
     if (this.state.file == null) this.setState({ hidden: true })
     else
       this.setState({ hidden: value !== 0 ? true : false });
-
+    if (value !== 0) this.setState({ hidden0: true })
+    else
+      this.setState({ hidden0: false });
   };
   handleOpenDialog = (e) => {
     console.log(e)
@@ -181,6 +184,12 @@ export class Reports extends Component {
   };
 
   handleOnFileLoad1 = (data, file) => {
+    this.setState({ data: data })
+    var years = []
+    this.state.data.map((element, index) => {
+      if (index > 0)
+        years.push(element.data[0])
+    })
     this.setState({ file: file });
     console.log(file['name'])
     this.setState({ filename: file['name'] })
@@ -232,6 +241,56 @@ export class Reports extends Component {
   };
 
   handleOnFileLoad2 = () => {
+    var sales2, sales3, sales4
+    const formData = new FormData();
+    formData.append('test', 'test');
+    formData.append('timeColumn', this.state.timeColumn);
+    formData.append('dataColumn', this.state.dataColumn);
+    formData.append('file', this.state.file, 'file.csv')
+    axios({
+      method: 'post',
+      url: 'http://127.0.0.1:8000/file',
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+      .then((response) => {
+
+        sales2 = Object.values(JSON.parse(response.data.data1).predicted_sales)
+
+        sales3 = Object.values(JSON.parse(response.data.data2).Predictions)
+        sales4 = Object.values(JSON.parse(response.data.data3).predicted_sales)
+
+        this.setState({ sales2: sales2, sales3: sales3, sales4: sales4 })
+        var yearsx = []
+        var int = 10
+        var y = "2021-"
+        sales4.map((element, index) => {
+
+
+          if (int > 12) {
+            y = "2022-"
+            int = 1
+            yearsx.push(y + int)
+
+          }
+          else {
+            yearsx.push(y + int)
+          }
+
+          int = int + 1
+        })
+
+
+        console.log(yearsx)
+
+        this.setState({ yearsx: yearsx });
+        this.setState({ hidden2: true });
+        this.setState({ hidden: false });
+      })
+      .catch((response) => {
+        //handle error
+        console.log(response);
+      });
     console.log(this.state.data)
     var years = []
     var xx = ''
@@ -378,10 +437,11 @@ export class Reports extends Component {
               ]}
             />
           </div>
-          <Step1 test={this.test} hidden={this.state.hidden}
+          <Step1 test={this.test}
             selectedDate={this.state.selectedDate}
             predicted={this.state.predicted}
             hidden={this.state.hidden}
+            hidden0={this.state.hidden0}
             hidden2={this.state.hidden2}
             hidden3={this.state.hidden3}
             file={this.state.file}
@@ -391,7 +451,6 @@ export class Reports extends Component {
             sales={this.state.sales}
             sales2={this.state.sales2}
             column={this.state.column}
-            selectedDate={this.state.selectedDate}
             buttonRef={buttonRef}
             timeColumn={this.state.timeColumn}
             dataColumn={this.state.dataColumn}

@@ -32,7 +32,7 @@ import { number } from 'prop-types';
 import { Steps, Descriptions, Row, Col } from 'antd';
 const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
-  const { hidden, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
+  const { hidden, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
     handleOpenDialog, buttonRef, handleSelectTime, predicted,
     selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, handleOnFileLoad2, handleSelectData } = props;
   useEffect(() => { console.log(hidden2); console.log(buttonRef) }, []);
@@ -53,7 +53,7 @@ const Step1 = (props) => {
 
             }}
           >
-            <Box >
+            <Box sx={{ m: 3, display: hidden0 ? 'none' : 'block', }}>
               <Card sx={{ m: 0 }} >
                 <CardContent >
                   <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1 }}>
@@ -61,7 +61,7 @@ const Step1 = (props) => {
                   </Typography>
 
                   <Divider />
-                  <div className='import-container' >
+                  <div className='import-container' style={{}}>
                     <Row>
                       <Col span={4} offset={10}><Box className='import-button'
                         sx={{
@@ -101,7 +101,7 @@ const Step1 = (props) => {
                         </CSVReader>
 
                       </Box></Col>
-                      <Col ><div className='file-name' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{filename}</div></Col>
+                      <Col style={{ display: 'flex' }}><div className='file-name' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{filename}</div></Col>
                     </Row>
                   </div>
 
@@ -211,7 +211,7 @@ const Step1 = (props) => {
                     </Box>
                   </Box>
 
-                  <Box
+                  {/* <Box
                     sx={{
                       display: 'flex',
                       justifyContent: 'center',
@@ -249,10 +249,10 @@ const Step1 = (props) => {
                         {'  ' + predicted + ' DA'}
                       </h3>
                     }
-                  </Box>
+                  </Box> */}
                 </CardContent>
                 <Divider />
-                <Descriptions title="User Info">
+                <Descriptions title="Visualization">
                   <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
                   <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
                   <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
