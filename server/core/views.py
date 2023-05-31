@@ -6,7 +6,7 @@ from rest_framework import views
 from rest_framework import permissions
 from rest_framework.parsers import FileUploadParser, FormParser, MultiPartParser
 from rest_framework.views import APIView
-from .models import Sales, Client, Employee
+from .models import Times, Client, Employee
 from .serializers import SalesSerializer, ClientSerializer, EmployeeSerializer
 
 
@@ -30,7 +30,7 @@ class EmployeeView(viewsets.ModelViewSet):
 
 
 class SalesView(viewsets.ModelViewSet):
-    queryset = Sales.objects.all()
+    queryset = Times.objects.all()
     serializer_class = SalesSerializer
     allowed_methods = ['post']
 
@@ -43,16 +43,16 @@ class FileUploadView(views.APIView):
         file_obj = request.data['file']
         print(filename)
         print(request.data['test'])
-        sales = read_csv(file_obj)
+        values = read_csv(file_obj)
 
-        sales['Month'] = pd.to_datetime(sales['Month'], errors='coerce')
-        sales.set_index('Month', inplace=True)
+        values['Month'] = pd.to_datetime(values['Month'], errors='coerce')
+        values.set_index('Month', inplace=True)
 
         adf_test = ADFTest(alpha=0.05)
-        adf_test.should_diff(sales)
+        adf_test.should_diff(values)
 
         from sklearn.model_selection import train_test_split
-        train, test = train_test_split(sales, test_size=0.2, shuffle=False)
+        train, test = train_test_split(values, test_size=0.2, shuffle=False)
 
         arima_model = auto_arima(train, start_p=0, d=1, start_q=0,
                                  max_p=5, max_d=5, max_q=5, start_P=0,
@@ -75,8 +75,8 @@ class FileUploadView(views.APIView):
 
         ################################################################################
 
-        rnn_train = sales[:93]
-        rnn_test = sales[93:]
+        rnn_train = values[:93]
+        rnn_test = values[93:]
 
         from sklearn.preprocessing import MinMaxScaler
         scaler = MinMaxScaler()
@@ -143,24 +143,24 @@ class FileUpload(views.APIView):
     def post(self, request, format=None):
         file_obj = request.data['file']
 
-        sales = read_csv(file_obj)
+        values = read_csv(file_obj)
 
-        sales['Month'] = pd.to_datetime(sales['Month'], errors='coerce')
-        sales.set_index('Month', inplace=True)
+        values['Month'] = pd.to_datetime(values['Month'], errors='coerce')
+        values.set_index('Month', inplace=True)
 
         adf_test = ADFTest(alpha=0.05)
-        adf_test.should_diff(sales)
+        adf_test.should_diff(values)
 
-        # from sklearn.model_selection import train_test_split
-        # train, test = train_test_split(sales, test_size=0.2, shuffle=False)
+        from sklearn.model_selection import train_test_split
+        train, test = train_test_split(values, test_size=0.2, shuffle=False)
 
-        # arima_model = auto_arima(train, start_p=0, d=1, start_q=0,
-        #                          max_p=5, max_d=5, max_q=5, start_P=0,
-        #                          D=1, start_Q=0, max_P=5, max_D=5,
-        #                          max_Q=5, m=12, seasonal=True,
-        #                          error_action='warn', trace=True,
-        #                          supress_warnings=True, stepwise=True,
-        #                          random_state=20, n_fits=50)
+        arima_model = auto_arima(train, start_p=0, d=1, start_q=0,
+                                 max_p=5, max_d=5, max_q=5, start_P=0,
+                                 D=1, start_Q=0, max_P=5, max_D=5,
+                                 max_Q=5, m=12, seasonal=True,
+                                 error_action='warn', trace=True,
+                                 supress_warnings=True, stepwise=True,
+                                 random_state=20, n_fits=50)
 
         # prediction = pd.DataFrame(
         #     arima_model.predict(n_periods=21), index=test.index)
@@ -175,8 +175,8 @@ class FileUpload(views.APIView):
 
         # ################################################################################
 
-        # rnn_train = sales[:93]
-        # rnn_test = sales[93:]
+        # rnn_train = values[:93]
+        # rnn_test = values[93:]
 
         # from sklearn.preprocessing import MinMaxScaler
         # scaler = MinMaxScaler()

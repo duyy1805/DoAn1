@@ -50,7 +50,7 @@ export class Reports extends Component {
     data3: null,
     years: [],
     yearsx: [],
-    sales: [],
+    values: [],
     years2: [],
     years3: [],
     sales2: [],
@@ -174,12 +174,12 @@ export class Reports extends Component {
 
 
 
-    var sales = []
+    var values = []
     this.state.data.map((element, index) => {
       if (index > 0)
-        sales.push(element.data[1])
+        values.push(element.data[1])
     })
-    this.setState({ sales: sales })
+    this.setState({ values: values })
 
   };
 
@@ -230,12 +230,12 @@ export class Reports extends Component {
 
 
 
-    // var sales = []
+    // var values = []
     // this.state.data.map((element, index) => {
     //   if (index > 0)
-    //     sales.push(element.data[1])
+    //     values.push(element.data[1])
     // })
-    // this.setState({ sales: sales })
+    // this.setState({ values: values })
     // this.setState({ hidden: false });
 
   };
@@ -311,13 +311,13 @@ export class Reports extends Component {
 
 
 
-    var sales = []
+    var values = []
     this.state.data.map((element, index) => {
       if (index > 0)
-        sales.push(element.data[this.state.dataColumn])
+        values.push(element.data[this.state.dataColumn])
     })
     console.log(this.state.dataColumn)
-    this.setState({ sales: sales }, () => console.log(sales))
+    this.setState({ values: values }, () => console.log(values))
     this.setState({ hidden: false });
 
   };
@@ -366,7 +366,7 @@ export class Reports extends Component {
       this.state.arima ? {
         type: "scatter",
         mode: "lines",
-        name: 'sales after prediction Arima ',
+        name: 'values after prediction Arima ',
         x: this.state.years2,
         y: this.state.sales2,
         line: { color: '#FF0000' }
@@ -383,7 +383,7 @@ export class Reports extends Component {
       this.state.rnn ? {
         type: "scatter",
         mode: "lines",
-        name: 'sales after prediction RNN',
+        name: 'values after prediction RNN',
         x: this.state.years3,
         y: this.state.sales3,
         line: { color: '#0000FF' }
@@ -448,7 +448,7 @@ export class Reports extends Component {
             data={this.state.data}
             years={this.state.years}
             yearsx={this.state.yearsx}
-            sales={this.state.sales}
+            values={this.state.values}
             sales2={this.state.sales2}
             column={this.state.column}
             buttonRef={buttonRef}
@@ -609,9 +609,9 @@ export class Reports extends Component {
                                     {
                                       type: "scatter",
                                       mode: "lines",
-                                      name: 'sales before prediction ',
+                                      name: 'values before prediction ',
                                       x: this.state.years,
-                                      y: this.state.sales,
+                                      y: this.state.values,
                                       line: { color: '#17BECF' }
                                     }
                                     // ,
@@ -737,9 +737,9 @@ export class Reports extends Component {
 
                                     type: "scatter",
                                     mode: "lines",
-                                    name: 'sales before prediction ',
+                                    name: 'values before prediction ',
                                     x: this.state.years,
-                                    y: this.state.sales,
+                                    y: this.state.values,
                                     line: { color: '#17BECF' }
                                   }
                                   ,
@@ -749,7 +749,7 @@ export class Reports extends Component {
 
                                 ]}
                                 layout={{
-                                  width: 1000, height: 700, title: 'sales',
+                                  width: 1000, height: 700, title: 'values',
                                   xaxis: {
                                     title: 'date(Monthly)',
                                   },

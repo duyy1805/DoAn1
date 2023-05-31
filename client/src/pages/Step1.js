@@ -34,7 +34,7 @@ const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
   const { hidden, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
     handleOpenDialog, buttonRef, handleSelectTime, predicted,
-    selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, handleOnFileLoad2, handleSelectData } = props;
+    selectedDate, filename, yearx, column, timeColumn, dataColumn, times, yearsx, values, handleOnFileLoad2, handleSelectData } = props;
   useEffect(() => { console.log(hidden2); console.log(buttonRef) }, []);
   return (
     <div style={{ flex: '5 0 0' }}>
@@ -191,9 +191,9 @@ const Step1 = (props) => {
                                       {
                                         type: "scatter",
                                         mode: "lines",
-                                        name: 'sales before prediction ',
-                                        x: years,
-                                        y: sales,
+                                        name: 'values before prediction ',
+                                        x: times,
+                                        y: values,
                                         line: { color: '#17BECF' }
                                       }
                                       // ,
@@ -264,7 +264,7 @@ const Step1 = (props) => {
                     }}
                   >
                     {predicted !== null &&
-                      <h3> The predicted sale is  for {selectedDate} is :
+                      <h3> The predicted value is  for {selectedDate} is :
                         {'  ' + predicted + ' DA'}
                       </h3>
                     }
@@ -335,9 +335,9 @@ const Step1 = (props) => {
 
                                     type: "scatter",
                                     mode: "lines",
-                                    name: 'sales before prediction ',
-                                    x: this.state.years,
-                                    y: this.state.sales,
+                                    name: 'values before prediction ',
+                                    x: this.state.times,
+                                    y: this.state.values,
                                     line: { color: '#17BECF' }
                                   }
                                   ,
@@ -347,7 +347,7 @@ const Step1 = (props) => {
 
                                 ]}
                                 layout={{
-                                  width: 1000, height: 700, title: 'sales',
+                                  width: 1000, height: 700, title: 'values',
                                   xaxis: {
                                     title: 'date(Monthly)',
                                   },
@@ -396,7 +396,7 @@ const Step1 = (props) => {
                         }}
                       >
                         {this.state.predicted !== null &&
-                          <h3> The predicted sale is  for {this.state.selectedDate} is :
+                          <h3> The predicted value is  for {this.state.selectedDate} is :
                             {'  ' + this.state.predicted + ' DA'}
                           </h3>
 

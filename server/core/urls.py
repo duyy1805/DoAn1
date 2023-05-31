@@ -6,7 +6,7 @@ app_name = 'core'
 
 
 router = routers.DefaultRouter()
-# router.register(r'sales', viewset=SalesView, basename='sales')
+# router.register(r'values', viewset=SalesView, basename='values')
 # router.register(r'clients', viewset=ClientView, basename='clients')
 # router.register(r'employees', viewset=EmployeeView, basename='employees')
 

@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.AlterField(
-            model_name='sales',
+            model_name='values',
             name='id',
             field=models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
         ),
