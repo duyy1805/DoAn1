@@ -29,7 +29,7 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
-import { Steps, Descriptions, Row, Col } from 'antd';
+import { Steps, Descriptions, Row, Col, Tabs } from 'antd';
 const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
   const { hidden, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
@@ -166,52 +166,71 @@ const Step1 = (props) => {
                 </CardContent>
               </Card>
             </Box>
-            <Box sx={{ m: 3, display: hidden ? 'none' : 'block', }}>
-              <Card>
-                <CardContent>
-                  <Box >
-                    <Box sx={{ m: 3 }} display="flex" justifyContent="center">
-                      <Grid
-                        container
-                        spacing={0}
-                        direction="column"
-                        alignItems="center"
-                        justify="center"
-                      >
-                        <div>
-                          <Plot
-                            data={[
-                              {
-                                type: "scatter",
-                                mode: "lines",
-                                name: 'sales before prediction ',
-                                x: years,
-                                y: sales,
-                                line: { color: '#17BECF' }
-                              }
-                              // ,
-                              // arima_graph,
-                              // rnn_graph
+            <Tabs
+              defaultActiveKey="1"
+              items={[
+                {
+                  label: 'Graph',
+                  key: '1',
+                  children:
+                    <Box sx={{ m: 3, display: hidden ? 'none' : 'block', }}>
+                      <Card>
+                        <CardContent>
+                          <Box >
+                            <Box sx={{ m: 3 }} display="flex" justifyContent="center">
+                              <Grid
+                                container
+                                spacing={0}
+                                direction="column"
+                                alignItems="center"
+                                justify="center"
+                              >
+                                <div>
+                                  <Plot
+                                    data={[
+                                      {
+                                        type: "scatter",
+                                        mode: "lines",
+                                        name: 'sales before prediction ',
+                                        x: years,
+                                        y: sales,
+                                        line: { color: '#17BECF' }
+                                      }
+                                      // ,
+                                      // arima_graph,
+                                      // rnn_graph
 
 
-                            ]}
-                            layout={{
-                              //width: 1000, height: 700, 
-                              title: 'SALES',
-                              xaxis: {
-                                title: 'date(Monthly)',
-                              },
-                              yaxis: {
-                                title: 'Time series data'
-                              },
-                            }}
-                          />
-                        </div>
-                      </Grid>
+                                    ]}
+                                    layout={{
+                                      //width: 1000, height: 700, 
+                                      title: 'SALES',
+                                      xaxis: {
+                                        title: 'date(Monthly)',
+                                      },
+                                      yaxis: {
+                                        title: 'Time series data'
+                                      },
+                                    }}
+                                  />
+                                </div>
+                              </Grid>
+                            </Box>
+                          </Box>
+
+
+                        </CardContent>
+                      </Card>
                     </Box>
-                  </Box>
-
-                  {/* <Box
+                },
+                {
+                  label: 'Visualization',
+                  key: '2',
+                  children:
+                    <Box sx={{ m: 3, display: hidden ? 'none' : 'block', }}>
+                      <Card>
+                        <CardContent>
+                          {/* <Box
                     sx={{
                       display: 'flex',
                       justifyContent: 'center',
@@ -250,19 +269,23 @@ const Step1 = (props) => {
                       </h3>
                     }
                   </Box> */}
-                </CardContent>
-                <Divider />
-                <Descriptions title="Visualization">
-                  <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
-                  <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
-                  <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
-                  <Descriptions.Item label="Remark">empty</Descriptions.Item>
-                  <Descriptions.Item label="Address">
-                    No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
-                  </Descriptions.Item>
-                </Descriptions>
-              </Card>
-            </Box>
+                        </CardContent>
+                        {/* <Divider /> */}
+                        <Descriptions title="Visualization">
+                          <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
+                          <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
+                          <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
+                          <Descriptions.Item label="Remark">empty</Descriptions.Item>
+                          <Descriptions.Item label="Address">
+                            No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
+                          </Descriptions.Item>
+                        </Descriptions>
+                      </Card>
+                    </Box>
+                },
+              ]}
+            />
+
             {/* <Box sx={{ m: 3, display: this.state.hidden ? 'none' : 'block', }}>
                   <Card>
                     <CardContent>
