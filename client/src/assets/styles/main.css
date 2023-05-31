@@ -1072,7 +1072,7 @@ span.blue {
   justify-content: space-between;
 }
 
-.antd-pro-pages-dashboard-analysis-style-salesExtra a {
+.antd-pro-pages-dashboard-analysis-style-valuesExtra a {
   display: inline-block;
   padding: 7px 10px;
   color: #595959;
@@ -1081,20 +1081,20 @@ span.blue {
   border-right: 1px solid transparent;
 }
 
-.antd-pro-pages-dashboard-analysis-style-salesExtra a:last-child {
+.antd-pro-pages-dashboard-analysis-style-valuesExtra a:last-child {
   border-right: 1px solid #d9d9d9;
   border-radius: 0px 5px 5px 0px;
 }
 
-.antd-pro-pages-dashboard-analysis-style-salesExtra a:first-child {
+.antd-pro-pages-dashboard-analysis-style-valuesExtra a:first-child {
   border-radius: 5px 0px 0px 5px;
 }
 
-.antd-pro-pages-dashboard-analysis-style-salesExtra a:hover {
+.antd-pro-pages-dashboard-analysis-style-valuesExtra a:hover {
   color: #1890ff;
   border: 1px solid #1890ff;
 }
-.antd-pro-pages-dashboard-analysis-style-salesExtra a.active {
+.antd-pro-pages-dashboard-analysis-style-valuesExtra a.active {
   color: #1890ff;
   border: 1px solid #1890ff;
 }

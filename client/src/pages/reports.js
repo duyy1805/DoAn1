@@ -48,14 +48,14 @@ export class Reports extends Component {
     data: null,
     data2: null,
     data3: null,
-    years: [],
-    yearsx: [],
+    times: [],
+    timesx: [],
     values: [],
-    years2: [],
-    years3: [],
-    sales2: [],
-    sales3: [],
-    sales4: [],
+    times2: [],
+    times3: [],
+    values2: [],
+    values3: [],
+    values4: [],
     activeStep: 0,
     skipped: new Set(),
     current: 0,
@@ -96,8 +96,8 @@ export class Reports extends Component {
   }
 
   handleSelectChanege = (event) => {
-    this.setState({ predicted: this.state.sales4[event.target.value].toFixed(2) })
-    this.setState({ selectedDate: this.state.yearsx[event.target.value] })
+    this.setState({ predicted: this.state.values4[event.target.value].toFixed(2) })
+    this.setState({ selectedDate: this.state.timesx[event.target.value] })
   };
   drawArima = () => {
     this.setState({ arima: !this.state.arima })
@@ -107,7 +107,7 @@ export class Reports extends Component {
   }
   handleOnFileLoad = (data, file) => {
     this.setState({ hidden2: false, file: file });
-    var sales2, sales3, sales4
+    var values2, values3, values4
     const formData = new FormData();
     formData.append('test', 'test');
     formData.append('file', file, 'file.csv')
@@ -119,35 +119,35 @@ export class Reports extends Component {
     })
       .then((response) => {
 
-        sales2 = Object.values(JSON.parse(response.data.data1).predicted_sales)
+        values2 = Object.values(JSON.parse(response.data.data1).predicted_values)
 
-        sales3 = Object.values(JSON.parse(response.data.data2).Predictions)
-        sales4 = Object.values(JSON.parse(response.data.data3).predicted_sales)
+        values3 = Object.values(JSON.parse(response.data.data2).Predictions)
+        values4 = Object.values(JSON.parse(response.data.data3).predicted_values)
 
-        this.setState({ sales2: sales2, sales3: sales3, sales4: sales4 })
-        var yearsx = []
+        this.setState({ values2: values2, values3: values3, values4: values4 })
+        var timesx = []
         var int = 10
         var y = "2021-"
-        sales4.map((element, index) => {
+        values4.map((element, index) => {
 
 
           if (int > 12) {
             y = "2022-"
             int = 1
-            yearsx.push(y + int)
+            timesx.push(y + int)
 
           }
           else {
-            yearsx.push(y + int)
+            timesx.push(y + int)
           }
 
           int = int + 1
         })
 
 
-        console.log(yearsx)
+        console.log(timesx)
 
-        this.setState({ yearsx: yearsx });
+        this.setState({ timesx: timesx });
         this.setState({ hidden2: true });
         this.setState({ hidden: false });
       })
@@ -157,20 +157,20 @@ export class Reports extends Component {
       });
 
     this.setState({ data: data })
-    var years = []
+    var times = []
     this.state.data.map((element, index) => {
       if (index > 0)
-        years.push(element.data[0])
+        times.push(element.data[0])
     })
 
 
-    this.setState({ years: years })
+    this.setState({ times: times })
 
-    var years2 = years.filter((item, index) => { return index > 84 })
-    this.setState({ years2: years2 })
+    var times2 = times.filter((item, index) => { return index > 84 })
+    this.setState({ times2: times2 })
 
-    var years3 = years.filter((item, index) => { return index > 92 })
-    this.setState({ years3: years3 })
+    var times3 = times.filter((item, index) => { return index > 92 })
+    this.setState({ times3: times3 })
 
 
 
@@ -185,16 +185,16 @@ export class Reports extends Component {
 
   handleOnFileLoad1 = (data, file) => {
     this.setState({ data: data })
-    var years = []
+    var times = []
     this.state.data.map((element, index) => {
       if (index > 0)
-        years.push(element.data[0])
+        times.push(element.data[0])
     })
     this.setState({ file: file });
     console.log(file['name'])
     this.setState({ filename: file['name'] })
 
-    var sales2, sales3, sales4;
+    var values2, values3, values4;
     this.setState({ data: data });
     Papa.parse(file, {
       header: true,
@@ -210,23 +210,23 @@ export class Reports extends Component {
         console.log(this.state.column);
       }
     })
-    // var years = []
+    // var times = []
     // var xx = ''
     // this.state.data.map((element, index) => {
     //   if (index > 0)
-    //     years.push(element.data[0])
+    //     times.push(element.data[0])
     //   else
     //     xx = element.data.length
     // })
     // console.log(xx)
 
-    // this.setState({ years: years })
+    // this.setState({ times: times })
 
-    // var years2 = years.filter((item, index) => { return index > 84 })
-    // this.setState({ years2: years2 })
+    // var times2 = times.filter((item, index) => { return index > 84 })
+    // this.setState({ times2: times2 })
 
-    // var years3 = years.filter((item, index) => { return index > 92 })
-    // this.setState({ years3: years3 })
+    // var times3 = times.filter((item, index) => { return index > 92 })
+    // this.setState({ times3: times3 })
 
 
 
@@ -241,7 +241,7 @@ export class Reports extends Component {
   };
 
   handleOnFileLoad2 = () => {
-    var sales2, sales3, sales4
+    var values2, values3, values4
     const formData = new FormData();
     formData.append('test', 'test');
     formData.append('timeColumn', this.state.timeColumn);
@@ -255,35 +255,35 @@ export class Reports extends Component {
     })
       .then((response) => {
 
-        sales2 = Object.values(JSON.parse(response.data.data1).predicted_sales)
+        values2 = Object.values(JSON.parse(response.data.data1).predicted_values)
 
-        sales3 = Object.values(JSON.parse(response.data.data2).Predictions)
-        sales4 = Object.values(JSON.parse(response.data.data3).predicted_sales)
+        values3 = Object.values(JSON.parse(response.data.data2).Predictions)
+        values4 = Object.values(JSON.parse(response.data.data3).predicted_values)
 
-        this.setState({ sales2: sales2, sales3: sales3, sales4: sales4 })
-        var yearsx = []
+        this.setState({ values2: values2, values3: values3, values4: values4 })
+        var timesx = []
         var int = 10
         var y = "2021-"
-        sales4.map((element, index) => {
+        values4.map((element, index) => {
 
 
           if (int > 12) {
             y = "2022-"
             int = 1
-            yearsx.push(y + int)
+            timesx.push(y + int)
 
           }
           else {
-            yearsx.push(y + int)
+            timesx.push(y + int)
           }
 
           int = int + 1
         })
 
 
-        console.log(yearsx)
+        console.log(timesx)
 
-        this.setState({ yearsx: yearsx });
+        this.setState({ timesx: timesx });
         this.setState({ hidden2: true });
         this.setState({ hidden: false });
       })
@@ -292,22 +292,22 @@ export class Reports extends Component {
         console.log(response);
       });
     console.log(this.state.data)
-    var years = []
+    var times = []
     var xx = ''
     this.state.data.map((element, index) => {
       if (index > 0)
-        years.push(element.data[this.state.timeColumn])
+        times.push(element.data[this.state.timeColumn])
       else
         xx = element.data
     })
 
-    this.setState({ years: years })
+    this.setState({ times: times })
 
-    var years2 = years.filter((item, index) => { return index > 84 })
-    this.setState({ years2: years2 })
+    var times2 = times.filter((item, index) => { return index > 84 })
+    this.setState({ times2: times2 })
 
-    var years3 = years.filter((item, index) => { return index > 92 })
-    this.setState({ years3: years3 })
+    var times3 = times.filter((item, index) => { return index > 92 })
+    this.setState({ times3: times3 })
 
 
 
@@ -367,8 +367,8 @@ export class Reports extends Component {
         type: "scatter",
         mode: "lines",
         name: 'values after prediction Arima ',
-        x: this.state.years2,
-        y: this.state.sales2,
+        x: this.state.times2,
+        y: this.state.values2,
         line: { color: '#FF0000' }
       } : {
         type: "scatter",
@@ -384,8 +384,8 @@ export class Reports extends Component {
         type: "scatter",
         mode: "lines",
         name: 'values after prediction RNN',
-        x: this.state.years3,
-        y: this.state.sales3,
+        x: this.state.times3,
+        y: this.state.values3,
         line: { color: '#0000FF' }
       } : {
         type: "scatter",
@@ -446,10 +446,10 @@ export class Reports extends Component {
             hidden3={this.state.hidden3}
             file={this.state.file}
             data={this.state.data}
-            years={this.state.years}
-            yearsx={this.state.yearsx}
+            times={this.state.times}
+            timesx={this.state.timesx}
             values={this.state.values}
-            sales2={this.state.sales2}
+            values2={this.state.values2}
             column={this.state.column}
             buttonRef={buttonRef}
             timeColumn={this.state.timeColumn}
@@ -610,7 +610,7 @@ export class Reports extends Component {
                                       type: "scatter",
                                       mode: "lines",
                                       name: 'values before prediction ',
-                                      x: this.state.years,
+                                      x: this.state.times,
                                       y: this.state.values,
                                       line: { color: '#17BECF' }
                                     }
@@ -654,7 +654,7 @@ export class Reports extends Component {
                               onChange={this.handleSelectChanege}
                             >
 
-                              {this.state.yearsx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
+                              {this.state.timesx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
 
                             </Select>
                             <FormHelperText>select a date to make prediction</FormHelperText>
@@ -670,7 +670,7 @@ export class Reports extends Component {
                           }}
                         >
                           {this.state.predicted !== null &&
-                            <h3> The predicted sale is  for {this.state.selectedDate} is :
+                            <h3> The predicted value is  for {this.state.selectedDate} is :
                               {'  ' + this.state.predicted + ' DA'}
                             </h3>
                           }
@@ -738,7 +738,7 @@ export class Reports extends Component {
                                     type: "scatter",
                                     mode: "lines",
                                     name: 'values before prediction ',
-                                    x: this.state.years,
+                                    x: this.state.times,
                                     y: this.state.values,
                                     line: { color: '#17BECF' }
                                   }
@@ -782,7 +782,7 @@ export class Reports extends Component {
                             onChange={this.handleSelectChanege}
                           >
 
-                            {this.state.yearsx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
+                            {this.state.timesx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
 
                           </Select>
                           <FormHelperText>select a date to make prediction</FormHelperText>
@@ -798,7 +798,7 @@ export class Reports extends Component {
                         }}
                       >
                         {this.state.predicted !== null &&
-                          <h3> The predicted sale is  for {this.state.selectedDate} is :
+                          <h3> The predicted value is  for {this.state.selectedDate} is :
                             {'  ' + this.state.predicted + ' DA'}
                           </h3>
 

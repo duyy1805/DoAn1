@@ -34,7 +34,7 @@ const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
   const { hidden, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
     handleOpenDialog, buttonRef, handleSelectTime, predicted,
-    selectedDate, filename, yearx, column, timeColumn, dataColumn, times, yearsx, values, handleOnFileLoad2, handleSelectData } = props;
+    selectedDate, filename, yearx, column, timeColumn, dataColumn, times, timesx, values, handleOnFileLoad2, handleSelectData } = props;
   useEffect(() => { console.log(hidden2); console.log(buttonRef) }, []);
   return (
     <div style={{ flex: '5 0 0' }}>
@@ -248,7 +248,7 @@ const Step1 = (props) => {
                         onChange={handleSelectChanege}
                       >
 
-                        {yearsx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
+                        {timesx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
 
                       </Select>
                       <FormHelperText>select a date to make prediction</FormHelperText>
@@ -380,7 +380,7 @@ const Step1 = (props) => {
                             onChange={this.handleSelectChanege}
                           >
 
-                            {this.state.yearsx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
+                            {this.state.timesx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
 
                           </Select>
                           <FormHelperText>select a date to make prediction</FormHelperText>

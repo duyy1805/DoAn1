@@ -64,14 +64,14 @@ class FileUploadView(views.APIView):
 
         prediction = pd.DataFrame(
             arima_model.predict(n_periods=21), index=test.index)
-        prediction.columns = ['predicted_sales']
+        prediction.columns = ['predicted_values']
         prediction.reset_index(inplace=True)
 
         index_future_dates = pd.date_range(
             start='2021-10-01', end='2023-01-1', freq='MS')
         prediction_arima = pd.DataFrame(arima_model.predict(
             n_periods=36), index=index_future_dates)
-        prediction_arima.columns = ['predicted_sales']
+        prediction_arima.columns = ['predicted_values']
 
         ################################################################################
 
@@ -151,27 +151,26 @@ class FileUpload(views.APIView):
         adf_test = ADFTest(alpha=0.05)
         adf_test.should_diff(values)
 
-        from sklearn.model_selection import train_test_split
-        train, test = train_test_split(values, test_size=0.2, shuffle=False)
-
-        arima_model = auto_arima(train, start_p=0, d=1, start_q=0,
-                                 max_p=5, max_d=5, max_q=5, start_P=0,
-                                 D=1, start_Q=0, max_P=5, max_D=5,
-                                 max_Q=5, m=12, seasonal=True,
-                                 error_action='warn', trace=True,
-                                 supress_warnings=True, stepwise=True,
-                                 random_state=20, n_fits=50)
+        import pandas as pd
+        import numpy as np
+        from pandas import read_csv
+        from pmdarima.arima import auto_arima
+        from datetime import datetime
+        import matplotlib.pyplot as plt
+        import tsfresh
+        from pmdarima.arima import ADFTest
+        from tsfresh import extract_features
 
         # prediction = pd.DataFrame(
         #     arima_model.predict(n_periods=21), index=test.index)
-        # prediction.columns = ['predicted_sales']
+        # prediction.columns = ['predicted_values']
         # prediction.reset_index(inplace=True)
 
         # index_future_dates = pd.date_range(
         #     start='2021-10-01', end='2023-01-1', freq='MS')
         # prediction_arima = pd.DataFrame(arima_model.predict(
         #     n_periods=36), index=index_future_dates)
-        # prediction_arima.columns = ['predicted_sales']
+        # prediction_arima.columns = ['predicted_values']
 
         # ################################################################################
 
