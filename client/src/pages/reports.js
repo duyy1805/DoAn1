@@ -98,7 +98,7 @@ export class Reports extends Component {
   handleSelectChanege = (event) => {
     this.setState({ predicted: this.state.sales4[event.target.value].toFixed(2) })
     this.setState({ selectedDate: this.state.yearsx[event.target.value] })
-  };
+  }
   drawArima = () => {
     this.setState({ arima: !this.state.arima })
   }
@@ -145,7 +145,7 @@ export class Reports extends Component {
         })
 
 
-        console.log(yearsx)
+        // console.log(yearsx)
 
         this.setState({ yearsx: yearsx });
         this.setState({ hidden2: true });
@@ -261,29 +261,7 @@ export class Reports extends Component {
         sales4 = Object.values(JSON.parse(response.data.data3).predicted_sales)
 
         this.setState({ sales2: sales2, sales3: sales3, sales4: sales4 })
-        var yearsx = []
-        var int = 10
-        var y = "2021-"
-        sales4.map((element, index) => {
 
-
-          if (int > 12) {
-            y = "2022-"
-            int = 1
-            yearsx.push(y + int)
-
-          }
-          else {
-            yearsx.push(y + int)
-          }
-
-          int = int + 1
-        })
-
-
-        console.log(yearsx)
-
-        this.setState({ yearsx: yearsx });
         this.setState({ hidden2: true });
         this.setState({ hidden: false });
       })
@@ -319,7 +297,6 @@ export class Reports extends Component {
     console.log(this.state.dataColumn)
     this.setState({ sales: sales }, () => console.log(sales))
     this.setState({ hidden: false });
-
   };
   handleOnError = (err, file, inputElem, reason) => {
     console.log('---------------------------');
