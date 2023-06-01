@@ -34,7 +34,7 @@ const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
   const { hidden, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
     handleOpenDialog, buttonRef, handleSelectTime, predicted,
-    selectedDate, filename, yearx, column, timeColumn, dataColumn, times, timesx, values, handleOnFileLoad2, handleSelectData } = props;
+    selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, handleOnFileLoad2, handleSelectData } = props;
   useEffect(() => { console.log(hidden2); console.log(buttonRef) }, []);
   return (
     <div style={{ flex: '5 0 0' }}>
@@ -166,14 +166,15 @@ const Step1 = (props) => {
                 </CardContent>
               </Card>
             </Box>
-            <Tabs
-              defaultActiveKey="1"
-              items={[
-                {
-                  label: 'Graph',
-                  key: '1',
-                  children:
-                    <Box sx={{ m: 3, display: hidden ? 'none' : 'block', }}>
+            <Box sx={{ m: 3, display: hidden ? 'none' : 'block', }}>
+              <Tabs
+                defaultActiveKey="1"
+                items={[
+                  {
+                    label: 'Graph',
+                    key: '1',
+                    children:
+
                       <Card>
                         <CardContent>
                           <Box >
@@ -191,15 +192,9 @@ const Step1 = (props) => {
                                       {
                                         type: "scatter",
                                         mode: "lines",
-<<<<<<< HEAD
                                         name: 'sales before prediction ',
                                         x: years,
                                         y: sales,
-=======
-                                        name: 'values before prediction ',
-                                        x: times,
-                                        y: values,
->>>>>>> 400c677ee17157f3b209218b3755c7065c2ad932
                                         line: { color: '#17BECF' }
                                       }
                                       // ,
@@ -227,29 +222,16 @@ const Step1 = (props) => {
 
                         </CardContent>
                       </Card>
-<<<<<<< HEAD
 
-},
-  {
-    label: 'Visualization',
-    key: '2',
-    children:
+                  },
+                  {
+                    label: 'Visualization',
+                    key: '2',
+                    children:
                       <Box sx={{ m: 3, display: hidden ? 'none' : 'block', }}>
-  <Card>
-    <CardContent>
-      {/* <Box
-=======
-                    </Box>
-                },
-                {
-                  label: 'Visualization',
-                  key: '2',
-                  children:
-                    <Box sx={{ m: 3, display: hidden ? 'none' : 'block', }}>
-                      <Card>
-                        <CardContent>
-                          {/* <Box
->>>>>>> 400c677ee17157f3b209218b3755c7065c2ad932
+                        <Card>
+                          <CardContent>
+                            {/* <Box
                     sx={{
                       display: 'flex',
                       justifyContent: 'center',
@@ -267,7 +249,7 @@ const Step1 = (props) => {
                         onChange={handleSelectChanege}
                       >
 
-                        {timesx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
+                        {yearsx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
 
                       </Select>
                       <FormHelperText>select a date to make prediction</FormHelperText>
@@ -283,15 +265,14 @@ const Step1 = (props) => {
                     }}
                   >
                     {predicted !== null &&
-                      <h3> The predicted value is  for {selectedDate} is :
+                      <h3> The predicted sale is  for {selectedDate} is :
                         {'  ' + predicted + ' DA'}
                       </h3>
                     }
                   </Box> */}
-<<<<<<< HEAD
-                          </CardContent >
-  {/* <Divider /> */ }
-  < Descriptions title = "Visualization" >
+                          </CardContent>
+                          {/* <Divider /> */}
+                          <Descriptions title="Visualization">
                             <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
                             <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
                             <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
@@ -299,33 +280,14 @@ const Step1 = (props) => {
                             <Descriptions.Item label="Address">
                               No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
                             </Descriptions.Item>
-                          </Descriptions >
-                        </Card >
-                      </Box >
+                          </Descriptions>
+                        </Card>
+                      </Box>
                   },
                 ]}
-/>
-            </Box >
-=======
-                        </CardContent>
-                        {/* <Divider /> */}
-                        <Descriptions title="Visualization">
-                          <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
-                          <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
-                          <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
-                          <Descriptions.Item label="Remark">empty</Descriptions.Item>
-                          <Descriptions.Item label="Address">
-                            No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
-                          </Descriptions.Item>
-                        </Descriptions>
-                      </Card>
-                    </Box>
-                },
-              ]}
-            />
-
->>>>>>> 400c677ee17157f3b209218b3755c7065c2ad932
-{/* <Box sx={{ m: 3, display: this.state.hidden ? 'none' : 'block', }}>
+              />
+            </Box>
+            {/* <Box sx={{ m: 3, display: this.state.hidden ? 'none' : 'block', }}>
                   <Card>
                     <CardContent>
                       <Box
@@ -374,9 +336,9 @@ const Step1 = (props) => {
 
                                     type: "scatter",
                                     mode: "lines",
-                                    name: 'values before prediction ',
-                                    x: this.state.times,
-                                    y: this.state.values,
+                                    name: 'sales before prediction ',
+                                    x: this.state.years,
+                                    y: this.state.sales,
                                     line: { color: '#17BECF' }
                                   }
                                   ,
@@ -386,7 +348,7 @@ const Step1 = (props) => {
 
                                 ]}
                                 layout={{
-                                  width: 1000, height: 700, title: 'values',
+                                  width: 1000, height: 700, title: 'sales',
                                   xaxis: {
                                     title: 'date(Monthly)',
                                   },
@@ -419,7 +381,7 @@ const Step1 = (props) => {
                             onChange={this.handleSelectChanege}
                           >
 
-                            {this.state.timesx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
+                            {this.state.yearsx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
 
                           </Select>
                           <FormHelperText>select a date to make prediction</FormHelperText>
@@ -435,7 +397,7 @@ const Step1 = (props) => {
                         }}
                       >
                         {this.state.predicted !== null &&
-                          <h3> The predicted value is  for {this.state.selectedDate} is :
+                          <h3> The predicted sale is  for {this.state.selectedDate} is :
                             {'  ' + this.state.predicted + ' DA'}
                           </h3>
 
@@ -454,11 +416,11 @@ const Step1 = (props) => {
 
 
 
-          </Box >
-        </Container >
-      </LoadingOverlay >
+          </Box>
+        </Container>
+      </LoadingOverlay>
 
-    </div >
+    </div>
   );
 };
 
