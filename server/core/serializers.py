@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from .models import Sales, Client, Employee
+from .models import Times, Client, Employee
 
 
 class SalesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Sales
+        model = Times
         fields = ['id','file']
 
 class ClientSerializer(serializers.HyperlinkedModelSerializer):

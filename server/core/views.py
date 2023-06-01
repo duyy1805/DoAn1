@@ -6,7 +6,7 @@ from rest_framework import views
 from rest_framework import permissions
 from rest_framework.parsers import FileUploadParser, FormParser, MultiPartParser
 from rest_framework.views import APIView
-from .models import Sales, Client, Employee
+from .models import Times, Client, Employee
 from .serializers import SalesSerializer, ClientSerializer, EmployeeSerializer
 
 
@@ -30,7 +30,7 @@ class EmployeeView(viewsets.ModelViewSet):
 
 
 class SalesView(viewsets.ModelViewSet):
-    queryset = Sales.objects.all()
+    queryset = Times.objects.all()
     serializer_class = SalesSerializer
     allowed_methods = ['post']
 
@@ -43,16 +43,16 @@ class FileUploadView(views.APIView):
         file_obj = request.data['file']
         print(filename)
         print(request.data['test'])
-        sales = read_csv(file_obj)
+        values = read_csv(file_obj)
 
-        sales['Month'] = pd.to_datetime(sales['Month'], errors='coerce')
-        sales.set_index('Month', inplace=True)
+        values['Month'] = pd.to_datetime(values['Month'], errors='coerce')
+        values.set_index('Month', inplace=True)
 
         adf_test = ADFTest(alpha=0.05)
-        adf_test.should_diff(sales)
+        adf_test.should_diff(values)
 
         from sklearn.model_selection import train_test_split
-        train, test = train_test_split(sales, test_size=0.2, shuffle=False)
+        train, test = train_test_split(values, test_size=0.2, shuffle=False)
 
         arima_model = auto_arima(train, start_p=0, d=1, start_q=0,
                                  max_p=5, max_d=5, max_q=5, start_P=0,
@@ -64,19 +64,19 @@ class FileUploadView(views.APIView):
 
         prediction = pd.DataFrame(
             arima_model.predict(n_periods=21), index=test.index)
-        prediction.columns = ['predicted_sales']
+        prediction.columns = ['predicted_values']
         prediction.reset_index(inplace=True)
 
         index_future_dates = pd.date_range(
             start='2021-10-01', end='2023-01-1', freq='MS')
         prediction_arima = pd.DataFrame(arima_model.predict(
             n_periods=36), index=index_future_dates)
-        prediction_arima.columns = ['predicted_sales']
+        prediction_arima.columns = ['predicted_values']
 
         ################################################################################
 
-        rnn_train = sales[:93]
-        rnn_test = sales[93:]
+        rnn_train = values[:93]
+        rnn_test = values[93:]
 
         from sklearn.preprocessing import MinMaxScaler
         scaler = MinMaxScaler()
@@ -143,13 +143,13 @@ class FileUpload(views.APIView):
     def post(self, request, format=None):
         file_obj = request.data['file']
 
-        sales = read_csv(file_obj)
+        values = read_csv(file_obj)
 
-        sales['Month'] = pd.to_datetime(sales['Month'], errors='coerce')
-        sales.set_index('Month', inplace=True)
+        values['Month'] = pd.to_datetime(values['Month'], errors='coerce')
+        values.set_index('Month', inplace=True)
 
         adf_test = ADFTest(alpha=0.05)
-        adf_test.should_diff(sales)
+        adf_test.should_diff(values)
 
         
 
