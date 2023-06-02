@@ -29,12 +29,12 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
-import { Steps, Descriptions, Row, Col, Tabs } from 'antd';
+import { Steps, Descriptions, Row, Col, Tabs, Badge } from 'antd';
 const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
   const { hidden, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
     handleOpenDialog, buttonRef, handleSelectTime, predicted,
-    selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, handleOnFileLoad2, handleSelectData } = props;
+    selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
   useEffect(() => { console.log(hidden2); console.log(buttonRef) }, []);
   return (
     <div style={{ flex: '5 0 0' }}>
@@ -42,7 +42,7 @@ const Step1 = (props) => {
         styles={{ display: 'none' }}
         active={!hidden2}
         spinner
-        text='applying ARIMA and RNN algorithms'
+        text='Lunas'
       >
 
         <Container >
@@ -205,13 +205,18 @@ const Step1 = (props) => {
                                     ]}
                                     layout={{
                                       //width: 1000, height: 700, 
-                                      title: 'SALES',
+                                      title: 'TIME SERIES DATA',
                                       xaxis: {
-                                        title: 'date(Monthly)',
+                                        title: 'Time',
                                       },
                                       yaxis: {
-                                        title: 'Time series data'
+                                        title: 'Data'
                                       },
+                                      font: {
+                                        family: '-apple - system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans- serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji',
+                                        size: 14,
+                                        color: 'black'
+                                      }
                                     }}
                                   />
                                 </div>
@@ -229,56 +234,24 @@ const Step1 = (props) => {
                     key: '2',
                     children:
                       <Box sx={{ m: 3, display: hidden ? 'none' : 'block', }}>
-                        <Card>
-                          <CardContent>
-                            {/* <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      p: 2
-                    }}
-                  >
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                      <InputLabel id="demo-simple-select-helper-label">select</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={selectedDate}
-                        label="Age"
-
-                        onChange={handleSelectChanege}
-                      >
-
-                        {yearsx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
-
-                      </Select>
-                      <FormHelperText>select a date to make prediction</FormHelperText>
-                    </FormControl>
-
-                  </Box>
-
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      p: 2
-                    }}
-                  >
-                    {predicted !== null &&
-                      <h3> The predicted sale is  for {selectedDate} is :
-                        {'  ' + predicted + ' DA'}
-                      </h3>
-                    }
-                  </Box> */}
-                          </CardContent>
+                        <Card sx={{ padding: 2 }}>
                           {/* <Divider /> */}
-                          <Descriptions title="Visualization">
-                            <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
-                            <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
-                            <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
-                            <Descriptions.Item label="Remark">empty</Descriptions.Item>
-                            <Descriptions.Item label="Address">
-                              No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
+                          <Descriptions title="Visualization" bordered>
+                            <Descriptions.Item label="Values count">0</Descriptions.Item>
+                            <Descriptions.Item label="Missing values">0</Descriptions.Item>
+                            <Descriptions.Item label="Sum values">0</Descriptions.Item>
+                            <Descriptions.Item label="Max value">0</Descriptions.Item>
+                            <Descriptions.Item label="Min value" span={2}>
+
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Giá trị trung bình" span={3}>
+                              <Badge status="processing" text="Running" />
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Trung vị">10</Descriptions.Item>
+                            <Descriptions.Item label="Độ lệch chuẩn">0</Descriptions.Item>
+                            <Descriptions.Item label="Phương sai">0</Descriptions.Item>
+                            <Descriptions.Item label="Độ lệch của chuỗi">
+
                             </Descriptions.Item>
                           </Descriptions>
                         </Card>

@@ -83,7 +83,7 @@ export class Reports extends Component {
   };
 
   handleSelectData = (event) => {
-    console.log(event.target.value)
+    // console.log(event.target.value)
     this.setState({ dataColumn: event.target.value }, () => {
       console.log(this.state.dataColumn)
     })
@@ -91,7 +91,7 @@ export class Reports extends Component {
   }
 
   handleSelectTime = (event) => {
-    console.log(event.target.value)
+    // console.log(event.target.value)
     this.setState({ timeColumn: event.target.value })
   }
 
@@ -119,7 +119,7 @@ export class Reports extends Component {
     })
       .then((response) => {
 
-        sales2 = Object.values(JSON.parse(response.data.data1).predicted_sales)
+        sales2 = Object.values((response.data.data1).predicted_sales)
 
         sales3 = Object.values(JSON.parse(response.data.data2).Predictions)
         sales4 = Object.values(JSON.parse(response.data.data3).predicted_sales)
@@ -242,10 +242,11 @@ export class Reports extends Component {
 
   handleOnFileLoad2 = () => {
     var sales2, sales3, sales4
+    // this.setState({ hidden2: false });
     const formData = new FormData();
     formData.append('test', 'test');
-    formData.append('timeColumn', this.state.timeColumn);
-    formData.append('dataColumn', this.state.dataColumn);
+    formData.append('timeColumn', this.state.column[this.state.timeColumn]);
+    formData.append('dataColumn', this.state.column[this.state.dataColumn]);
     formData.append('file', this.state.file, 'file.csv')
     axios({
       method: 'post',
@@ -255,12 +256,9 @@ export class Reports extends Component {
     })
       .then((response) => {
 
-        sales2 = Object.values(JSON.parse(response.data.data1).predicted_sales)
-
-        sales3 = Object.values(JSON.parse(response.data.data2).Predictions)
-        sales4 = Object.values(JSON.parse(response.data.data3).predicted_sales)
-
-        this.setState({ sales2: sales2, sales3: sales3, sales4: sales4 })
+        sales2 = response.data.data1
+        sales3 = response.data.data2
+        // this.setState({ sales2: sales2, sales3: sales3, sales4: sales4 }, () => { console.log(this.state.sales3) })
 
         this.setState({ hidden2: true });
         this.setState({ hidden: false });
@@ -269,7 +267,6 @@ export class Reports extends Component {
         //handle error
         console.log(response);
       });
-    console.log(this.state.data)
     var years = []
     var xx = ''
     this.state.data.map((element, index) => {
@@ -294,7 +291,7 @@ export class Reports extends Component {
       if (index > 0)
         sales.push(element.data[this.state.dataColumn])
     })
-    console.log(this.state.dataColumn)
+    // console.log(this.state.dataColumn)
     this.setState({ sales: sales }, () => console.log(sales))
     this.setState({ hidden: false });
   };

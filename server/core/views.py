@@ -17,6 +17,7 @@ from pmdarima.arima import auto_arima
 from datetime import datetime
 import matplotlib.pyplot as plt
 from pmdarima.arima import ADFTest
+from tsfresh import extract_features
 
 
 class ClientView(viewsets.ModelViewSet):
@@ -142,17 +143,26 @@ class FileUpload(views.APIView):
 
     def post(self, request, format=None):
         file_obj = request.data['file']
-
+        timeColumn = request.data['timeColumn']
+        dataColumn = request.data['dataColumn']
+        print(dataColumn)
         values = read_csv(file_obj)
 
-        values['Month'] = pd.to_datetime(values['Month'], errors='coerce')
-        values.set_index('Month', inplace=True)
+        values[timeColumn] = pd.to_datetime(
+            values[timeColumn], errors='coerce')
 
-        adf_test = ADFTest(alpha=0.05)
-        adf_test.should_diff(values)
+        missing_values_count = values.isna().sum().sum()
+        print(missing_values_count)
+        values = values.rename(columns={'Sales': 'Data'})
+        values['ID'] = 'Duy'
+        # adf_test = ADFTest(alpha=0.05)
+        # adf_test.should_diff(values)
 
-        
+        features = extract_features(
+            values, column_id='ID', column_sort='Month', n_jobs=8)
 
+        data1 = features.Data__sum_values
+        data2 = features.Data__maximum
         return Response({
-            "data1": "duyy",
-            "data2": "luna"})
+            "data1": data1,
+            "data2": data2})
