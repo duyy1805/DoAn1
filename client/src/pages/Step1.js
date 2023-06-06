@@ -19,7 +19,8 @@ import {
   Step,
   StepLabel,
   Stepper,
-  StepContent
+  StepContent,
+  InputNumber
 
 
 } from '@material-ui/core';
@@ -32,12 +33,12 @@ import { number } from 'prop-types';
 import { Steps, Descriptions, Row, Col, Tabs, Badge } from 'antd';
 const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
-  const { hidden, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
+  const { hidden_step1, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
     handleOpenDialog, buttonRef, handleSelectTime, predicted,
     selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
-  useEffect(() => { console.log(hidden2); console.log(buttonRef) }, []);
+  // useEffect(() => { console.log(hidden2); console.log(buttonRef) }, []);
   return (
-    <div style={{ flex: '5 0 0' }}>
+    <div >
       <LoadingOverlay
         styles={{ display: 'none' }}
         active={!hidden2}
@@ -166,7 +167,7 @@ const Step1 = (props) => {
                 </CardContent>
               </Card>
             </Box>
-            <Box sx={{ m: 3, display: hidden ? 'none' : 'block', }}>
+            <Box sx={{ m: 3, display: hidden_step1 ? 'none' : 'block', }}>
               <Tabs
                 defaultActiveKey="1"
                 items={[
@@ -233,7 +234,7 @@ const Step1 = (props) => {
                     label: 'Visualization',
                     key: '2',
                     children:
-                      <Box sx={{ m: 3, display: hidden ? 'none' : 'block', }}>
+                      <Box sx={{ m: 3, display: hidden_step1 ? 'none' : 'block', }}>
                         <Card sx={{ padding: 2 }}>
                           {/* <Divider /> */}
                           <Descriptions title="Visualization" bordered>

@@ -31,6 +31,8 @@ import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
 import { Steps, Descriptions, Row, Col } from 'antd';
 import Step1 from './Step1';
+import Step2 from './Step2';
+import './style.css';
 const Plot = createPlotlyComponent(Plotly);
 
 const buttonRef = React.createRef();
@@ -39,7 +41,8 @@ export class Reports extends Component {
     selectedDate: '',
     predicted: null,
     hidden0: false,
-    hidden: true,
+    hidden_step1: true,
+    hidden_step2: true,
     hidden2: true,
     hidden3: true,
     arima: false,
@@ -68,12 +71,15 @@ export class Reports extends Component {
   onChange = (value) => {
     this.setState({ current: value });
 
-    if (this.state.file == null) this.setState({ hidden: true })
+    if (this.state.file == null) this.setState({ hidden_step1: true })
     else
-      this.setState({ hidden: value !== 0 ? true : false });
+      this.setState({ hidden_step1: value !== 0 ? true : false });
     if (value !== 0) this.setState({ hidden0: true })
     else
       this.setState({ hidden0: false });
+
+    if (value !== 1) this.setState({ hidden_step2: true })
+    else this.setState({ hidden_step2: false })
   };
   handleOpenDialog = (e) => {
     console.log(e)
@@ -149,7 +155,7 @@ export class Reports extends Component {
 
         this.setState({ yearsx: yearsx });
         this.setState({ hidden2: true });
-        this.setState({ hidden: false });
+        this.setState({ hidden_step1: false });
       })
       .catch((response) => {
         //handle error
@@ -261,7 +267,7 @@ export class Reports extends Component {
         // this.setState({ sales2: sales2, sales3: sales3, sales4: sales4 }, () => { console.log(this.state.sales3) })
 
         this.setState({ hidden2: true });
-        this.setState({ hidden: false });
+        this.setState({ hidden_step1: false });
       })
       .catch((response) => {
         //handle error
@@ -293,7 +299,7 @@ export class Reports extends Component {
     })
     // console.log(this.state.dataColumn)
     this.setState({ sales: sales }, () => console.log(sales))
-    this.setState({ hidden: false });
+    this.setState({ hidden_step1: false });
   };
   handleOnError = (err, file, inputElem, reason) => {
     console.log('---------------------------');
@@ -311,26 +317,12 @@ export class Reports extends Component {
       buttonRef.current.removeFile(e);
     }
   };
-  handleNext = () => {
-    const nextStep = this.state.activeStep + 1;
-    this.setState({ activeStep: nextStep })
-    console.log(this.state.activeStep)
-  };
 
-  handleBack = () => {
-    const prevStep = this.state.activeStep - 1;
-    this.setState({ activeStep: prevStep })
-
-  };
-
-  handleReset = () => {
-    this.setState({ activeStep: 0 })
-  };
 
   show = () => {
     this.setState({ hidden2: false });
     setTimeout(() => {
-      this.setState({ hidden: false });
+      this.setState({ hidden_step1: false });
       this.setState({ hidden2: true });
     }, 2000);
   };
@@ -383,7 +375,7 @@ export class Reports extends Component {
         <Helmet>
           <title>Dashboard</title>
         </Helmet>
-        <div style={{ display: 'flex', marginLeft: '200px', marginRight: '200px' }}>
+        <div style={{ display: 'flex', paddingLeft: 200, height: "100vh", overflow: "hidden" }}>
           <div style={{ flex: ' 1 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Divider />
             <Steps
@@ -398,7 +390,7 @@ export class Reports extends Component {
                 },
                 {
                   title: 'Step 2',
-                  // this.state.description,
+                  description: "Select Time-Series Params",
                 },
                 {
                   title: 'Step 3',
@@ -411,31 +403,65 @@ export class Reports extends Component {
               ]}
             />
           </div>
-          <Step1 test={this.test}
-            selectedDate={this.state.selectedDate}
-            predicted={this.state.predicted}
-            hidden={this.state.hidden}
-            hidden0={this.state.hidden0}
-            hidden2={this.state.hidden2}
-            hidden3={this.state.hidden3}
-            file={this.state.file}
-            data={this.state.data}
-            years={this.state.years}
-            yearsx={this.state.yearsx}
-            sales={this.state.sales}
-            sales2={this.state.sales2}
-            column={this.state.column}
-            buttonRef={buttonRef}
-            timeColumn={this.state.timeColumn}
-            dataColumn={this.state.dataColumn}
-            handleSelectData={this.handleSelectData}
-            handleSelectTime={this.handleSelectTime}
-            handleOpenDialog={this.handleOpenDialog}
-            handleOnFileLoad1={this.handleOnFileLoad1}
-            handleOnFileLoad2={this.handleOnFileLoad2}
-            handleOnError={this.handleOnError}
-            handleOnRemoveFile={this.handleOnRemoveFile}
-            filename={this.state.filename}></Step1 >
+          <div className='step-container'>
+            <div>
+              <Step1 test={this.test}
+                selectedDate={this.state.selectedDate}
+                predicted={this.state.predicted}
+                hidden_step1={this.state.hidden_step1}
+                hidden_step2={this.state.hidden_step2}
+                hidden0={this.state.hidden0}
+                hidden2={this.state.hidden2}
+                hidden3={this.state.hidden3}
+                file={this.state.file}
+                data={this.state.data}
+                years={this.state.years}
+                yearsx={this.state.yearsx}
+                sales={this.state.sales}
+                sales2={this.state.sales2}
+                column={this.state.column}
+                buttonRef={buttonRef}
+                timeColumn={this.state.timeColumn}
+                dataColumn={this.state.dataColumn}
+                handleSelectData={this.handleSelectData}
+                handleSelectTime={this.handleSelectTime}
+                handleOpenDialog={this.handleOpenDialog}
+                handleOnFileLoad1={this.handleOnFileLoad1}
+                handleOnFileLoad2={this.handleOnFileLoad2}
+                handleOnError={this.handleOnError}
+                handleOnRemoveFile={this.handleOnRemoveFile}
+                filename={this.state.filename}></Step1 >
+            </div>
+            <div>
+              <Step2
+                test={this.test}
+                selectedDate={this.state.selectedDate}
+                predicted={this.state.predicted}
+                hidden_step1={this.state.hidden_step1}
+                hidden_step2={this.state.hidden_step2}
+                hidden0={this.state.hidden0}
+                hidden2={this.state.hidden2}
+                hidden3={this.state.hidden3}
+                file={this.state.file}
+                data={this.state.data}
+                years={this.state.years}
+                yearsx={this.state.yearsx}
+                sales={this.state.sales}
+                sales2={this.state.sales2}
+                column={this.state.column}
+                buttonRef={buttonRef}
+                timeColumn={this.state.timeColumn}
+                dataColumn={this.state.dataColumn}
+                handleSelectData={this.handleSelectData}
+                handleSelectTime={this.handleSelectTime}
+                handleOpenDialog={this.handleOpenDialog}
+                handleOnFileLoad1={this.handleOnFileLoad1}
+                handleOnFileLoad2={this.handleOnFileLoad2}
+                handleOnError={this.handleOnError}
+                handleOnRemoveFile={this.handleOnRemoveFile}
+                filename={this.state.filename}></Step2>
+            </div>
+          </div>
           {/* <div style={{ flex: '5 0 0' }}>
             <LoadingOverlay
               styles={{ display: 'none' }}
@@ -797,7 +823,7 @@ export class Reports extends Component {
 
           </div> */}
 
-        </div>
+        </div >
       </>
     );
   }
