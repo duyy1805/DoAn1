@@ -210,7 +210,7 @@ class AutoArima(views.APIView):
         prediction_arima.columns = ['predicted_values']
 
         ###############################################################################
-
+        print(prediction.to_json)
         return Response({
             "data1": prediction.to_json(),
             "data2": prediction_arima.to_json()
