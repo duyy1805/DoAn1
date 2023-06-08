@@ -70,15 +70,12 @@ export class Reports extends Component {
 
   onChange = (value) => {
     this.setState({ current: value });
-    if (value !== 0) { this.setState({ hidden0: true }); this.setState({ hidden_step1: true }) }
-    else { this.setState({ hidden0: false }); this.setState({ hidden_step1: false }) }
+    if (value !== 0) { this.setState({ hidden0: true }); }
+    else { this.setState({ hidden0: false }); }
 
     if (this.state.file == null) this.setState({ hidden_step1: true })
-    else
-      this.setState({ hidden0: value !== 0 ? true : false });
-    // if (value !== 0) this.setState({ hidden0: true })
     // else
-    //   this.setState({ hidden0: false });
+    //   this.setState({ hidden0: value !== 0 ? true : false });
 
     if (value !== 1) this.setState({ hidden_step2: true })
     else this.setState({ hidden_step2: false })
@@ -127,8 +124,7 @@ export class Reports extends Component {
     })
       .then((response) => {
 
-        sales2 = Object.values((response.data.data1).predicted_sales)
-
+        sales2 = Object.values(JSON.parse(response.data.data1).predicted_sales)
         sales3 = Object.values(JSON.parse(response.data.data2).Predictions)
         sales4 = Object.values(JSON.parse(response.data.data3).predicted_sales)
 
@@ -251,46 +247,46 @@ export class Reports extends Component {
   handleOnFileLoad2 = () => {
     var sales2, sales3, sales4
     // this.setState({ hidden2: false });
-    const formData = new FormData();
-    formData.append('test', 'test');
-    formData.append('timeColumn', this.state.column[this.state.timeColumn]);
-    formData.append('dataColumn', this.state.column[this.state.dataColumn]);
-    formData.append('file', this.state.file, 'file.csv')
-    axios({
-      method: 'post',
-      url: 'http://127.0.0.1:8000/file',
-      data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-      .then((response) => {
-
-
-        this.setState({ hidden_step1: false });
+    if (this.state.file !== null) {
+      const formData = new FormData();
+      formData.append('test', 'test');
+      formData.append('timeColumn', this.state.column[this.state.timeColumn]);
+      formData.append('dataColumn', this.state.column[this.state.dataColumn]);
+      formData.append('file', this.state.file, 'file.csv')
+      axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/file',
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' }
       })
-      .catch((response) => {
-        //handle error
-        console.log(response);
-      });
-    var years = []
-    var xx = ''
-    this.state.data.map((element, index) => {
-      if (index > 0)
-        years.push(element.data[this.state.timeColumn])
-      else
-        xx = element.data
-    })
+        .then((response) => {
+          console.log('1')
+          // this.setState({ hidden_step1: false });
+        })
+        .catch((response) => {
+          //handle error
+          console.log(response);
+        });
+      var years = []
+      var xx = ''
+      this.state.data.map((element, index) => {
+        if (index > 0)
+          years.push(element.data[this.state.timeColumn])
+        else
+          xx = element.data
+      })
 
-    this.setState({ years: years })
+      this.setState({ years: years })
 
-    var sales = []
-    this.state.data.map((element, index) => {
-      if (index > 0)
-        sales.push(element.data[this.state.dataColumn])
-    })
-    // console.log(this.state.dataColumn)
-    console.log('am ảnh')
-    this.setState({ sales: sales }, () => console.log(sales))
-    // this.setState({ hidden_step1: false });
+      var sales = []
+      this.state.data.map((element, index) => {
+        if (index > 0)
+          sales.push(element.data[this.state.dataColumn])
+      })
+      console.log('2')
+      this.setState({ sales: sales }, () => console.log(sales))
+      this.setState({ hidden_step1: false });
+    }
   };
 
   handleOnFileLoadAutoArima = () => {
@@ -308,17 +304,24 @@ export class Reports extends Component {
     })
       .then((response) => {
 
-        sales2 = response.data.data1
-        sales3 = response.data.data2
-        console.log('Nguyen cr');
-        // this.setState({ sales2: sales2, sales3: sales3, sales4: sales4 }, () => { console.log(this.state.sales3) })
-        // console.log(sales2)
+        sales2 = Object.values(JSON.parse(response.data.data1).predicted_values)
+        console.log(Object.values(JSON.parse(response.data.data1).predicted_values))
+        this.setState({ sales2: sales2 })
+        this.setState({ arima: true }, () => {
+          this.render()
+        })
       })
       .catch((response) => {
         //handle error
         console.log(response);
       });
-
+    var years = []
+    this.state.data.map((element, index) => {
+      if (index > 0)
+        years.push(element.data[0])
+    })
+    var years2 = years.filter((item, index) => { return index > 84 })
+    this.setState({ years2: years2 })
   }
 
   handleOnError = (err, file, inputElem, reason) => {
@@ -348,6 +351,14 @@ export class Reports extends Component {
   };
 
   render() {
+    var graph = {
+      type: "scatter",
+      mode: "lines",
+      name: 'sales before prediction ',
+      x: this.state.years,
+      y: this.state.sales,
+      line: { color: '#17BECF' }
+    }
     var arima_graph =
       this.state.arima ? {
         type: "scatter",
@@ -364,7 +375,6 @@ export class Reports extends Component {
         y: [],
         line: { color: '#17BECF' }
       }
-
     var rnn_graph =
       this.state.rnn ? {
         type: "scatter",
@@ -478,6 +488,8 @@ export class Reports extends Component {
                 handleOnFileLoad1={this.handleOnFileLoad1}
                 handleOnFileLoad2={this.handleOnFileLoad2}
                 handleOnError={this.handleOnError}
+                graph={graph}
+                arima_graph={arima_graph}
                 handleOnRemoveFile={this.handleOnRemoveFile}
                 handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
                 filename={this.state.filename}></Step2>

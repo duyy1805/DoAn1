@@ -31,6 +31,7 @@ import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
 import { InputNumber, Row, Col, Tabs, Badge, Form, Button, Checkbox, Input } from 'antd';
 
+const Plot = createPlotlyComponent(Plotly);
 const onFinish = (values: any) => {
     console.log('Success:', values);
 };
@@ -41,8 +42,11 @@ const onFinishFailed = (errorInfo: any) => {
 
 const Step2 = (props) => {
     const { hidden_step1, hidden_step2, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
-        handleOpenDialog, buttonRef, handleSelectTime, predicted, handleOnFileLoadAutoArima,
+        handleOpenDialog, buttonRef, handleSelectTime, predicted, handleOnFileLoadAutoArima, graph, arima_graph,
         selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
+    useEffect(() => {
+        console.log(arima_graph)
+    }, [])
     return (
         <div>
             <Container >
@@ -79,6 +83,46 @@ const Step2 = (props) => {
                                                             Runn
                                                         </ButtonMui>
                                                     </CardContent>
+                                                    <Box sx={{ m: 3, }}>
+                                                        <Card>
+                                                            <CardContent>
+                                                                <Box >
+                                                                    <Box sx={{ m: 3 }} display="flex" justifyContent="center">
+                                                                        <Grid
+                                                                            container
+                                                                            spacing={0}
+                                                                            direction="column"
+                                                                            alignItems="center"
+                                                                            justify="center"
+                                                                        >
+                                                                            <div>
+                                                                                <Plot
+                                                                                    data={[
+                                                                                        graph,
+                                                                                        // ,
+                                                                                        arima_graph
+                                                                                        // rnn_graph
+
+
+                                                                                    ]}
+                                                                                    layout={{
+                                                                                        //width: 1000, height: 700, 
+                                                                                        title: 'Data',
+                                                                                        xaxis: {
+                                                                                            title: 'Time',
+                                                                                        },
+                                                                                        yaxis: {
+                                                                                            title: 'Time series data'
+                                                                                        },
+                                                                                    }}
+                                                                                />
+                                                                            </div>
+                                                                        </Grid>
+                                                                    </Box>
+                                                                </Box>
+                                                            </CardContent>
+                                                        </Card>
+                                                    </Box>
                                                 </Card>
 
                                         },

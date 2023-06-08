@@ -51,10 +51,10 @@ const Step1 = (props) => {
             sx={{
               backgroundColor: 'background.default',
               minHeight: '100%',
-
+              display: hidden0 ? 'none' : 'block',
             }}
           >
-            <Box sx={{ m: 3, display: hidden0 ? 'none' : 'block', }}>
+            <Box sx={{ m: 3, }}>
               <Card sx={{ m: 0 }} >
                 <CardContent >
                   <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1 }}>
