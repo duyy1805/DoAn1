@@ -43,7 +43,7 @@ export class Reports extends Component {
     hidden0: false,
     hidden_step1: true,
     hidden_step2: true,
-    hidden2: true,
+    hidden2: true, // loading overlay
     hidden3: true,
     arima: false,
     file: null,
@@ -70,13 +70,15 @@ export class Reports extends Component {
 
   onChange = (value) => {
     this.setState({ current: value });
+    if (value !== 0) { this.setState({ hidden0: true }); this.setState({ hidden_step1: true }) }
+    else { this.setState({ hidden0: false }); this.setState({ hidden_step1: false }) }
 
     if (this.state.file == null) this.setState({ hidden_step1: true })
     else
-      this.setState({ hidden_step1: value !== 0 ? true : false });
-    if (value !== 0) this.setState({ hidden0: true })
-    else
-      this.setState({ hidden0: false });
+      this.setState({ hidden0: value !== 0 ? true : false });
+    // if (value !== 0) this.setState({ hidden0: true })
+    // else
+    //   this.setState({ hidden0: false });
 
     if (value !== 1) this.setState({ hidden_step2: true })
     else this.setState({ hidden_step2: false })
@@ -262,11 +264,7 @@ export class Reports extends Component {
     })
       .then((response) => {
 
-        sales2 = response.data.data1
-        sales3 = response.data.data2
-        // this.setState({ sales2: sales2, sales3: sales3, sales4: sales4 }, () => { console.log(this.state.sales3) })
 
-        this.setState({ hidden2: true });
         this.setState({ hidden_step1: false });
       })
       .catch((response) => {
@@ -284,23 +282,45 @@ export class Reports extends Component {
 
     this.setState({ years: years })
 
-    var years2 = years.filter((item, index) => { return index > 84 })
-    this.setState({ years2: years2 })
-
-    var years3 = years.filter((item, index) => { return index > 92 })
-    this.setState({ years3: years3 })
-
-
-
     var sales = []
     this.state.data.map((element, index) => {
       if (index > 0)
         sales.push(element.data[this.state.dataColumn])
     })
     // console.log(this.state.dataColumn)
+    console.log('am ảnh')
     this.setState({ sales: sales }, () => console.log(sales))
-    this.setState({ hidden_step1: false });
+    // this.setState({ hidden_step1: false });
   };
+
+  handleOnFileLoadAutoArima = () => {
+    var sales2, sales3, sales4
+    const formData = new FormData();
+    formData.append('test', 'test');
+    formData.append('timeColumn', this.state.column[this.state.timeColumn]);
+    formData.append('dataColumn', this.state.column[this.state.dataColumn]);
+    formData.append('file', this.state.file, 'file.csv')
+    axios({
+      method: 'post',
+      url: 'http://127.0.0.1:8000/autoarima',
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+      .then((response) => {
+
+        sales2 = response.data.data1
+        sales3 = response.data.data2
+        console.log('Nguyen cr');
+        // this.setState({ sales2: sales2, sales3: sales3, sales4: sales4 }, () => { console.log(this.state.sales3) })
+        // console.log(sales2)
+      })
+      .catch((response) => {
+        //handle error
+        console.log(response);
+      });
+
+  }
+
   handleOnError = (err, file, inputElem, reason) => {
     console.log('---------------------------');
     console.log(err);
@@ -459,6 +479,7 @@ export class Reports extends Component {
                 handleOnFileLoad2={this.handleOnFileLoad2}
                 handleOnError={this.handleOnError}
                 handleOnRemoveFile={this.handleOnRemoveFile}
+                handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
                 filename={this.state.filename}></Step2>
             </div>
           </div>

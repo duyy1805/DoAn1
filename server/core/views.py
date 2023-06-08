@@ -145,14 +145,14 @@ class FileUpload(views.APIView):
         file_obj = request.data['file']
         timeColumn = request.data['timeColumn']
         dataColumn = request.data['dataColumn']
-        print(dataColumn)
+        # print(dataColumn)
         values = read_csv(file_obj)
 
         values[timeColumn] = pd.to_datetime(
             values[timeColumn], errors='coerce')
 
         missing_values_count = values.isna().sum().sum()
-        print(missing_values_count)
+        # print(missing_values_count)
         values = values.rename(columns={'Sales': 'Data'})
         values['ID'] = 'Duy'
         # adf_test = ADFTest(alpha=0.05)
@@ -166,3 +166,52 @@ class FileUpload(views.APIView):
         return Response({
             "data1": data1,
             "data2": data2})
+
+
+class AutoArima(views.APIView):
+    parser_classes = [MultiPartParser]
+
+    def post(self, request, format=None):
+        file_obj = request.data['file']
+        timeColumn = request.data['timeColumn']
+        dataColumn = request.data['dataColumn']
+
+        print(timeColumn)
+        values = read_csv(file_obj)
+
+        values[timeColumn] = pd.to_datetime(
+            values[timeColumn], errors='coerce')
+        values = values.rename(columns={timeColumn: 'Time'})
+        values.set_index('Time', inplace=True)
+
+        adf_test = ADFTest(alpha=0.05)
+        adf_test.should_diff(values)
+
+        from sklearn.model_selection import train_test_split
+        train, test = train_test_split(values, test_size=0.2, shuffle=False)
+
+        arima_model = auto_arima(train, start_p=0, d=1, start_q=0,
+                                 max_p=5, max_d=5, max_q=5, start_P=0,
+                                 D=1, start_Q=0, max_P=5, max_D=5,
+                                 max_Q=5, m=12, seasonal=True,
+                                 error_action='warn', trace=True,
+                                 supress_warnings=True, stepwise=True,
+                                 random_state=20, n_fits=50)
+
+        prediction = pd.DataFrame(
+            arima_model.predict(n_periods=21), index=test.index)
+        prediction.columns = ['predicted_values']
+        prediction.reset_index(inplace=True)
+
+        index_future_dates = pd.date_range(
+            start='2021-10-01', end='2023-01-1', freq='MS')
+        prediction_arima = pd.DataFrame(arima_model.predict(
+            n_periods=36), index=index_future_dates)
+        prediction_arima.columns = ['predicted_values']
+
+        ###############################################################################
+
+        return Response({
+            "data1": prediction.to_json(),
+            "data2": prediction_arima.to_json()
+        })

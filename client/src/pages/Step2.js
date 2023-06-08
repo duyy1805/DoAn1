@@ -7,7 +7,7 @@ import {
     Container,
     Card,
     CardContent,
-    // Button,
+    Button as ButtonMui,
     Grid,
     MenuItem,
     Divider,
@@ -41,7 +41,7 @@ const onFinishFailed = (errorInfo: any) => {
 
 const Step2 = (props) => {
     const { hidden_step1, hidden_step2, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
-        handleOpenDialog, buttonRef, handleSelectTime, predicted,
+        handleOpenDialog, buttonRef, handleSelectTime, predicted, handleOnFileLoadAutoArima,
         selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
     return (
         <div>
@@ -60,55 +60,84 @@ const Step2 = (props) => {
                                     Select Time-Series Params
                                 </Typography>
                                 <Divider />
-                                <Form
-                                    name="basic"
-                                    labelCol={{ span: 18 }}
-                                    wrapperCol={{ span: 6 }}
-                                    style={{ maxWidth: 20000, color: 'red' }}
-                                    // initialValues={{ remember: true }}
-                                    onFinish={onFinish}
-                                    onFinishFailed={onFinishFailed}
-                                    autoComplete="off"
-                                    disabled='true'
-                                >
-                                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
-                                        <Form.Item
-                                            label="Maximum AR(p)"
-                                            name="p"
-                                            style={{ marginRight: '100px' }}
-                                        // rules={[{ required: true, message: 'Please input your username!' }]}
-                                        >
-                                            <InputNumber defaultValue={1} />
-                                        </Form.Item>
+                                <Tabs
+                                    defaultActiveKey="1"
+                                    items={[
+                                        {
+                                            label: 'Auto',
+                                            key: '1',
+                                            children:
 
-                                        <Form.Item
-                                            label="Maximum Difference(d)"
-                                            name="d"
-                                            style={{ marginRight: '100px' }}
-                                        // rules={[{ required: true, message: 'Please input your username!' }]}
-                                        >
-                                            <InputNumber defaultValue={1} />
-                                        </Form.Item>
+                                                <Card>
+                                                    <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
+                                                        <ButtonMui
+                                                            color="primary"
+                                                            variant="contained"
+                                                            onClick={handleOnFileLoadAutoArima}
+
+                                                        >
+                                                            Runn
+                                                        </ButtonMui>
+                                                    </CardContent>
+                                                </Card>
+
+                                        },
+                                        {
+                                            label: 'Manual',
+                                            key: '2',
+                                            children:
+                                                <Form
+                                                    name="basic"
+                                                    labelCol={{ span: 18 }}
+                                                    wrapperCol={{ span: 6 }}
+                                                    style={{ maxWidth: 20000, color: 'red' }}
+                                                    // initialValues={{ remember: true }}
+                                                    onFinish={onFinish}
+                                                    onFinishFailed={onFinishFailed}
+                                                    autoComplete="off"
+                                                    disabled='true'
+                                                >
+                                                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
+                                                        <Form.Item
+                                                            label="Maximum AR(p)"
+                                                            name="p"
+                                                            style={{ marginRight: '100px' }}
+                                                        // rules={[{ required: true, message: 'Please input your username!' }]}
+                                                        >
+                                                            <InputNumber defaultValue={1} />
+                                                        </Form.Item>
+
+                                                        <Form.Item
+                                                            label="Maximum Difference(d)"
+                                                            name="d"
+                                                            style={{ marginRight: '100px' }}
+                                                        // rules={[{ required: true, message: 'Please input your username!' }]}
+                                                        >
+                                                            <InputNumber defaultValue={1} />
+                                                        </Form.Item>
 
 
-                                        <Form.Item
-                                            label="Maximum MA(q)"
-                                            name="q"
-                                        // rules={[{ required: true, message: 'Please input your username!' }]}
-                                        >
-                                            <InputNumber defaultValue={1} />
-                                        </Form.Item>
-                                    </div>
-                                    <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-                                        <Checkbox>Remember me</Checkbox>
-                                    </Form.Item>
+                                                        <Form.Item
+                                                            label="Maximum MA(q)"
+                                                            name="q"
+                                                        // rules={[{ required: true, message: 'Please input your username!' }]}
+                                                        >
+                                                            <InputNumber defaultValue={1} />
+                                                        </Form.Item>
+                                                    </div>
+                                                    <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
+                                                        <Checkbox>Remember me</Checkbox>
+                                                    </Form.Item>
 
-                                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                                        <Button type="primary" htmlType="submit">
-                                            Submit
-                                        </Button>
-                                    </Form.Item>
-                                </Form>
+                                                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                                                        <Button type="primary" htmlType="submit">
+                                                            Submit
+                                                        </Button>
+                                                    </Form.Item>
+                                                </Form>
+                                        },
+                                    ]}
+                                />
                             </CardContent>
                         </Card>
                     </Box>
