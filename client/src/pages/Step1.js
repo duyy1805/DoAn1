@@ -35,8 +35,10 @@ const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
   const { hidden_step1, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
     handleOpenDialog, buttonRef, handleSelectTime, predicted,
+    //visualize
+    sum_values, values_count, missing_values_count,
     selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
-  // useEffect(() => { console.log(hidden2); console.log(buttonRef) }, []);
+  // useEffect(() => { console.log(sum_values) }, [sum_values]);
   return (
     <div >
       <LoadingOverlay
@@ -193,7 +195,7 @@ const Step1 = (props) => {
                                       {
                                         type: "scatter",
                                         mode: "lines",
-                                        name: 'sales before prediction ',
+                                        name: ' before prediction ',
                                         x: years,
                                         y: sales,
                                         line: { color: '#17BECF' }
@@ -205,7 +207,7 @@ const Step1 = (props) => {
 
                                     ]}
                                     layout={{
-                                      //width: 1000, height: 700, 
+                                      width: 1000, height: 700,
                                       title: 'TIME SERIES DATA',
                                       xaxis: {
                                         title: 'Time',
@@ -238,9 +240,9 @@ const Step1 = (props) => {
                         <Card sx={{ padding: 2 }}>
                           {/* <Divider /> */}
                           <Descriptions title="Visualization" bordered>
-                            <Descriptions.Item label="Values count">0</Descriptions.Item>
-                            <Descriptions.Item label="Missing values">0</Descriptions.Item>
-                            <Descriptions.Item label="Sum values">0</Descriptions.Item>
+                            <Descriptions.Item label="Values count">{values_count}</Descriptions.Item>
+                            <Descriptions.Item label="Missing values">{missing_values_count}</Descriptions.Item>
+                            <Descriptions.Item label="Sum values">{sum_values}</Descriptions.Item>
                             <Descriptions.Item label="Max value">0</Descriptions.Item>
                             <Descriptions.Item label="Min value" span={2}>
 

@@ -32,6 +32,8 @@ import { number } from 'prop-types';
 import { Steps, Descriptions, Row, Col } from 'antd';
 import Step1 from './Step1';
 import Step2 from './Step2';
+import Step3 from './Step3';
+import Step4 from './Step4';
 import './style.css';
 const Plot = createPlotlyComponent(Plotly);
 
@@ -43,6 +45,8 @@ export class Reports extends Component {
     hidden0: false,
     hidden_step1: true,
     hidden_step2: true,
+    hidden_step3: true,
+    hidden_step4: true,
     hidden2: true, // loading overlay
     hidden3: true,
     arima: false,
@@ -51,6 +55,9 @@ export class Reports extends Component {
     data: null,
     data2: null,
     data3: null,
+
+    test_size: 0.2,
+
     years: [],
     yearsx: [],
     sales: [],
@@ -66,22 +73,33 @@ export class Reports extends Component {
     timeColumn: null,
     dataColumn: null,
     filename: '',
+
+    //visualize
+    values_count: 0,
+    missing_values_count: 0,
+    sum_values: 0
   }
 
   onChange = (value) => {
-    this.setState({ current: value });
-    if (value !== 0) { this.setState({ hidden0: true }); }
-    else { this.setState({ hidden0: false }); }
+    this.setState({ current: value }, () => {
+      if (this.state.current !== 0) { this.setState({ hidden0: true }); }
+      else { this.setState({ hidden0: false }); }
 
-    if (this.state.file == null) this.setState({ hidden_step1: true })
-    // else
-    //   this.setState({ hidden0: value !== 0 ? true : false });
+      if (this.state.file == null) this.setState({ hidden_step1: true })
+      // else
+      //   this.setState({ hidden0: value !== 0 ? true : false });
 
-    if (value !== 1) this.setState({ hidden_step2: true })
-    else this.setState({ hidden_step2: false })
+      if (this.state.current !== 1) this.setState({ hidden_step2: true })
+      else this.setState({ hidden_step2: false })
+
+      if (this.state.current !== 2) this.setState({ hidden_step3: true })
+      else this.setState({ hidden_step3: false })
+
+      if (this.state.current !== 3) this.setState({ hidden_step4: true })
+      else this.setState({ hidden_step4: false })
+    });
   };
   handleOpenDialog = (e) => {
-    console.log(e)
     if (buttonRef.current) {
       buttonRef.current.open(e);
     }
@@ -90,7 +108,7 @@ export class Reports extends Component {
   handleSelectData = (event) => {
     // console.log(event.target.value)
     this.setState({ dataColumn: event.target.value }, () => {
-      console.log(this.state.dataColumn)
+      // console.log(this.state.dataColumn)
     })
 
   }
@@ -104,6 +122,12 @@ export class Reports extends Component {
     this.setState({ predicted: this.state.sales4[event.target.value].toFixed(2) })
     this.setState({ selectedDate: this.state.yearsx[event.target.value] })
   }
+
+
+  handleUpdateTestSize = (value) => {
+    this.setState({ test_size: value });
+  };
+
   drawArima = () => {
     this.setState({ arima: !this.state.arima })
   }
@@ -195,7 +219,7 @@ export class Reports extends Component {
         years.push(element.data[0])
     })
     this.setState({ file: file });
-    console.log(file['name'])
+    // console.log(file['name'])
     this.setState({ filename: file['name'] })
 
     var sales2, sales3, sales4;
@@ -211,37 +235,9 @@ export class Reports extends Component {
           valueArray.push(Object.values(d))
         });
         this.setState({ column: columnArray[0] });
-        console.log(this.state.column);
+        // console.log(this.state.column);
       }
     })
-    // var years = []
-    // var xx = ''
-    // this.state.data.map((element, index) => {
-    //   if (index > 0)
-    //     years.push(element.data[0])
-    //   else
-    //     xx = element.data.length
-    // })
-    // console.log(xx)
-
-    // this.setState({ years: years })
-
-    // var years2 = years.filter((item, index) => { return index > 84 })
-    // this.setState({ years2: years2 })
-
-    // var years3 = years.filter((item, index) => { return index > 92 })
-    // this.setState({ years3: years3 })
-
-
-
-    // var sales = []
-    // this.state.data.map((element, index) => {
-    //   if (index > 0)
-    //     sales.push(element.data[1])
-    // })
-    // this.setState({ sales: sales })
-    // this.setState({ hidden: false });
-
   };
 
   handleOnFileLoad2 = () => {
@@ -260,8 +256,16 @@ export class Reports extends Component {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
         .then((response) => {
-          console.log('1')
-          // this.setState({ hidden_step1: false });
+          var values_count = response.data.values_count
+          var missing_values_count = response.data.missing_values_count
+          var sum_values = response.data.sum_values
+          this.setState({
+            sum_values: sum_values,
+            values_count: values_count,
+            missing_values_count: missing_values_count,
+          }, () => {
+            console.log(missing_values_count)
+          })
         })
         .catch((response) => {
           //handle error
@@ -283,7 +287,6 @@ export class Reports extends Component {
         if (index > 0)
           sales.push(element.data[this.state.dataColumn])
       })
-      console.log('2')
       this.setState({ sales: sales }, () => console.log(sales))
       this.setState({ hidden_step1: false });
     }
@@ -291,6 +294,7 @@ export class Reports extends Component {
 
   handleOnFileLoadAutoArima = () => {
     var sales2, sales3, sales4
+    this.setState({ hidden2: false })
     const formData = new FormData();
     formData.append('test', 'test');
     formData.append('timeColumn', this.state.column[this.state.timeColumn]);
@@ -305,9 +309,10 @@ export class Reports extends Component {
       .then((response) => {
 
         sales2 = Object.values(JSON.parse(response.data.data1).predicted_values)
-        console.log(Object.values(JSON.parse(response.data.data1).predicted_values))
         this.setState({ sales2: sales2 })
-        this.setState({ arima: true }, () => {
+        this.setState({ arima: true, current: 3 }, () => {
+          this.setState({ hidden2: true })
+          this.onChange(3)
           this.render()
         })
       })
@@ -320,7 +325,9 @@ export class Reports extends Component {
       if (index > 0)
         years.push(element.data[0])
     })
-    var years2 = years.filter((item, index) => { return index > 84 })
+    var x = years.length - years.length * this.state.test_size
+    console.log(x)
+    var years2 = years.filter((item, index) => { return index > x })
     this.setState({ years2: years2 })
   }
 
@@ -354,7 +361,7 @@ export class Reports extends Component {
     var graph = {
       type: "scatter",
       mode: "lines",
-      name: 'sales before prediction ',
+      name: ' before prediction ',
       x: this.state.years,
       y: this.state.sales,
       line: { color: '#17BECF' }
@@ -363,7 +370,7 @@ export class Reports extends Component {
       this.state.arima ? {
         type: "scatter",
         mode: "lines",
-        name: 'sales after prediction Arima ',
+        name: ' after prediction Arima ',
         x: this.state.years2,
         y: this.state.sales2,
         line: { color: '#FF0000' }
@@ -379,7 +386,7 @@ export class Reports extends Component {
       this.state.rnn ? {
         type: "scatter",
         mode: "lines",
-        name: 'sales after prediction RNN',
+        name: ' after prediction RNN',
         x: this.state.years3,
         y: this.state.sales3,
         line: { color: '#0000FF' }
@@ -424,7 +431,7 @@ export class Reports extends Component {
                 },
                 {
                   title: 'Step 3',
-                  // this.state.description,
+                  description: "Select Time-Series Params",
                 },
                 {
                   title: 'Step 4',
@@ -439,7 +446,7 @@ export class Reports extends Component {
                 selectedDate={this.state.selectedDate}
                 predicted={this.state.predicted}
                 hidden_step1={this.state.hidden_step1}
-                hidden_step2={this.state.hidden_step2}
+                hidden_step3={this.state.hidden_step3}
                 hidden0={this.state.hidden0}
                 hidden2={this.state.hidden2}
                 hidden3={this.state.hidden3}
@@ -460,6 +467,11 @@ export class Reports extends Component {
                 handleOnFileLoad2={this.handleOnFileLoad2}
                 handleOnError={this.handleOnError}
                 handleOnRemoveFile={this.handleOnRemoveFile}
+
+                //visualize
+                sum_values={this.state.sum_values}
+                values_count={this.state.values_count}
+                missing_values_count={this.state.missing_values_count}
                 filename={this.state.filename}></Step1 >
             </div>
             <div>
@@ -469,6 +481,42 @@ export class Reports extends Component {
                 predicted={this.state.predicted}
                 hidden_step1={this.state.hidden_step1}
                 hidden_step2={this.state.hidden_step2}
+                hidden_step3={this.state.hidden_step3}
+                hidden0={this.state.hidden0}
+                hidden2={this.state.hidden2}
+                hidden3={this.state.hidden3}
+                file={this.state.file}
+                data={this.state.data}
+                years={this.state.years}
+                yearsx={this.state.yearsx}
+                sales={this.state.sales}
+                sales2={this.state.sales2}
+                column={this.state.column}
+                buttonRef={buttonRef}
+                timeColumn={this.state.timeColumn}
+                dataColumn={this.state.dataColumn}
+                test_size={this.state.test_size}
+                handleSelectData={this.handleSelectData}
+                handleSelectTime={this.handleSelectTime}
+                handleUpdateTestSize={this.handleUpdateTestSize}
+                handleOpenDialog={this.handleOpenDialog}
+                handleOnFileLoad1={this.handleOnFileLoad1}
+                handleOnFileLoad2={this.handleOnFileLoad2}
+                handleOnError={this.handleOnError}
+                graph={graph}
+                arima_graph={arima_graph}
+                handleOnRemoveFile={this.handleOnRemoveFile}
+                handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
+                filename={this.state.filename}></Step2>
+            </div>
+            <div>
+              <Step3
+                test={this.test}
+                selectedDate={this.state.selectedDate}
+                predicted={this.state.predicted}
+                hidden_step1={this.state.hidden_step1}
+                hidden_step2={this.state.hidden_step2}
+                hidden_step3={this.state.hidden_step3}
                 hidden0={this.state.hidden0}
                 hidden2={this.state.hidden2}
                 hidden3={this.state.hidden3}
@@ -492,7 +540,41 @@ export class Reports extends Component {
                 arima_graph={arima_graph}
                 handleOnRemoveFile={this.handleOnRemoveFile}
                 handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
-                filename={this.state.filename}></Step2>
+                filename={this.state.filename}></Step3>
+            </div>
+            <div>
+              <Step4
+                test={this.test}
+                selectedDate={this.state.selectedDate}
+                predicted={this.state.predicted}
+                hidden_step1={this.state.hidden_step1}
+                hidden_step3={this.state.hidden_step3}
+                hidden_step4={this.state.hidden_step4}
+                hidden0={this.state.hidden0}
+                hidden2={this.state.hidden2}
+                hidden3={this.state.hidden3}
+                file={this.state.file}
+                data={this.state.data}
+                years={this.state.years}
+                yearsx={this.state.yearsx}
+                sales={this.state.sales}
+                sales2={this.state.sales2}
+                column={this.state.column}
+                buttonRef={buttonRef}
+                timeColumn={this.state.timeColumn}
+                dataColumn={this.state.dataColumn}
+                handleSelectData={this.handleSelectData}
+                handleSelectTime={this.handleSelectTime}
+                handleOpenDialog={this.handleOpenDialog}
+                handleOnFileLoad1={this.handleOnFileLoad1}
+                handleOnFileLoad2={this.handleOnFileLoad2}
+                handleOnError={this.handleOnError}
+                graph={graph}
+                drawArima={this.drawArima}
+                arima_graph={arima_graph}
+                handleOnRemoveFile={this.handleOnRemoveFile}
+                handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
+                filename={this.state.filename}></Step4>
             </div>
           </div>
           {/* <div style={{ flex: '5 0 0' }}>

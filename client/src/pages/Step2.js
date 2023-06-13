@@ -1,3 +1,12 @@
+// step 2 thanhf step3 cluwaj chọn thuật toán + tham số
+
+
+// ======step2 thì là chuẩn hóa, chuẩn bị dữ liệu
+
+// Fill dữ liệu bị thiếu
+// xóa các dữ liệu không hợp lệ
+// phân chia dữ liệu train test
+
 import React, { Component, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import DownloadIcon from '@material-ui/icons/PictureAsPdf';
@@ -41,151 +50,73 @@ const onFinishFailed = (errorInfo: any) => {
 };
 
 const Step2 = (props) => {
-    const { hidden_step1, hidden_step2, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
-        handleOpenDialog, buttonRef, handleSelectTime, predicted, handleOnFileLoadAutoArima, graph, arima_graph,
+    const { hidden_step1, hidden_step2, hidden_step3, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
+        handleOpenDialog, test_size, buttonRef, handleSelectTime, predicted, handleOnFileLoadAutoArima, graph, arima_graph, handleUpdateTestSize,
         selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
-    useEffect(() => {
-        console.log(arima_graph)
-    }, [])
+
+
     return (
         <div>
+
             <Container >
-                <Box
-                    sx={{
-                        backgroundColor: 'background.default',
-                        minHeight: '100%',
-
-                    }}
+                <LoadingOverlay
+                    styles={{ display: 'none' }}
+                    active={!hidden2}
+                    spinner
+                    text='Lunas'
                 >
-                    <Box sx={{ m: 3, display: hidden_step2 ? 'none' : 'block', }}>
-                        <Card sx={{ m: 0 }}>
-                            <CardContent>
-                                <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1 }}>
-                                    Select Time-Series Params
-                                </Typography>
-                                <Divider />
-                                <Tabs
-                                    defaultActiveKey="1"
-                                    items={[
-                                        {
-                                            label: 'Auto',
-                                            key: '1',
-                                            children:
+                    <Box
+                        sx={{
+                            backgroundColor: 'background.default',
+                            minHeight: '100%',
 
-                                                <Card>
-                                                    <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
-                                                        <ButtonMui
-                                                            color="primary"
-                                                            variant="contained"
-                                                            onClick={handleOnFileLoadAutoArima}
+                        }}
+                    >
+                        <Box sx={{ m: 3, display: hidden_step2 ? 'none' : 'block', }}>
+                            <Card sx={{ m: 0 }}>
+                                <CardContent>
+                                    <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1 }}>
+                                        Select Time-Series Params
+                                    </Typography>
+                                    <Divider />
 
-                                                        >
-                                                            Runn
-                                                        </ButtonMui>
-                                                    </CardContent>
-                                                    <Box sx={{ m: 3, }}>
-                                                        <Card>
-                                                            <CardContent>
-                                                                <Box >
-                                                                    <Box sx={{ m: 3 }} display="flex" justifyContent="center">
-                                                                        <Grid
-                                                                            container
-                                                                            spacing={0}
-                                                                            direction="column"
-                                                                            alignItems="center"
-                                                                            justify="center"
-                                                                        >
-                                                                            <div>
-                                                                                <Plot
-                                                                                    data={[
-                                                                                        graph,
-                                                                                        // ,
-                                                                                        arima_graph
-                                                                                        // rnn_graph
+                                    <Form
+                                        name="basic"
+                                        labelCol={{ span: 18 }}
+                                        wrapperCol={{ span: 6 }}
+                                        style={{ maxWidth: 20000, color: 'red' }}
+                                        // initialValues={{ remember: true }}
+                                        onFinish={onFinish}
+                                        onFinishFailed={onFinishFailed}
+                                        autoComplete="off"
+                                        disable="false"
+                                    >
+                                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
+                                            <Form.Item
+                                                label="Maximum AR(p)"
+                                                name="p"
+                                                style={{ marginRight: '100px' }}
+                                            // rules={[{ required: true, message: 'Please input your username!' }]}
+                                            >
+                                                <InputNumber defaultValue={0.2} max={1} min={0} step={0.01}
+                                                    value={test_size}
+                                                    onChange={(value) => (handleUpdateTestSize(value))}
+                                                />
+                                            </Form.Item>
 
+                                            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                                                <Button type="primary" htmlType="submit">
+                                                    Submit
+                                                </Button>
+                                            </Form.Item>
+                                        </div>
+                                    </Form>
 
-                                                                                    ]}
-                                                                                    layout={{
-                                                                                        //width: 1000, height: 700, 
-                                                                                        title: 'Data',
-                                                                                        xaxis: {
-                                                                                            title: 'Time',
-                                                                                        },
-                                                                                        yaxis: {
-                                                                                            title: 'Time series data'
-                                                                                        },
-                                                                                    }}
-                                                                                />
-                                                                            </div>
-                                                                        </Grid>
-                                                                    </Box>
-                                                                </Box>
-                                                            </CardContent>
-                                                        </Card>
-                                                    </Box>
-                                                </Card>
-
-                                        },
-                                        {
-                                            label: 'Manual',
-                                            key: '2',
-                                            children:
-                                                <Form
-                                                    name="basic"
-                                                    labelCol={{ span: 18 }}
-                                                    wrapperCol={{ span: 6 }}
-                                                    style={{ maxWidth: 20000, color: 'red' }}
-                                                    // initialValues={{ remember: true }}
-                                                    onFinish={onFinish}
-                                                    onFinishFailed={onFinishFailed}
-                                                    autoComplete="off"
-                                                    disabled='true'
-                                                >
-                                                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
-                                                        <Form.Item
-                                                            label="Maximum AR(p)"
-                                                            name="p"
-                                                            style={{ marginRight: '100px' }}
-                                                        // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                        >
-                                                            <InputNumber defaultValue={1} />
-                                                        </Form.Item>
-
-                                                        <Form.Item
-                                                            label="Maximum Difference(d)"
-                                                            name="d"
-                                                            style={{ marginRight: '100px' }}
-                                                        // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                        >
-                                                            <InputNumber defaultValue={1} />
-                                                        </Form.Item>
-
-
-                                                        <Form.Item
-                                                            label="Maximum MA(q)"
-                                                            name="q"
-                                                        // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                        >
-                                                            <InputNumber defaultValue={1} />
-                                                        </Form.Item>
-                                                    </div>
-                                                    <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-                                                        <Checkbox>Remember me</Checkbox>
-                                                    </Form.Item>
-
-                                                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                                                        <Button type="primary" htmlType="submit">
-                                                            Submit
-                                                        </Button>
-                                                    </Form.Item>
-                                                </Form>
-                                        },
-                                    ]}
-                                />
-                            </CardContent>
-                        </Card>
+                                </CardContent>
+                            </Card>
+                        </Box>
                     </Box>
-                </Box>
+                </LoadingOverlay>
             </Container>
         </div >
     );

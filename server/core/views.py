@@ -150,22 +150,25 @@ class FileUpload(views.APIView):
 
         values[timeColumn] = pd.to_datetime(
             values[timeColumn], errors='coerce')
-
+        values = values.rename(columns={timeColumn: 'Time'})
         missing_values_count = values.isna().sum().sum()
         # print(missing_values_count)
-        values = values.rename(columns={'Sales': 'Data'})
+        values = values.rename(columns={dataColumn: 'Data'})
+        values_count = len(values.index)
         values['ID'] = 'Duy'
         # adf_test = ADFTest(alpha=0.05)
         # adf_test.should_diff(values)
 
         features = extract_features(
-            values, column_id='ID', column_sort='Month', n_jobs=8)
+            values, column_id='ID', column_sort='Time', n_jobs=8)
 
-        data1 = features.Data__sum_values
-        data2 = features.Data__maximum
+        sum_values = features.Data__sum_values[0]
+        maximum = features.Data__maximum[0]
         return Response({
-            "data1": data1,
-            "data2": data2})
+            "values_count": values_count,
+            "missing_values_count": missing_values_count,
+            "sum_values": sum_values,
+            "maximum": maximum})
 
 
 class AutoArima(views.APIView):
@@ -198,8 +201,9 @@ class AutoArima(views.APIView):
                                  supress_warnings=True, stepwise=True,
                                  random_state=20, n_fits=50)
 
+        n_periods = test.shape[0]
         prediction = pd.DataFrame(
-            arima_model.predict(n_periods=21), index=test.index)
+            arima_model.predict(n_periods=n_periods), index=test.index)
         prediction.columns = ['predicted_values']
         prediction.reset_index(inplace=True)
 
