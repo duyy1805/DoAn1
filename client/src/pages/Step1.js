@@ -51,15 +51,15 @@ const Step1 = (props) => {
         <Container >
           <Box
             sx={{
-              backgroundColor: 'background.default',
+              // backgroundColor: 'background.default',
               minHeight: '100%',
               display: hidden0 ? 'none' : 'block',
             }}
           >
             <Box sx={{ m: 3, }}>
               <Card sx={{ m: 0 }} >
-                <CardContent >
-                  <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1 }}>
+                <CardContent sx={{ width: "1000px" }}>
+                  <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
                     Time Series Forecasting using ARIMA & RNN
                   </Typography>
 
@@ -88,6 +88,7 @@ const Step1 = (props) => {
                               style={{
                                 display: 'flex',
                                 flexDirection: 'row',
+                                whiteSpace: 'nowrap'
                                 // marginBottom: 10,
                               }}
                             >
@@ -95,7 +96,6 @@ const Step1 = (props) => {
                                 color="primary"
                                 variant="contained"
                                 onClick={handleOpenDialog}
-
                               >
                                 Import CSV file
                               </Button>
@@ -122,8 +122,8 @@ const Step1 = (props) => {
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={column[timeColumn]}
-                        label="Age"
-
+                        label="Time"
+                        sx={{ borderRadius: '10px' }}
                         onChange={handleSelectTime}
                       >
 
@@ -138,8 +138,8 @@ const Step1 = (props) => {
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={column[dataColumn]}
-                        label="Age"
-
+                        sx={{ borderRadius: '10px' }}
+                        label="Data"
                         onChange={handleSelectData}
                       >
 
@@ -207,7 +207,7 @@ const Step1 = (props) => {
 
                                     ]}
                                     layout={{
-                                      width: 1000, height: 700,
+                                      width: 900, height: 700,
                                       title: 'TIME SERIES DATA',
                                       xaxis: {
                                         title: 'Time',

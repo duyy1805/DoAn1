@@ -59,15 +59,15 @@ const Step3 = (props) => {
                 >
                     <Box
                         sx={{
-                            backgroundColor: 'background.default',
+                            // backgroundColor: 'background.default',
                             minHeight: '100%',
 
                         }}
                     >
                         <Box sx={{ m: 3, display: hidden_step3 ? 'none' : 'block', }}>
                             <Card sx={{ m: 0 }}>
-                                <CardContent>
-                                    <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1 }}>
+                                <CardContent sx={{ width: "1000px" }}>
+                                    <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
                                         Select Time-Series Params
                                     </Typography>
                                     <Divider />

@@ -111,7 +111,7 @@ const Step4 = (props) => {
 
                                                 ]}
                                                 layout={{
-                                                    width: 1000, height: 700, title: 'Time series data',
+                                                    width: 900, height: 700, title: 'Time series data',
                                                     xaxis: {
                                                         title: 'Time',
                                                     },

@@ -34,11 +34,10 @@ import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
 import Step4 from './Step4';
-import './style.css';
 const Plot = createPlotlyComponent(Plotly);
 
 const buttonRef = React.createRef();
-export class Reports extends Component {
+export default class Reports extends Component {
   state = {
     selectedDate: '',
     predicted: null,
@@ -412,7 +411,7 @@ export class Reports extends Component {
         <Helmet>
           <title>Dashboard</title>
         </Helmet>
-        <div style={{ display: 'flex', paddingLeft: 200, height: "100vh", overflow: "hidden" }}>
+        <div style={{ display: 'flex', paddingLeft: 20, overflow: "hidden" }}>
           <div style={{ flex: ' 1 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Divider />
             <Steps
@@ -440,7 +439,7 @@ export class Reports extends Component {
               ]}
             />
           </div>
-          <div className='step-container'>
+          <div style={{ flex: ' 5 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div>
               <Step1 test={this.test}
                 selectedDate={this.state.selectedDate}
