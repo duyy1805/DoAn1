@@ -36,7 +36,7 @@ const Step1 = (props) => {
   const { hidden_step1, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
     handleOpenDialog, buttonRef, handleSelectTime, predicted,
     //visualize
-    sum_values, values_count, missing_values_count,
+    sum_values, values_count, missing_values_count, max_values, min_values, mean_values, median_values, std_values, variance_values, skewness_values,
     selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
   // useEffect(() => { console.log(sum_values) }, [sum_values]);
   return (
@@ -243,18 +243,18 @@ const Step1 = (props) => {
                             <Descriptions.Item label="Values count">{values_count}</Descriptions.Item>
                             <Descriptions.Item label="Missing values">{missing_values_count}</Descriptions.Item>
                             <Descriptions.Item label="Sum values">{sum_values}</Descriptions.Item>
-                            <Descriptions.Item label="Max value">0</Descriptions.Item>
+                            <Descriptions.Item label="Max value">{max_values}</Descriptions.Item>
                             <Descriptions.Item label="Min value" span={2}>
-
+                              {min_values}
                             </Descriptions.Item>
                             <Descriptions.Item label="Giá trị trung bình" span={3}>
-                              <Badge status="processing" text="Running" />
+                              {mean_values}
                             </Descriptions.Item>
-                            <Descriptions.Item label="Trung vị">10</Descriptions.Item>
-                            <Descriptions.Item label="Độ lệch chuẩn">0</Descriptions.Item>
-                            <Descriptions.Item label="Phương sai">0</Descriptions.Item>
+                            <Descriptions.Item label="Trung vị">{median_values}</Descriptions.Item>
+                            <Descriptions.Item label="Độ lệch chuẩn">{std_values}</Descriptions.Item>
+                            <Descriptions.Item label="Phương sai">{variance_values}</Descriptions.Item>
                             <Descriptions.Item label="Độ lệch của chuỗi">
-
+                              {skewness_values}
                             </Descriptions.Item>
                           </Descriptions>
                         </Card>

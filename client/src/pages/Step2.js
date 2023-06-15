@@ -20,7 +20,7 @@ import {
     Grid,
     MenuItem,
     Divider,
-    Select,
+    // Select,
     FormControl,
     InputLabel,
     FormHelperText,
@@ -38,7 +38,7 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
-import { InputNumber, Row, Col, Tabs, Badge, Form, Button, Checkbox, Input } from 'antd';
+import { InputNumber, Select, Row, Col, Tabs, Badge, Form, Button, Checkbox, Input } from 'antd';
 
 const Plot = createPlotlyComponent(Plotly);
 const onFinish = (values: any) => {
@@ -93,8 +93,8 @@ const Step2 = (props) => {
                                     >
                                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
                                             <Form.Item
-                                                label="Maximum AR(p)"
-                                                name="p"
+                                                label="Test size"
+                                                name="Test_Size"
                                                 style={{ marginRight: '100px' }}
                                             // rules={[{ required: true, message: 'Please input your username!' }]}
                                             >
@@ -103,7 +103,23 @@ const Step2 = (props) => {
                                                     onChange={(value) => (handleUpdateTestSize(value))}
                                                 />
                                             </Form.Item>
-
+                                            <Form.Item
+                                                label="Fill missing data"
+                                                name="fill"
+                                                style={{ marginRight: '100px' }}
+                                            // rules={[{ required: true, message: 'Please input your username!' }]}
+                                            >
+                                                <Select
+                                                    defaultValue="none"
+                                                    style={{ width: 120 }}
+                                                    // onChange={handleChange}
+                                                    options={[
+                                                        { value: 'none', label: 'none' },
+                                                        { value: 'lucy', label: 'Lucy' },
+                                                        { value: 'Yiminghe', label: 'yiminghe' },
+                                                    ]}
+                                                />
+                                            </Form.Item>
                                             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                                                 <Button type="primary" htmlType="submit">
                                                     Submit
