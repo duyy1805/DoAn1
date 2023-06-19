@@ -47,7 +47,7 @@ function Main({ children }) {
       className={`layout-dashboard ${pathname === "profile" ? "layout-profile" : ""
         } ${pathname === "rtl" ? "layout-dashboard-rtl" : ""}`}
     >
-      <video style={{ position: "absolute", width: '100%' }} src={anime} autoPlay loop muted />
+      {/* <video style={{ position: "absolute", width: '100%' }} src={anime} autoPlay loop muted /> */}
       <Drawer
         title={false}
         placement={placement === "right" ? "left" : "right"}

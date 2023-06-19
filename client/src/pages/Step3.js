@@ -42,7 +42,9 @@ const onFinishFailed = (errorInfo: any) => {
 
 const Step3 = (props) => {
     const { hidden_step1, hidden_step3, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
-        handleOpenDialog, buttonRef, handleSelectTime, predicted, handleOnFileLoadAutoArima, graph, arima_graph,
+        handleOpenDialog, buttonRef, handleSelectTime, predicted,
+        previousStep, nextStep,
+        handleOnFileLoadAutoArima, graph, arima_graph,
         selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
     // useEffect(() => {
     //     console.log(arima_graph)
@@ -55,7 +57,7 @@ const Step3 = (props) => {
                     styles={{ display: 'none' }}
                     active={!hidden2}
                     spinner
-                    text='Lunas'
+                    text='Applying ARIMA algorithms '
                 >
                     <Box
                         sx={{
@@ -81,14 +83,14 @@ const Step3 = (props) => {
 
                                                     <Card>
                                                         <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
-                                                            <ButtonMui
-                                                                color="primary"
-                                                                variant="contained"
+                                                            <Button
+                                                                type="primary"
+                                                                // variant="contained"
                                                                 onClick={handleOnFileLoadAutoArima}
 
                                                             >
                                                                 Runn
-                                                            </ButtonMui>
+                                                            </Button>
                                                         </CardContent>
                                                     </Card>
 
@@ -106,35 +108,89 @@ const Step3 = (props) => {
                                                         onFinish={onFinish}
                                                         onFinishFailed={onFinishFailed}
                                                         autoComplete="off"
-                                                        disabled='true'
+                                                    // disabled='true'
                                                     >
-                                                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
-                                                            <Form.Item
-                                                                label="Maximum AR(p)"
-                                                                name="p"
-                                                                style={{ marginRight: '100px' }}
-                                                            // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                            >
-                                                                <InputNumber defaultValue={1} />
-                                                            </Form.Item>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', marginTop: 10 }}>
+                                                                <Form.Item
+                                                                    label="p"
+                                                                    name="p"
+                                                                    style={{ marginRight: '100px' }}
+                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
+                                                                >
+                                                                    <InputNumber defaultValue={1} />
+                                                                </Form.Item>
 
-                                                            <Form.Item
-                                                                label="Maximum Difference(d)"
-                                                                name="d"
-                                                                style={{ marginRight: '100px' }}
-                                                            // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                            >
-                                                                <InputNumber defaultValue={1} />
-                                                            </Form.Item>
+                                                                <Form.Item
+                                                                    label="d"
+                                                                    name="d"
+                                                                    style={{ marginRight: '100px' }}
+                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
+                                                                >
+                                                                    <InputNumber defaultValue={1} />
+                                                                </Form.Item>
 
 
-                                                            <Form.Item
-                                                                label="Maximum MA(q)"
-                                                                name="q"
-                                                            // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                            >
-                                                                <InputNumber defaultValue={1} />
-                                                            </Form.Item>
+                                                                <Form.Item
+                                                                    label="q"
+                                                                    name="q"
+                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
+                                                                >
+                                                                    <InputNumber defaultValue={1} />
+                                                                </Form.Item>
+                                                                <Form.Item
+                                                                    label="P"
+                                                                    name="P"
+                                                                    style={{ marginRight: '100px' }}
+                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
+                                                                >
+                                                                    <InputNumber defaultValue={1} />
+                                                                </Form.Item>
+
+                                                                <Form.Item
+                                                                    label="D"
+                                                                    name="D"
+                                                                    style={{ marginRight: '100px' }}
+                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
+                                                                >
+                                                                    <InputNumber defaultValue={1} />
+                                                                </Form.Item>
+
+
+                                                                <Form.Item
+                                                                    label="Q"
+                                                                    name="Q"
+                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
+                                                                >
+                                                                    <InputNumber defaultValue={1} />
+                                                                </Form.Item>
+                                                                <Form.Item
+                                                                    label="m"
+                                                                    name="m"
+                                                                    style={{ marginRight: '100px' }}
+                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
+                                                                >
+                                                                    <InputNumber defaultValue={1} />
+                                                                </Form.Item>
+
+                                                                <Form.Item
+                                                                    label="seasonal"
+                                                                    name="seasonal"
+                                                                    style={{ marginRight: '100px' }}
+                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
+                                                                >
+                                                                    <InputNumber defaultValue={1} />
+                                                                </Form.Item>
+
+
+                                                                <Form.Item
+                                                                    label="error_action"
+                                                                    name="error_action"
+                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
+                                                                >
+                                                                    <InputNumber defaultValue={1} />
+                                                                </Form.Item>
+                                                            </div>
                                                         </div>
                                                         <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
                                                             <Checkbox>Remember me</Checkbox>

@@ -60,16 +60,16 @@ const Step4 = (props) => {
                                     p: 2
                                 }}
                             >
-                                <ButtonMui
-                                    color="primary"
-                                    variant="contained"
+                                <Button
+                                    type="primary"
+                                    // variant="contained"
                                     onClick={drawArima}
                                     sx={{
                                         m: 1,
                                     }}
                                 >
                                     Apply ARIMA Model
-                                </ButtonMui>
+                                </Button>
                                 {/* <Button
                                     color="primary"
                                     variant="contained"

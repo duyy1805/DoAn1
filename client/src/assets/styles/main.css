@@ -1745,7 +1745,7 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav li.ant-menu-it
 }
 
 body {
-  overflow: visible !important;
+  overflow: hidden !important;
   width: 100% !important;
 }
 

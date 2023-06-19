@@ -158,6 +158,8 @@ class FileUpload(views.APIView):
         values['ID'] = 'Duy'
         # adf_test = ADFTest(alpha=0.05)
         # adf_test.should_diff(values)
+        if missing_values_count != 0:
+            values.fillna(values['Data'].mean(), inplace=True)
 
         features = extract_features(
             values, column_id='ID', column_sort='Time', n_jobs=8)
@@ -191,20 +193,37 @@ class AutoArima(views.APIView):
         file_obj = request.data['file']
         timeColumn = request.data['timeColumn']
         dataColumn = request.data['dataColumn']
+        test_size = request.data['test_size']
+        fill_method = request.data['fill_method']
 
-        print(timeColumn)
+        test_size = float(test_size)
         values = read_csv(file_obj)
 
         values[timeColumn] = pd.to_datetime(
             values[timeColumn], errors='coerce')
         values = values.rename(columns={timeColumn: 'Time'})
+        values = values.rename(columns={dataColumn: 'Data'})
+        missing_values_count = values.isna().sum().sum()
+        if missing_values_count != 0:
+            # if fill_method == 'delete':
+            #     values = values[~(values.isna().any(axis=1))]
+            if fill_method == '0':
+                values['Data'].fillna(0, inplace=True)
+            if fill_method == 'mean':
+                values['Data'].fillna(values['Data'].mean, inplace=True)
+            if fill_method == 'forward':
+                values['Data'].fillna(method='ffill', inplace=True)
+            if fill_method == 'backward':
+                values['Data'].fillna(method='bfill', inplace=True)
+
         values.set_index('Time', inplace=True)
 
         adf_test = ADFTest(alpha=0.05)
         adf_test.should_diff(values)
 
         from sklearn.model_selection import train_test_split
-        train, test = train_test_split(values, test_size=0.2, shuffle=False)
+        train, test = train_test_split(
+            values, test_size=test_size, shuffle=False)
 
         arima_model = auto_arima(train, start_p=0, d=1, start_q=0,
                                  max_p=5, max_d=5, max_q=5, start_P=0,

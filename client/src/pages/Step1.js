@@ -7,7 +7,7 @@ import {
   Container,
   Card,
   CardContent,
-  Button,
+  Button as ButtonMui,
   Grid,
   MenuItem,
   Divider,
@@ -30,11 +30,13 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
-import { Steps, Descriptions, Row, Col, Tabs, Badge } from 'antd';
+import { Steps, Descriptions, Row, Col, Button, Tabs, Badge } from 'antd';
+import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
+
 const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
   const { hidden_step1, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
-    handleOpenDialog, buttonRef, handleSelectTime, predicted,
+    handleOpenDialog, buttonRef, handleSelectTime, predicted, nextStep, previousStep,
     //visualize
     sum_values, values_count, missing_values_count, max_values, min_values, mean_values, median_values, std_values, variance_values, skewness_values,
     selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
@@ -93,8 +95,8 @@ const Step1 = (props) => {
                               }}
                             >
                               <Button
-                                color="primary"
-                                variant="contained"
+                                type="primary"
+                                // variant="contained"
                                 onClick={handleOpenDialog}
                               >
                                 Import CSV file
@@ -158,8 +160,8 @@ const Step1 = (props) => {
                     }}
                   >
                     <Button
-                      color="primary"
-                      variant="contained"
+                      type="primary"
+                      // variant="contained"
                       onClick={handleOnFileLoad2}
 
                     >
@@ -262,136 +264,18 @@ const Step1 = (props) => {
                   },
                 ]}
               />
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+                <Button
+                  type="primary"
+                  // variant="contained"
+                  onClick={nextStep}
+                  style={{ margin: '0 8px' }}
+                >
+                  Next
+                  {/* <AiOutlineArrowRight size={20} style={{ marginLeft: '5px' }} /> */}
+                </Button>
+              </div>
             </Box>
-            {/* <Box sx={{ m: 3, display: this.state.hidden ? 'none' : 'block', }}>
-                  <Card>
-                    <CardContent>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                          p: 2
-                        }}
-                      >
-                        <Button
-                          color="primary"
-                          variant="contained"
-                          onClick={this.drawArima}
-                          sx={{
-                            m: 1,
-                          }}
-                        >
-                          Apply ARIMA Model
-                        </Button>
-                        <Button
-                          color="primary"
-                          variant="contained"
-                          onClick={this.drawRnn}
-                          sx={{
-                            m: 1,
-                          }}
-                        >
-                          Apply RNN Model
-                        </Button>
-
-                      </Box>
-                      <Box sx={{ maxWidth: 1000 }}>
-
-                        <Box sx={{ m: 3 }} display="flex" justifyContent="center">
-                          <Grid
-                            container
-                            spacing={0}
-                            direction="column"
-                            alignItems="center"
-                            justify="center"
-                          >
-                            <div>
-                              <Plot
-                                data={[
-                                  {
-
-                                    type: "scatter",
-                                    mode: "lines",
-                                    name: 'sales before prediction ',
-                                    x: this.state.years,
-                                    y: this.state.sales,
-                                    line: { color: '#17BECF' }
-                                  }
-                                  ,
-                                  arima_graph,
-                                  rnn_graph
-
-
-                                ]}
-                                layout={{
-                                  width: 1000, height: 700, title: 'sales',
-                                  xaxis: {
-                                    title: 'date(Monthly)',
-                                  },
-                                  yaxis: {
-                                    title: 'Time series data'
-                                  },
-                                }}
-                              />
-                            </div>
-                          </Grid>
-                        </Box>
-                      </Box>
-
-
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          p: 2
-                        }}
-                      >
-                        <FormControl sx={{ m: 1, minWidth: 120 }}>
-                          <InputLabel id="demo-simple-select-helper-label">select</InputLabel>
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={this.state.selectedDate}
-                            label="Age"
-
-                            onChange={this.handleSelectChanege}
-                          >
-
-                            {this.state.yearsx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
-
-                          </Select>
-                          <FormHelperText>select a date to make prediction</FormHelperText>
-                        </FormControl>
-
-                      </Box>
-
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          p: 2
-                        }}
-                      >
-                        {this.state.predicted !== null &&
-                          <h3> The predicted sale is  for {this.state.selectedDate} is :
-                            {'  ' + this.state.predicted + ' DA'}
-                          </h3>
-
-                        }
-
-
-
-
-                      </Box>
-
-                    </CardContent>
-                    <Divider />
-                  </Card>
-                </Box> */}
-
-
-
-
           </Box>
         </Container>
       </LoadingOverlay>

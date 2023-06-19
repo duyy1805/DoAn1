@@ -56,6 +56,7 @@ export default class Reports extends Component {
     data3: null,
 
     test_size: 0.2,
+    fill_method: 'delete',
 
     years: [],
     yearsx: [],
@@ -105,6 +106,23 @@ export default class Reports extends Component {
       else this.setState({ hidden_step4: false })
     });
   };
+  nextStep = () => {
+    var x = this.state.current
+    x = x + 1
+    this.setState({ current: x }, () => {
+      this.onChange(x)
+      this.render()
+    })
+  }
+
+  previousStep = () => {
+    var x = this.state.current
+    if (x != 0) { x = x - 1 }
+    this.setState({ current: x }, () => {
+      this.onChange(x)
+      this.render()
+    })
+  }
   handleOpenDialog = (e) => {
     if (buttonRef.current) {
       buttonRef.current.open(e);
@@ -132,6 +150,10 @@ export default class Reports extends Component {
 
   handleUpdateTestSize = (value) => {
     this.setState({ test_size: value });
+  };
+
+  handleFillMethod = (value) => {
+    this.setState({ fill_method: value });
   };
 
   drawArima = () => {
@@ -248,8 +270,8 @@ export default class Reports extends Component {
 
   handleOnFileLoad2 = () => {
     var sales2, sales3, sales4
-    // this.setState({ hidden2: false });
     if (this.state.file !== null) {
+      this.setState({ hidden2: false });
       const formData = new FormData();
       formData.append('test', 'test');
       formData.append('timeColumn', this.state.column[this.state.timeColumn]);
@@ -272,6 +294,8 @@ export default class Reports extends Component {
           var std_values = response.data.std_values
           var variance_values = response.data.variance_values
           var skewness_values = response.data.skewness_values
+          this.setState({ hidden_step1: false });
+          this.setState({ hidden2: true });
           this.setState({
             sum_values: sum_values,
             values_count: values_count,
@@ -310,7 +334,7 @@ export default class Reports extends Component {
       this.setState({ sales: sales },
         // () => console.log(sales)
       )
-      this.setState({ hidden_step1: false });
+      // this.setState({ hidden_step1: false });
     }
   };
 
@@ -318,7 +342,8 @@ export default class Reports extends Component {
     var sales2, sales3, sales4
     this.setState({ hidden2: false })
     const formData = new FormData();
-    formData.append('test', 'test');
+    formData.append('test_size', this.state.test_size);
+    formData.append('fill_method', this.state.fill_method);
     formData.append('timeColumn', this.state.column[this.state.timeColumn]);
     formData.append('dataColumn', this.state.column[this.state.dataColumn]);
     formData.append('file', this.state.file, 'file.csv')
@@ -439,7 +464,7 @@ export default class Reports extends Component {
             <Divider />
             <Steps
               current={this.state.current}
-              onChange={this.onChange}
+              // onChange={this.onChange}
               direction="vertical"
               style={{ marginTop: "100px" }}
               items={[
@@ -449,7 +474,7 @@ export default class Reports extends Component {
                 },
                 {
                   title: 'Step 2',
-                  description: "Select Time-Series Params",
+                  description: "Data preparation",
                 },
                 {
                   title: 'Step 3',
@@ -462,7 +487,7 @@ export default class Reports extends Component {
               ]}
             />
           </div>
-          <div style={{ flex: ' 5 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ flex: ' 5 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', overflowY: 'scroll', height: 'calc(100vh - 102px)' }}>
             <div>
               <Step1 test={this.test}
                 selectedDate={this.state.selectedDate}
@@ -490,6 +515,8 @@ export default class Reports extends Component {
                 handleOnError={this.handleOnError}
                 handleOnRemoveFile={this.handleOnRemoveFile}
 
+                nextStep={this.nextStep}
+                previousStep={this.previousStep}
                 //visualize
                 sum_values={this.state.sum_values}
                 values_count={this.state.values_count}
@@ -525,14 +552,22 @@ export default class Reports extends Component {
                 buttonRef={buttonRef}
                 timeColumn={this.state.timeColumn}
                 dataColumn={this.state.dataColumn}
+
                 test_size={this.state.test_size}
+                fill_method={this.state.fill_method}
+
                 handleSelectData={this.handleSelectData}
                 handleSelectTime={this.handleSelectTime}
                 handleUpdateTestSize={this.handleUpdateTestSize}
+                handleFillMethod={this.handleFillMethod}
+
                 handleOpenDialog={this.handleOpenDialog}
                 handleOnFileLoad1={this.handleOnFileLoad1}
                 handleOnFileLoad2={this.handleOnFileLoad2}
                 handleOnError={this.handleOnError}
+
+                nextStep={this.nextStep}
+                previousStep={this.previousStep}
                 graph={graph}
                 arima_graph={arima_graph}
                 handleOnRemoveFile={this.handleOnRemoveFile}
@@ -566,6 +601,10 @@ export default class Reports extends Component {
                 handleOnFileLoad1={this.handleOnFileLoad1}
                 handleOnFileLoad2={this.handleOnFileLoad2}
                 handleOnError={this.handleOnError}
+
+                nextStep={this.nextStep}
+                previousStep={this.previousStep}
+
                 graph={graph}
                 arima_graph={arima_graph}
                 handleOnRemoveFile={this.handleOnRemoveFile}
@@ -599,7 +638,10 @@ export default class Reports extends Component {
                 handleOnFileLoad1={this.handleOnFileLoad1}
                 handleOnFileLoad2={this.handleOnFileLoad2}
                 handleOnError={this.handleOnError}
-                graph={graph}
+
+                nextStep={this.nextStep}
+                previousStep={this.previousStep}
+
                 drawArima={this.drawArima}
                 arima_graph={arima_graph}
                 handleOnRemoveFile={this.handleOnRemoveFile}
