@@ -49,6 +49,7 @@ export default class Reports extends Component {
     hidden2: true, // loading overlay
     hidden3: true,
     arima: false,
+    auto_arima: false,
     file: null,
     rnn: false,
     data: null,
@@ -85,6 +86,9 @@ export default class Reports extends Component {
     std_values: 0,
     variance_values: 0,
     skewness_values: 0,
+    //step3
+
+    params: []
   }
 
   onChange = (value) => {
@@ -158,6 +162,9 @@ export default class Reports extends Component {
 
   drawArima = () => {
     this.setState({ arima: !this.state.arima })
+  }
+  drawAuto_Arima = () => {
+    this.setState({ auto_arima: !this.state.auto_arima })
   }
   drawRnn = () => {
     this.setState({ rnn: !this.state.rnn })
@@ -357,6 +364,58 @@ export default class Reports extends Component {
 
         sales2 = Object.values(JSON.parse(response.data.data1).predicted_values)
         this.setState({ sales2: sales2 })
+        this.setState({ auto_arima: true, current: 3 }, () => {
+          this.setState({ hidden2: true })
+          this.onChange(3)
+          this.render()
+        })
+      })
+      .catch((response) => {
+        //handle error
+        console.log(response);
+      });
+    var years = []
+    this.state.data.map((element, index) => {
+      if (index > 0)
+        years.push(element.data[0])
+    })
+    var x = years.length - years.length * this.state.test_size
+    console.log(x)
+    var years2 = years.filter((item, index) => { return index > x })
+    this.setState({ years2: years2 })
+  }
+
+  handleOnFileLoadArima = (values) => {
+    var sales2, sales3, sales4
+    console.log(values)
+    // this.setState({ hidden2: false })
+    const formData = new FormData();
+    formData.append('test_size', this.state.test_size);
+    formData.append('fill_method', this.state.fill_method);
+    formData.append('timeColumn', this.state.column[this.state.timeColumn]);
+    formData.append('dataColumn', this.state.column[this.state.dataColumn]);
+    formData.append('file', this.state.file, 'file.csv')
+    formData.append('p', values.p)
+    formData.append('d', values.d)
+    formData.append('q', values.q)
+    formData.append('P', values.P)
+    formData.append('D', values.D)
+    formData.append('Q', values.Q)
+    formData.append('m', values.m)
+    formData.append('stationarity', values.stationarity)
+    formData.append('invertibility', values.invertibility)
+    formData.append('concentrate_scale', values.concentrate_scale)
+    console.log(formData)
+    axios({
+      method: 'post',
+      url: 'http://127.0.0.1:8000/arima',
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+      .then((response) => {
+
+        sales3 = Object.values(JSON.parse(response.data.data1).predicted_values)
+        this.setState({ sales3: sales3 })
         this.setState({ arima: true, current: 3 }, () => {
           this.setState({ hidden2: true })
           this.onChange(3)
@@ -413,14 +472,30 @@ export default class Reports extends Component {
       y: this.state.sales,
       line: { color: '#17BECF' }
     }
+    var auto_arima_graph =
+      this.state.auto_arima ? {
+        type: "scatter",
+        mode: "lines",
+        name: ' after prediction auto Arima ',
+        x: this.state.years2,
+        y: this.state.sales2,
+        line: { color: '#FF0000' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
     var arima_graph =
       this.state.arima ? {
         type: "scatter",
         mode: "lines",
         name: ' after prediction Arima ',
         x: this.state.years2,
-        y: this.state.sales2,
-        line: { color: '#FF0000' }
+        y: this.state.sales3,
+        line: { color: '#E82CB2' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -464,7 +539,7 @@ export default class Reports extends Component {
             <Divider />
             <Steps
               current={this.state.current}
-              // onChange={this.onChange}
+              onChange={this.onChange}
               direction="vertical"
               style={{ marginTop: "100px" }}
               items={[
@@ -605,6 +680,9 @@ export default class Reports extends Component {
                 nextStep={this.nextStep}
                 previousStep={this.previousStep}
 
+                params={this.state.params}
+                handleOnFileLoadArima={this.handleOnFileLoadArima}
+
                 graph={graph}
                 arima_graph={arima_graph}
                 handleOnRemoveFile={this.handleOnRemoveFile}
@@ -643,7 +721,9 @@ export default class Reports extends Component {
                 previousStep={this.previousStep}
 
                 drawArima={this.drawArima}
+                drawAuto_Arima={this.drawAuto_Arima}
                 arima_graph={arima_graph}
+                auto_arima_graph={auto_arima_graph}
                 handleOnRemoveFile={this.handleOnRemoveFile}
                 handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
                 filename={this.state.filename}></Step4>

@@ -42,7 +42,7 @@ const onFinishFailed = (errorInfo: any) => {
 
 const Step4 = (props) => {
     const { hidden_step1, hidden_step3, hidden_step4, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
-        handleOpenDialog, buttonRef, handleSelectTime, predicted, handleOnFileLoadAutoArima, graph, arima_graph, drawArima,
+        handleOpenDialog, buttonRef, handleSelectTime, predicted, handleOnFileLoadAutoArima, graph, auto_arima_graph, arima_graph, drawArima, drawAuto_Arima,
         selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
     // useEffect(() => {
     //     console.log(arima_graph)
@@ -63,7 +63,18 @@ const Step4 = (props) => {
                                 <Button
                                     type="primary"
                                     // variant="contained"
+                                    onClick={drawAuto_Arima}
+                                    sx={{
+                                        m: 1,
+                                    }}
+                                >
+                                    Apply Auto ARIMA Model
+                                </Button>
+                                <Button
+                                    type="primary"
+                                    // variant="contained"
                                     onClick={drawArima}
+                                    style={{ marginLeft: 5 }}
                                     sx={{
                                         m: 1,
                                     }}
@@ -105,6 +116,7 @@ const Step4 = (props) => {
                                                         line: { color: '#17BECF' }
                                                     }
                                                     ,
+                                                    auto_arima_graph,
                                                     arima_graph,
                                                     // rnn_graph
 

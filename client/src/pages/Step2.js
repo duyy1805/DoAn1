@@ -88,7 +88,7 @@ const Step2 = (props) => {
                                         labelCol={{ span: 18 }}
                                         wrapperCol={{ span: 6 }}
                                         style={{ maxWidth: 20000, color: 'red' }}
-                                        initialValues={{ remember: true, test_size: 0.2, fill: '0' }}
+                                        initialValues={{ test_size: 0.2, fill: '0' }}
                                         onFinish={onFinish}
                                         onFinishFailed={onFinishFailed}
                                         autoComplete="off"

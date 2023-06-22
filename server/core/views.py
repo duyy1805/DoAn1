@@ -8,7 +8,8 @@ from rest_framework.parsers import FileUploadParser, FormParser, MultiPartParser
 from rest_framework.views import APIView
 from .models import Times, Client, Employee
 from .serializers import SalesSerializer, ClientSerializer, EmployeeSerializer
-
+from statsmodels.tsa.arima.model import ARIMA
+import json
 
 import pandas as pd
 import numpy as np
@@ -250,4 +251,78 @@ class AutoArima(views.APIView):
         return Response({
             "data1": prediction.to_json(),
             "data2": prediction_arima.to_json()
+        })
+
+
+class Arima(views.APIView):
+    parser_classes = [MultiPartParser]
+
+    def post(self, request, format=None):
+        file_obj = request.data['file']
+        timeColumn = request.data['timeColumn']
+        dataColumn = request.data['dataColumn']
+        test_size = request.data['test_size']
+        fill_method = request.data['fill_method']
+
+        p = int(request.data['p'])
+        d = int(request.data['d'])
+        q = int(request.data['q'])
+        P = int(request.data['P'])
+        D = int(request.data['D'])
+        m = int(request.data['m'])
+        Q = int(request.data['Q'])
+        stationarity = request.data['stationarity']
+        invertibility = request.data['invertibility']
+        concentrate_scale = request.data['concentrate_scale']
+
+        test_size = float(test_size)
+        values = read_csv(file_obj)
+
+        values[timeColumn] = pd.to_datetime(
+            values[timeColumn], errors='coerce')
+        values = values.rename(columns={timeColumn: 'Time'})
+        values = values.rename(columns={dataColumn: 'Data'})
+        missing_values_count = values.isna().sum().sum()
+        if missing_values_count != 0:
+            # if fill_method == 'delete':
+            #     values = values[~(values.isna().any(axis=1))]
+            if fill_method == '0':
+                values['Data'].fillna(0, inplace=True)
+            if fill_method == 'mean':
+                values['Data'].fillna(values['Data'].mean, inplace=True)
+            if fill_method == 'forward':
+                values['Data'].fillna(method='ffill', inplace=True)
+            if fill_method == 'backward':
+                values['Data'].fillna(method='bfill', inplace=True)
+
+        values.set_index('Time', inplace=True)
+
+        adf_test = ADFTest(alpha=0.05)
+        adf_test.should_diff(values)
+
+        from sklearn.model_selection import train_test_split
+        train, test = train_test_split(
+            values, test_size=test_size, shuffle=False)
+
+        arima_model = ARIMA(train, exog=None, order=(p, d, q), seasonal_order=(P, D, Q, m),
+                            trend=None, enforce_stationarity=stationarity, enforce_invertibility=invertibility,
+                            concentrate_scale=concentrate_scale, trend_offset=1, dates=None, freq=None,
+                            missing='none', validate_specification=False)
+        model_fit = arima_model.fit()
+        n_periods = test.shape[0]
+        prediction = pd.DataFrame(
+            model_fit.forecast(n_periods), index=test.index)
+        prediction.columns = ['predicted_values']
+        prediction.reset_index(inplace=True)
+
+        # index_future_dates = pd.date_range(
+        #     start='2021-10-01', end='2023-01-1', freq='MS')
+        # prediction_arima = pd.DataFrame(arima_model.predict(
+        #     n_periods=36), index=index_future_dates)
+        # prediction_arima.columns = ['predicted_values']
+
+        # ###############################################################################
+        # print(prediction.to_json)
+        return Response({
+            "data1": prediction.to_json(),
         })

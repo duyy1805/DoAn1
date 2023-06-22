@@ -1,6 +1,6 @@
 from django.urls import path, include, re_path
 from rest_framework import routers
-from .views import SalesView, FileUploadView, ClientView, AutoArima, FileUpload
+from .views import SalesView, FileUploadView, ClientView, Arima, AutoArima, FileUpload
 
 app_name = 'core'
 
@@ -16,4 +16,5 @@ urlpatterns = [
     #         FileUploadView.as_view(), name="view1"),
     path('file', FileUpload.as_view(), name="view2"),
     path('autoarima', AutoArima.as_view(), name="view3"),
+    path('arima', Arima.as_view(), name="view4"),
 ]
