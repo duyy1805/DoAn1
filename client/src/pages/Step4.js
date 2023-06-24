@@ -42,8 +42,8 @@ const onFinishFailed = (errorInfo: any) => {
 
 const Step4 = (props) => {
     const { hidden_step1, hidden_step3, hidden_step4, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
-        handleOpenDialog, buttonRef, handleSelectTime, predicted, handleOnFileLoadAutoArima, graph, auto_arima_graph, arima_graph, drawArima, drawAuto_Arima,
-        selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
+        handleOpenDialog, buttonRef, handleSelectTime, future_values_auto_arima, handleOnFileLoadAutoArima, graph, auto_arima_graph, arima_graph, drawArima, drawAuto_Arima,
+        selectedDate, filename, yearx, column, timeColumn, dataColumn, time_of_TS, yearsx, data_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
     // useEffect(() => {
     //     console.log(arima_graph)
     // }, [])
@@ -111,8 +111,8 @@ const Step4 = (props) => {
                                                         type: "scatter",
                                                         mode: "lines",
                                                         name: ' before prediction ',
-                                                        x: years,
-                                                        y: sales,
+                                                        x: time_of_TS,
+                                                        y: data_of_TS,
                                                         line: { color: '#17BECF' }
                                                     }
                                                     ,
@@ -146,20 +146,19 @@ const Step4 = (props) => {
                                 }}
                             >
                                 <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                    <InputLabel id="demo-simple-select-helper-label">select</InputLabel>
+                                    <InputLabel id="demo-simple-select-helper-label">Select</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
                                         value={selectedDate}
-                                        label="Age"
-
+                                        label="Date_prediction"
                                         onChange={handleSelectChanege}
                                     >
 
                                         {yearsx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
 
                                     </Select>
-                                    <FormHelperText>select a date to make prediction</FormHelperText>
+                                    <FormHelperText>Select a date to make prediction</FormHelperText>
                                 </FormControl>
 
                             </Box>

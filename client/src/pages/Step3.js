@@ -42,10 +42,10 @@ const onFinishFailed = (errorInfo: any) => {
 
 const Step3 = (props) => {
     const { hidden_step1, hidden_step3, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
-        handleOpenDialog, buttonRef, handleSelectTime, predicted,
+        handleOpenDialog, buttonRef, handleSelectTime, future_values_auto_arima,
         previousStep, nextStep, params, handleOnFileLoadArima,
         handleOnFileLoadAutoArima, graph, arima_graph,
-        selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
+        selectedDate, filename, yearx, column, timeColumn, dataColumn, time_of_TS, yearsx, data_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
     // useEffect(() => {
     //     console.log(arima_graph)
     // }, [])

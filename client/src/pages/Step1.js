@@ -36,10 +36,10 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
   const { hidden_step1, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
-    handleOpenDialog, buttonRef, handleSelectTime, predicted, nextStep, previousStep,
+    handleOpenDialog, buttonRef, handleSelectTime, future_values_auto_arima, nextStep, previousStep,
     //visualize
     sum_values, values_count, missing_values_count, max_values, min_values, mean_values, median_values, std_values, variance_values, skewness_values,
-    selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
+    selectedDate, filename, yearx, column, timeColumn, dataColumn, data_of_TS, yearsx, time_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
   // useEffect(() => { console.log(sum_values) }, [sum_values]);
   return (
     <div >
@@ -198,8 +198,8 @@ const Step1 = (props) => {
                                         type: "scatter",
                                         mode: "lines",
                                         name: ' before prediction ',
-                                        x: years,
-                                        y: sales,
+                                        x: time_of_TS,
+                                        y: data_of_TS,
                                         line: { color: '#17BECF' }
                                       }
                                       // ,
@@ -249,7 +249,7 @@ const Step1 = (props) => {
                             <Descriptions.Item label="Min value" span={2}>
                               {min_values}
                             </Descriptions.Item>
-                            <Descriptions.Item label="Giá trị trung bình" span={3}>
+                            <Descriptions.Item label="Mean values" span={3}>
                               {mean_values}
                             </Descriptions.Item>
                             <Descriptions.Item label="Trung vị">{median_values}</Descriptions.Item>

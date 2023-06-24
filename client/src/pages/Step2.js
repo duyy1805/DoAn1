@@ -55,8 +55,8 @@ const onFinishFailed = (errorInfo: any) => {
 const Step2 = (props) => {
     const { hidden_step1, hidden_step2, hidden_step3, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
         nextStep, previousStep,
-        handleOpenDialog, test_size, fill_method, buttonRef, handleSelectTime, predicted, handleOnFileLoadAutoArima, graph, arima_graph, handleUpdateTestSize, handleFillMethod,
-        selectedDate, filename, yearx, column, timeColumn, dataColumn, years, yearsx, sales, sales2, handleOnFileLoad2, handleSelectData } = props;
+        handleOpenDialog, test_size, fill_method, buttonRef, handleSelectTime, future_values_auto_arima, handleOnFileLoadAutoArima, graph, arima_graph, handleUpdateTestSize, handleFillMethod,
+        selectedDate, filename, yearx, column, timeColumn, dataColumn, time_of_TS, yearsx, data_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
 
 
     return (

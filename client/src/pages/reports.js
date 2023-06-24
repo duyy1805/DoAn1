@@ -40,7 +40,7 @@ const buttonRef = React.createRef();
 export default class Reports extends Component {
   state = {
     selectedDate: '',
-    predicted: null,
+    future_values_auto_arima: null,
     hidden0: false,
     hidden_step1: true,
     hidden_step2: true,
@@ -59,14 +59,14 @@ export default class Reports extends Component {
     test_size: 0.2,
     fill_method: 'delete',
 
-    years: [],
+    time_of_TS: [],
     yearsx: [],
-    sales: [],
-    years2: [],
-    years3: [],
-    sales2: [],
-    sales3: [],
-    sales4: [],
+    data_of_TS: [],
+    time_of_predicted: [],
+    time_of_prediction: [],
+    predicted_auto_arima: [],
+    predicted_arima: [],
+    prediction_auto_arima: [],
     activeStep: 0,
     skipped: new Set(),
     current: 0,
@@ -147,8 +147,11 @@ export default class Reports extends Component {
   }
 
   handleSelectChanege = (event) => {
-    this.setState({ predicted: this.state.sales4[event.target.value].toFixed(2) })
-    this.setState({ selectedDate: this.state.yearsx[event.target.value] })
+    // console.log(this.state.yearsx[event.target.value])
+    this.setState({ future_values_auto_arima: this.state.prediction_auto_arima[event.target.value] })
+    this.setState({ selectedDate: event.target.value }, () => {
+      // console.log(this.state.selectedDate)
+    })
   }
 
 
@@ -171,7 +174,7 @@ export default class Reports extends Component {
   }
   handleOnFileLoad = (data, file) => {
     this.setState({ hidden2: false, file: file });
-    var sales2, sales3, sales4
+    var predicted_auto_arima, predicted_arima, prediction_auto_arima
     const formData = new FormData();
     formData.append('test', 'test');
     formData.append('file', file, 'file.csv')
@@ -183,15 +186,15 @@ export default class Reports extends Component {
     })
       .then((response) => {
 
-        sales2 = Object.values(JSON.parse(response.data.data1).predicted_sales)
-        sales3 = Object.values(JSON.parse(response.data.data2).Predictions)
-        sales4 = Object.values(JSON.parse(response.data.data3).predicted_sales)
+        predicted_auto_arima = Object.values(JSON.parse(response.data.data1).predicted_sales)
+        predicted_arima = Object.values(JSON.parse(response.data.data2).Predictions)
+        prediction_auto_arima = Object.values(JSON.parse(response.data.data3).predicted_sales)
 
-        this.setState({ sales2: sales2, sales3: sales3, sales4: sales4 })
+        this.setState({ predicted_auto_arima: predicted_auto_arima, predicted_arima: predicted_arima, prediction_auto_arima: prediction_auto_arima })
         var yearsx = []
         var int = 10
         var y = "2021-"
-        sales4.map((element, index) => {
+        prediction_auto_arima.map((element, index) => {
 
 
           if (int > 12) {
@@ -220,44 +223,44 @@ export default class Reports extends Component {
       });
 
     this.setState({ data: data })
-    var years = []
+    var time_of_TS = []
     this.state.data.map((element, index) => {
       if (index > 0)
-        years.push(element.data[0])
+        time_of_TS.push(element.data[0])
     })
 
 
-    this.setState({ years: years })
+    this.setState({ time_of_TS: time_of_TS })
 
-    var years2 = years.filter((item, index) => { return index > 84 })
-    this.setState({ years2: years2 })
+    var time_of_predicted = time_of_TS.filter((item, index) => { return index > 84 })
+    this.setState({ time_of_predicted: time_of_predicted })
 
-    var years3 = years.filter((item, index) => { return index > 92 })
-    this.setState({ years3: years3 })
+    var time_of_prediction = time_of_TS.filter((item, index) => { return index > 92 })
+    this.setState({ time_of_prediction: time_of_prediction })
 
 
 
-    var sales = []
+    var data_of_TS = []
     this.state.data.map((element, index) => {
       if (index > 0)
-        sales.push(element.data[1])
+        data_of_TS.push(element.data[1])
     })
-    this.setState({ sales: sales })
+    this.setState({ data_of_TS: data_of_TS })
 
   };
 
   handleOnFileLoad1 = (data, file) => {
     this.setState({ data: data })
-    var years = []
+    var time_of_TS = []
     this.state.data.map((element, index) => {
       if (index > 0)
-        years.push(element.data[0])
+        time_of_TS.push(element.data[0])
     })
     this.setState({ file: file });
     // console.log(file['name'])
     this.setState({ filename: file['name'] })
 
-    var sales2, sales3, sales4;
+    var predicted_auto_arima, predicted_arima, prediction_auto_arima;
     this.setState({ data: data });
     Papa.parse(file, {
       header: true,
@@ -276,7 +279,7 @@ export default class Reports extends Component {
   };
 
   handleOnFileLoad2 = () => {
-    var sales2, sales3, sales4
+    var predicted_auto_arima, predicted_arima, prediction_auto_arima
     if (this.state.file !== null) {
       this.setState({ hidden2: false });
       const formData = new FormData();
@@ -315,38 +318,38 @@ export default class Reports extends Component {
             variance_values: variance_values,
             skewness_values: skewness_values,
           }, () => {
-            console.log(response.data.max_values)
+            // console.log(response.data.max_values)
           })
         })
         .catch((response) => {
           //handle error
           console.log(response);
         });
-      var years = []
+      var time_of_TS = []
       var xx = ''
       this.state.data.map((element, index) => {
         if (index > 0)
-          years.push(element.data[this.state.timeColumn])
+          time_of_TS.push(element.data[this.state.timeColumn])
         else
           xx = element.data
       })
 
-      this.setState({ years: years })
+      this.setState({ time_of_TS: time_of_TS })
 
-      var sales = []
+      var data_of_TS = []
       this.state.data.map((element, index) => {
         if (index > 0)
-          sales.push(element.data[this.state.dataColumn])
+          data_of_TS.push(element.data[this.state.dataColumn])
       })
-      this.setState({ sales: sales },
-        // () => console.log(sales)
+      this.setState({ data_of_TS: data_of_TS },
+        // () => console.log(data_of_TS)
       )
       // this.setState({ hidden_step1: false });
     }
   };
 
   handleOnFileLoadAutoArima = () => {
-    var sales2, sales3, sales4
+    var predicted_auto_arima, predicted_arima, prediction_auto_arima
     this.setState({ hidden2: false })
     const formData = new FormData();
     formData.append('test_size', this.state.test_size);
@@ -362,8 +365,18 @@ export default class Reports extends Component {
     })
       .then((response) => {
 
-        sales2 = Object.values(JSON.parse(response.data.data1).predicted_values)
-        this.setState({ sales2: sales2 })
+        predicted_auto_arima = Object.values(JSON.parse(response.data.data1).predicted_values)
+        prediction_auto_arima = Object.values(JSON.parse(response.data.data2).predicted_values)
+
+
+        const timestamps = (Object.values(JSON.parse(response.data.data2).index))
+
+        const dates = timestamps.map(timestamp => {
+          const dateObject = new Date(timestamp);
+          return dateObject.toISOString().slice(0, 10);
+        });
+        console.log(dates)
+        this.setState({ predicted_auto_arima: predicted_auto_arima, yearsx: dates, prediction_auto_arima: prediction_auto_arima })
         this.setState({ auto_arima: true, current: 3 }, () => {
           this.setState({ hidden2: true })
           this.onChange(3)
@@ -374,19 +387,19 @@ export default class Reports extends Component {
         //handle error
         console.log(response);
       });
-    var years = []
+    var time_of_TS = []
     this.state.data.map((element, index) => {
       if (index > 0)
-        years.push(element.data[0])
+        time_of_TS.push(element.data[0])
     })
-    var x = years.length - years.length * this.state.test_size
-    console.log(x)
-    var years2 = years.filter((item, index) => { return index > x })
-    this.setState({ years2: years2 })
+    var x = time_of_TS.length - time_of_TS.length * this.state.test_size
+    // console.log(x)
+    var time_of_predicted = time_of_TS.filter((item, index) => { return index > x })
+    this.setState({ time_of_predicted: time_of_predicted })
   }
 
   handleOnFileLoadArima = (values) => {
-    var sales2, sales3, sales4
+    var predicted_auto_arima, predicted_arima, prediction_auto_arima
     console.log(values)
     // this.setState({ hidden2: false })
     const formData = new FormData();
@@ -414,8 +427,8 @@ export default class Reports extends Component {
     })
       .then((response) => {
 
-        sales3 = Object.values(JSON.parse(response.data.data1).predicted_values)
-        this.setState({ sales3: sales3 })
+        predicted_arima = Object.values(JSON.parse(response.data.data1).predicted_values)
+        this.setState({ predicted_arima: predicted_arima })
         this.setState({ arima: true, current: 3 }, () => {
           this.setState({ hidden2: true })
           this.onChange(3)
@@ -426,15 +439,15 @@ export default class Reports extends Component {
         //handle error
         console.log(response);
       });
-    var years = []
+    var time_of_TS = []
     this.state.data.map((element, index) => {
       if (index > 0)
-        years.push(element.data[0])
+        time_of_TS.push(element.data[0])
     })
-    var x = years.length - years.length * this.state.test_size
+    var x = time_of_TS.length - time_of_TS.length * this.state.test_size
     console.log(x)
-    var years2 = years.filter((item, index) => { return index > x })
-    this.setState({ years2: years2 })
+    var time_of_predicted = time_of_TS.filter((item, index) => { return index > x })
+    this.setState({ time_of_predicted: time_of_predicted })
   }
 
   handleOnError = (err, file, inputElem, reason) => {
@@ -468,8 +481,8 @@ export default class Reports extends Component {
       type: "scatter",
       mode: "lines",
       name: ' before prediction ',
-      x: this.state.years,
-      y: this.state.sales,
+      x: this.state.time_of_TS,
+      y: this.state.data_of_TS,
       line: { color: '#17BECF' }
     }
     var auto_arima_graph =
@@ -477,8 +490,8 @@ export default class Reports extends Component {
         type: "scatter",
         mode: "lines",
         name: ' after prediction auto Arima ',
-        x: this.state.years2,
-        y: this.state.sales2,
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_auto_arima,
         line: { color: '#FF0000' }
       } : {
         type: "scatter",
@@ -493,8 +506,8 @@ export default class Reports extends Component {
         type: "scatter",
         mode: "lines",
         name: ' after prediction Arima ',
-        x: this.state.years2,
-        y: this.state.sales3,
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_arima,
         line: { color: '#E82CB2' }
       } : {
         type: "scatter",
@@ -509,8 +522,8 @@ export default class Reports extends Component {
         type: "scatter",
         mode: "lines",
         name: ' after prediction RNN',
-        x: this.state.years3,
-        y: this.state.sales3,
+        x: this.state.time_of_prediction,
+        y: this.state.predicted_arima,
         line: { color: '#0000FF' }
       } : {
         type: "scatter",
@@ -566,7 +579,7 @@ export default class Reports extends Component {
             <div>
               <Step1 test={this.test}
                 selectedDate={this.state.selectedDate}
-                predicted={this.state.predicted}
+                future_values_auto_arima={this.state.future_values_auto_arima}
                 hidden_step1={this.state.hidden_step1}
                 hidden_step3={this.state.hidden_step3}
                 hidden0={this.state.hidden0}
@@ -574,10 +587,10 @@ export default class Reports extends Component {
                 hidden3={this.state.hidden3}
                 file={this.state.file}
                 data={this.state.data}
-                years={this.state.years}
+                time_of_TS={this.state.time_of_TS}
                 yearsx={this.state.yearsx}
-                sales={this.state.sales}
-                sales2={this.state.sales2}
+                data_of_TS={this.state.data_of_TS}
+                predicted_auto_arima={this.state.predicted_auto_arima}
                 column={this.state.column}
                 buttonRef={buttonRef}
                 timeColumn={this.state.timeColumn}
@@ -610,7 +623,7 @@ export default class Reports extends Component {
               <Step2
                 test={this.test}
                 selectedDate={this.state.selectedDate}
-                predicted={this.state.predicted}
+                future_values_auto_arima={this.state.future_values_auto_arima}
                 hidden_step1={this.state.hidden_step1}
                 hidden_step2={this.state.hidden_step2}
                 hidden_step3={this.state.hidden_step3}
@@ -619,10 +632,10 @@ export default class Reports extends Component {
                 hidden3={this.state.hidden3}
                 file={this.state.file}
                 data={this.state.data}
-                years={this.state.years}
+                time_of_TS={this.state.time_of_TS}
                 yearsx={this.state.yearsx}
-                sales={this.state.sales}
-                sales2={this.state.sales2}
+                data_of_TS={this.state.data_of_TS}
+                predicted_auto_arima={this.state.predicted_auto_arima}
                 column={this.state.column}
                 buttonRef={buttonRef}
                 timeColumn={this.state.timeColumn}
@@ -653,7 +666,7 @@ export default class Reports extends Component {
               <Step3
                 test={this.test}
                 selectedDate={this.state.selectedDate}
-                predicted={this.state.predicted}
+                future_values_auto_arima={this.state.future_values_auto_arima}
                 hidden_step1={this.state.hidden_step1}
                 hidden_step2={this.state.hidden_step2}
                 hidden_step3={this.state.hidden_step3}
@@ -662,10 +675,10 @@ export default class Reports extends Component {
                 hidden3={this.state.hidden3}
                 file={this.state.file}
                 data={this.state.data}
-                years={this.state.years}
+                time_of_TS={this.state.time_of_TS}
                 yearsx={this.state.yearsx}
-                sales={this.state.sales}
-                sales2={this.state.sales2}
+                data_of_TS={this.state.data_of_TS}
+                predicted_auto_arima={this.state.predicted_auto_arima}
                 column={this.state.column}
                 buttonRef={buttonRef}
                 timeColumn={this.state.timeColumn}
@@ -693,7 +706,7 @@ export default class Reports extends Component {
               <Step4
                 test={this.test}
                 selectedDate={this.state.selectedDate}
-                predicted={this.state.predicted}
+                future_values_auto_arima={this.state.future_values_auto_arima}
                 hidden_step1={this.state.hidden_step1}
                 hidden_step3={this.state.hidden_step3}
                 hidden_step4={this.state.hidden_step4}
@@ -702,10 +715,10 @@ export default class Reports extends Component {
                 hidden3={this.state.hidden3}
                 file={this.state.file}
                 data={this.state.data}
-                years={this.state.years}
+                time_of_TS={this.state.time_of_TS}
                 yearsx={this.state.yearsx}
-                sales={this.state.sales}
-                sales2={this.state.sales2}
+                data_of_TS={this.state.data_of_TS}
+                predicted_auto_arima={this.state.predicted_auto_arima}
                 column={this.state.column}
                 buttonRef={buttonRef}
                 timeColumn={this.state.timeColumn}
@@ -713,6 +726,7 @@ export default class Reports extends Component {
                 handleSelectData={this.handleSelectData}
                 handleSelectTime={this.handleSelectTime}
                 handleOpenDialog={this.handleOpenDialog}
+                handleSelectChanege={this.handleSelectChanege}
                 handleOnFileLoad1={this.handleOnFileLoad1}
                 handleOnFileLoad2={this.handleOnFileLoad2}
                 handleOnError={this.handleOnError}

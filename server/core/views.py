@@ -205,6 +205,9 @@ class AutoArima(views.APIView):
         values = values.rename(columns={timeColumn: 'Time'})
         values = values.rename(columns={dataColumn: 'Data'})
         missing_values_count = values.isna().sum().sum()
+
+        freq = pd.infer_freq(values["Time"])
+
         if missing_values_count != 0:
             # if fill_method == 'delete':
             #     values = values[~(values.isna().any(axis=1))]
@@ -240,17 +243,25 @@ class AutoArima(views.APIView):
         prediction.columns = ['predicted_values']
         prediction.reset_index(inplace=True)
 
+        x = values.index[train.shape[0]]
+        print(x)
+        n_periods = test.shape[0] + 12
+
         index_future_dates = pd.date_range(
-            start='2021-10-01', end='2023-01-1', freq='MS')
-        prediction_arima = pd.DataFrame(arima_model.predict(
-            n_periods=36), index=index_future_dates)
-        prediction_arima.columns = ['predicted_values']
+            start=x, periods=n_periods, freq=freq)
+
+        prediction_auto_arima = pd.DataFrame(arima_model.predict(
+            n_periods=n_periods), index=index_future_dates)
+        prediction_auto_arima.columns = ['predicted_values']
+        prediction_auto_arima.reset_index(inplace=True)
+
+        prediction_auto_arima = prediction_auto_arima.tail(12)
 
         ###############################################################################
-        print(prediction.to_json)
+
         return Response({
             "data1": prediction.to_json(),
-            "data2": prediction_arima.to_json()
+            "data2": prediction_auto_arima.to_json()
         })
 
 
