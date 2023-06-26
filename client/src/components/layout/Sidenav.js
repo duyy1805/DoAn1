@@ -162,10 +162,10 @@ function Sidenav({ color }) {
 
   return (
     <>
-      <div className="brand">
+      {/* <div className="brand">
         <img src={logo} alt="" />
         <span>Muse Dashboard</span>
-      </div>
+      </div> */}
       <hr />
       <Menu theme="light" mode="inline">
         <Menu.Item key="1">
@@ -249,7 +249,7 @@ function Sidenav({ color }) {
           </NavLink>
         </Menu.Item>
       </Menu>
-      
+
     </>
   );
 }

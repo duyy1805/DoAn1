@@ -23,7 +23,7 @@ function Main({ children }) {
   const [visible, setVisible] = useState(false);
   const [placement, setPlacement] = useState("right");
   const [sidenavColor, setSidenavColor] = useState("#1890ff");
-  const [sidenavType, setSidenavType] = useState("transparent");
+  const [sidenavType, setSidenavType] = useState("ffffff");
   const [fixed, setFixed] = useState(false);
 
   const openDrawer = () => setVisible(!visible);
@@ -41,13 +41,18 @@ function Main({ children }) {
       setPlacement("right");
     }
   }, [pathname]);
-
+  const GradientBackground = () => (
+    <div className="gradient-background">
+      {/* Nội dung của thành phần */}
+    </div>
+  );
   return (
     <Layout
       className={`layout-dashboard ${pathname === "profile" ? "layout-profile" : ""
         } ${pathname === "rtl" ? "layout-dashboard-rtl" : ""}`}
     >
       {/* <video style={{ position: "absolute", width: '100%' }} src={anime} autoPlay loop muted /> */}
+      <GradientBackground />
       <Drawer
         title={false}
         placement={placement === "right" ? "left" : "right"}

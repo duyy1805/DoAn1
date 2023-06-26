@@ -147,6 +147,8 @@ class FileUpload(views.APIView):
         timeColumn = request.data['timeColumn']
         dataColumn = request.data['dataColumn']
         # print(dataColumn)
+
+        print('Duy')
         values = read_csv(file_obj)
 
         values[timeColumn] = pd.to_datetime(

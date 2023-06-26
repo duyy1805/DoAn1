@@ -32,6 +32,7 @@ import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
 import { Steps, Descriptions, Row, Col, Button, Tabs, Badge } from 'antd';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
+import { animated, useSpring } from '@react-spring/web'
 
 const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
@@ -58,8 +59,8 @@ const Step1 = (props) => {
               display: hidden0 ? 'none' : 'block',
             }}
           >
-            <Box sx={{ m: 3, }}>
-              <Card sx={{ m: 0 }} >
+            <Box sx={{ m: 3, }} >
+              <Card sx={{ m: 0 }} style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px" }} >
                 <CardContent sx={{ width: "1000px" }}>
                   <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
                     Time Series Forecasting using ARIMA & RNN

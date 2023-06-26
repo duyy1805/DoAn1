@@ -29,7 +29,7 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
-import { Steps, Descriptions, Row, Col } from 'antd';
+import { Steps, Descriptions, Row, Col, message } from 'antd';
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
@@ -127,6 +127,19 @@ export default class Reports extends Component {
       this.render()
     })
   }
+
+  next = () => {
+    // setCurrent(current + 1);
+    const current = this.state.current + 1
+    this.setState({ current: current }, () => {
+      this.render()
+    })
+  };
+  prev = () => {
+    // setCurrent(current - 1);
+    const current = this.state.current - 1
+    this.setState({ current: current })
+  };
   handleOpenDialog = (e) => {
     if (buttonRef.current) {
       buttonRef.current.open(e);
@@ -540,7 +553,181 @@ export default class Reports extends Component {
     const isStepSkipped = (step) => {
       return this.state.skipped.has(step);
     };
-    const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+    const steps = [
+      {
+        title: 'Step 1',
+        content: <Step1 test={this.test}
+          selectedDate={this.state.selectedDate}
+          future_values_auto_arima={this.state.future_values_auto_arima}
+          hidden_step1={this.state.hidden_step1}
+          hidden_step3={this.state.hidden_step3}
+          hidden0={this.state.hidden0}
+          hidden2={this.state.hidden2}
+          hidden3={this.state.hidden3}
+          file={this.state.file}
+          data={this.state.data}
+          time_of_TS={this.state.time_of_TS}
+          yearsx={this.state.yearsx}
+          data_of_TS={this.state.data_of_TS}
+          predicted_auto_arima={this.state.predicted_auto_arima}
+          column={this.state.column}
+          buttonRef={buttonRef}
+          timeColumn={this.state.timeColumn}
+          dataColumn={this.state.dataColumn}
+          handleSelectData={this.handleSelectData}
+          handleSelectTime={this.handleSelectTime}
+          handleOpenDialog={this.handleOpenDialog}
+          handleOnFileLoad1={this.handleOnFileLoad1}
+          handleOnFileLoad2={this.handleOnFileLoad2}
+          handleOnError={this.handleOnError}
+          handleOnRemoveFile={this.handleOnRemoveFile}
+
+          nextStep={this.nextStep}
+          previousStep={this.previousStep}
+          //visualize
+          sum_values={this.state.sum_values}
+          values_count={this.state.values_count}
+          missing_values_count={this.state.missing_values_count}
+          max_values={this.state.max_values}
+          min_values={this.state.min_values}
+          mean_values={this.state.mean_values}
+          median_values={this.state.median_values}
+          std_values={this.state.std_values}
+          variance_values={this.state.variance_values}
+          skewness_values={this.state.skewness_values}
+
+          filename={this.state.filename}></Step1 >,
+      },
+      {
+        title: 'Step 2',
+        content: <Step2
+          test={this.test}
+          selectedDate={this.state.selectedDate}
+          future_values_auto_arima={this.state.future_values_auto_arima}
+          hidden_step1={this.state.hidden_step1}
+          hidden_step2={this.state.hidden_step2}
+          hidden_step3={this.state.hidden_step3}
+          hidden0={this.state.hidden0}
+          hidden2={this.state.hidden2}
+          hidden3={this.state.hidden3}
+          file={this.state.file}
+          data={this.state.data}
+          time_of_TS={this.state.time_of_TS}
+          yearsx={this.state.yearsx}
+          data_of_TS={this.state.data_of_TS}
+          predicted_auto_arima={this.state.predicted_auto_arima}
+          column={this.state.column}
+          buttonRef={buttonRef}
+          timeColumn={this.state.timeColumn}
+          dataColumn={this.state.dataColumn}
+
+          test_size={this.state.test_size}
+          fill_method={this.state.fill_method}
+
+          handleSelectData={this.handleSelectData}
+          handleSelectTime={this.handleSelectTime}
+          handleUpdateTestSize={this.handleUpdateTestSize}
+          handleFillMethod={this.handleFillMethod}
+
+          handleOpenDialog={this.handleOpenDialog}
+          handleOnFileLoad1={this.handleOnFileLoad1}
+          handleOnFileLoad2={this.handleOnFileLoad2}
+          handleOnError={this.handleOnError}
+
+          nextStep={this.nextStep}
+          previousStep={this.previousStep}
+          graph={graph}
+          arima_graph={arima_graph}
+          handleOnRemoveFile={this.handleOnRemoveFile}
+          handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
+          filename={this.state.filename}></Step2>,
+      },
+      {
+        title: 'Step 3',
+        content: <Step3
+          test={this.test}
+          selectedDate={this.state.selectedDate}
+          future_values_auto_arima={this.state.future_values_auto_arima}
+          hidden_step1={this.state.hidden_step1}
+          hidden_step2={this.state.hidden_step2}
+          hidden_step3={this.state.hidden_step3}
+          hidden0={this.state.hidden0}
+          hidden2={this.state.hidden2}
+          hidden3={this.state.hidden3}
+          file={this.state.file}
+          data={this.state.data}
+          time_of_TS={this.state.time_of_TS}
+          yearsx={this.state.yearsx}
+          data_of_TS={this.state.data_of_TS}
+          predicted_auto_arima={this.state.predicted_auto_arima}
+          column={this.state.column}
+          buttonRef={buttonRef}
+          timeColumn={this.state.timeColumn}
+          dataColumn={this.state.dataColumn}
+          handleSelectData={this.handleSelectData}
+          handleSelectTime={this.handleSelectTime}
+          handleOpenDialog={this.handleOpenDialog}
+          handleOnFileLoad1={this.handleOnFileLoad1}
+          handleOnFileLoad2={this.handleOnFileLoad2}
+          handleOnError={this.handleOnError}
+
+          nextStep={this.nextStep}
+          previousStep={this.previousStep}
+
+          params={this.state.params}
+          handleOnFileLoadArima={this.handleOnFileLoadArima}
+
+          graph={graph}
+          arima_graph={arima_graph}
+          handleOnRemoveFile={this.handleOnRemoveFile}
+          handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
+          filename={this.state.filename}></Step3>,
+      },
+      {
+        title: 'Step 4',
+        content: <Step4
+          test={this.test}
+          selectedDate={this.state.selectedDate}
+          future_values_auto_arima={this.state.future_values_auto_arima}
+          hidden_step1={this.state.hidden_step1}
+          hidden_step3={this.state.hidden_step3}
+          hidden_step4={this.state.hidden_step4}
+          hidden0={this.state.hidden0}
+          hidden2={this.state.hidden2}
+          hidden3={this.state.hidden3}
+          file={this.state.file}
+          data={this.state.data}
+          time_of_TS={this.state.time_of_TS}
+          yearsx={this.state.yearsx}
+          data_of_TS={this.state.data_of_TS}
+          predicted_auto_arima={this.state.predicted_auto_arima}
+          column={this.state.column}
+          buttonRef={buttonRef}
+          timeColumn={this.state.timeColumn}
+          dataColumn={this.state.dataColumn}
+          handleSelectData={this.handleSelectData}
+          handleSelectTime={this.handleSelectTime}
+          handleOpenDialog={this.handleOpenDialog}
+          handleSelectChanege={this.handleSelectChanege}
+          handleOnFileLoad1={this.handleOnFileLoad1}
+          handleOnFileLoad2={this.handleOnFileLoad2}
+          handleOnError={this.handleOnError}
+
+          nextStep={this.nextStep}
+          previousStep={this.previousStep}
+
+          drawArima={this.drawArima}
+          drawAuto_Arima={this.drawAuto_Arima}
+          arima_graph={arima_graph}
+          auto_arima_graph={auto_arima_graph}
+          handleOnRemoveFile={this.handleOnRemoveFile}
+          handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
+          filename={this.state.filename}></Step4>,
+      },
+    ];
+
+    const items = steps.map((item) => ({ key: item.title, title: item.title }));
+
     return (
 
       <>
@@ -552,9 +739,9 @@ export default class Reports extends Component {
             <Divider />
             <Steps
               current={this.state.current}
-              onChange={this.onChange}
+              // onChange={this.onChange}
               direction="vertical"
-              style={{ marginTop: "100px" }}
+              style={{ marginTop: "100px", background: '#ffffff', padding: '20px', borderRadius: '12px', boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)" }}
               items={[
                 {
                   title: 'Step 1',
@@ -576,171 +763,33 @@ export default class Reports extends Component {
             />
           </div>
           <div style={{ flex: ' 5 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', overflowY: 'scroll', height: 'calc(100vh - 102px)' }}>
-            <div>
-              <Step1 test={this.test}
-                selectedDate={this.state.selectedDate}
-                future_values_auto_arima={this.state.future_values_auto_arima}
-                hidden_step1={this.state.hidden_step1}
-                hidden_step3={this.state.hidden_step3}
-                hidden0={this.state.hidden0}
-                hidden2={this.state.hidden2}
-                hidden3={this.state.hidden3}
-                file={this.state.file}
-                data={this.state.data}
-                time_of_TS={this.state.time_of_TS}
-                yearsx={this.state.yearsx}
-                data_of_TS={this.state.data_of_TS}
-                predicted_auto_arima={this.state.predicted_auto_arima}
-                column={this.state.column}
-                buttonRef={buttonRef}
-                timeColumn={this.state.timeColumn}
-                dataColumn={this.state.dataColumn}
-                handleSelectData={this.handleSelectData}
-                handleSelectTime={this.handleSelectTime}
-                handleOpenDialog={this.handleOpenDialog}
-                handleOnFileLoad1={this.handleOnFileLoad1}
-                handleOnFileLoad2={this.handleOnFileLoad2}
-                handleOnError={this.handleOnError}
-                handleOnRemoveFile={this.handleOnRemoveFile}
+            <div>{steps[this.state.current].content}</div>
+            <div
+              style={{
+                marginTop: 24,
+              }}
+            >
+              {this.state.current > 0 && (
+                <Button
+                  style={{
+                    margin: '0 8px',
+                  }}
+                  onClick={() => this.prev()}
+                >
+                  Previous
+                </Button>
+              )}
+              {this.state.current < steps.length - 1 && (
+                <Button type="primary" onClick={() => this.next()}>
+                  Next
+                </Button>
+              )}
+              {this.state.current === steps.length - 1 && (
+                <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                  Done
+                </Button>
+              )}
 
-                nextStep={this.nextStep}
-                previousStep={this.previousStep}
-                //visualize
-                sum_values={this.state.sum_values}
-                values_count={this.state.values_count}
-                missing_values_count={this.state.missing_values_count}
-                max_values={this.state.max_values}
-                min_values={this.state.min_values}
-                mean_values={this.state.mean_values}
-                median_values={this.state.median_values}
-                std_values={this.state.std_values}
-                variance_values={this.state.variance_values}
-                skewness_values={this.state.skewness_values}
-
-                filename={this.state.filename}></Step1 >
-            </div>
-            <div>
-              <Step2
-                test={this.test}
-                selectedDate={this.state.selectedDate}
-                future_values_auto_arima={this.state.future_values_auto_arima}
-                hidden_step1={this.state.hidden_step1}
-                hidden_step2={this.state.hidden_step2}
-                hidden_step3={this.state.hidden_step3}
-                hidden0={this.state.hidden0}
-                hidden2={this.state.hidden2}
-                hidden3={this.state.hidden3}
-                file={this.state.file}
-                data={this.state.data}
-                time_of_TS={this.state.time_of_TS}
-                yearsx={this.state.yearsx}
-                data_of_TS={this.state.data_of_TS}
-                predicted_auto_arima={this.state.predicted_auto_arima}
-                column={this.state.column}
-                buttonRef={buttonRef}
-                timeColumn={this.state.timeColumn}
-                dataColumn={this.state.dataColumn}
-
-                test_size={this.state.test_size}
-                fill_method={this.state.fill_method}
-
-                handleSelectData={this.handleSelectData}
-                handleSelectTime={this.handleSelectTime}
-                handleUpdateTestSize={this.handleUpdateTestSize}
-                handleFillMethod={this.handleFillMethod}
-
-                handleOpenDialog={this.handleOpenDialog}
-                handleOnFileLoad1={this.handleOnFileLoad1}
-                handleOnFileLoad2={this.handleOnFileLoad2}
-                handleOnError={this.handleOnError}
-
-                nextStep={this.nextStep}
-                previousStep={this.previousStep}
-                graph={graph}
-                arima_graph={arima_graph}
-                handleOnRemoveFile={this.handleOnRemoveFile}
-                handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
-                filename={this.state.filename}></Step2>
-            </div>
-            <div>
-              <Step3
-                test={this.test}
-                selectedDate={this.state.selectedDate}
-                future_values_auto_arima={this.state.future_values_auto_arima}
-                hidden_step1={this.state.hidden_step1}
-                hidden_step2={this.state.hidden_step2}
-                hidden_step3={this.state.hidden_step3}
-                hidden0={this.state.hidden0}
-                hidden2={this.state.hidden2}
-                hidden3={this.state.hidden3}
-                file={this.state.file}
-                data={this.state.data}
-                time_of_TS={this.state.time_of_TS}
-                yearsx={this.state.yearsx}
-                data_of_TS={this.state.data_of_TS}
-                predicted_auto_arima={this.state.predicted_auto_arima}
-                column={this.state.column}
-                buttonRef={buttonRef}
-                timeColumn={this.state.timeColumn}
-                dataColumn={this.state.dataColumn}
-                handleSelectData={this.handleSelectData}
-                handleSelectTime={this.handleSelectTime}
-                handleOpenDialog={this.handleOpenDialog}
-                handleOnFileLoad1={this.handleOnFileLoad1}
-                handleOnFileLoad2={this.handleOnFileLoad2}
-                handleOnError={this.handleOnError}
-
-                nextStep={this.nextStep}
-                previousStep={this.previousStep}
-
-                params={this.state.params}
-                handleOnFileLoadArima={this.handleOnFileLoadArima}
-
-                graph={graph}
-                arima_graph={arima_graph}
-                handleOnRemoveFile={this.handleOnRemoveFile}
-                handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
-                filename={this.state.filename}></Step3>
-            </div>
-            <div>
-              <Step4
-                test={this.test}
-                selectedDate={this.state.selectedDate}
-                future_values_auto_arima={this.state.future_values_auto_arima}
-                hidden_step1={this.state.hidden_step1}
-                hidden_step3={this.state.hidden_step3}
-                hidden_step4={this.state.hidden_step4}
-                hidden0={this.state.hidden0}
-                hidden2={this.state.hidden2}
-                hidden3={this.state.hidden3}
-                file={this.state.file}
-                data={this.state.data}
-                time_of_TS={this.state.time_of_TS}
-                yearsx={this.state.yearsx}
-                data_of_TS={this.state.data_of_TS}
-                predicted_auto_arima={this.state.predicted_auto_arima}
-                column={this.state.column}
-                buttonRef={buttonRef}
-                timeColumn={this.state.timeColumn}
-                dataColumn={this.state.dataColumn}
-                handleSelectData={this.handleSelectData}
-                handleSelectTime={this.handleSelectTime}
-                handleOpenDialog={this.handleOpenDialog}
-                handleSelectChanege={this.handleSelectChanege}
-                handleOnFileLoad1={this.handleOnFileLoad1}
-                handleOnFileLoad2={this.handleOnFileLoad2}
-                handleOnError={this.handleOnError}
-
-                nextStep={this.nextStep}
-                previousStep={this.previousStep}
-
-                drawArima={this.drawArima}
-                drawAuto_Arima={this.drawAuto_Arima}
-                arima_graph={arima_graph}
-                auto_arima_graph={auto_arima_graph}
-                handleOnRemoveFile={this.handleOnRemoveFile}
-                handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
-                filename={this.state.filename}></Step4>
             </div>
           </div>
         </div >
