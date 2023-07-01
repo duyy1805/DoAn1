@@ -7,7 +7,7 @@ import {
   Container,
   Card,
   CardContent,
-  Button,
+  Button as ButtonMui,
   Grid,
   MenuItem,
   Divider,
@@ -29,7 +29,7 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
-import { Steps, Descriptions, Row, Col, message } from 'antd';
+import { Steps, Descriptions, Row, Col, message, Button } from 'antd';
 import Step1 from './Step1';
 import Step2 from './Step2';
 import Step3 from './Step3';
@@ -76,6 +76,7 @@ export default class Reports extends Component {
     filename: '',
 
     //visualize
+
     values_count: 0,
     missing_values_count: 0,
     sum_values: 0,
@@ -114,7 +115,7 @@ export default class Reports extends Component {
     var x = this.state.current
     x = x + 1
     this.setState({ current: x }, () => {
-      this.onChange(x)
+      // this.onChange(x)
       this.render()
     })
   }
@@ -132,7 +133,7 @@ export default class Reports extends Component {
     // setCurrent(current + 1);
     const current = this.state.current + 1
     this.setState({ current: current }, () => {
-      this.render()
+      // this.render()
     })
   };
   prev = () => {
@@ -147,7 +148,7 @@ export default class Reports extends Component {
   };
 
   handleSelectData = (event) => {
-    // console.log(event.target.value)
+    console.log(event.target.value)
     this.setState({ dataColumn: event.target.value }, () => {
       // console.log(this.state.dataColumn)
     })
@@ -155,15 +156,16 @@ export default class Reports extends Component {
   }
 
   handleSelectTime = (event) => {
-    // console.log(event.target.value)
+    console.log(event.target.value)
     this.setState({ timeColumn: event.target.value })
   }
 
   handleSelectChanege = (event) => {
     // console.log(this.state.yearsx[event.target.value])
     this.setState({ future_values_auto_arima: this.state.prediction_auto_arima[event.target.value] })
+
     this.setState({ selectedDate: event.target.value }, () => {
-      // console.log(this.state.selectedDate)
+      console.log(this.state.selectedDate)
     })
   }
 
@@ -273,7 +275,6 @@ export default class Reports extends Component {
     // console.log(file['name'])
     this.setState({ filename: file['name'] })
 
-    var predicted_auto_arima, predicted_arima, prediction_auto_arima;
     this.setState({ data: data });
     Papa.parse(file, {
       header: true,
@@ -388,12 +389,13 @@ export default class Reports extends Component {
           const dateObject = new Date(timestamp);
           return dateObject.toISOString().slice(0, 10);
         });
-        console.log(dates)
+        // console.log(dates)
         this.setState({ predicted_auto_arima: predicted_auto_arima, yearsx: dates, prediction_auto_arima: prediction_auto_arima })
         this.setState({ auto_arima: true, current: 3 }, () => {
           this.setState({ hidden2: true })
-          this.onChange(3)
-          this.render()
+          message.success("Complete")
+          // this.onChange(3)
+          // this.render()
         })
       })
       .catch((response) => {
@@ -413,7 +415,7 @@ export default class Reports extends Component {
 
   handleOnFileLoadArima = (values) => {
     var predicted_auto_arima, predicted_arima, prediction_auto_arima
-    console.log(values)
+    // console.log(values)
     // this.setState({ hidden2: false })
     const formData = new FormData();
     formData.append('test_size', this.state.test_size);
@@ -431,7 +433,8 @@ export default class Reports extends Component {
     formData.append('stationarity', values.stationarity)
     formData.append('invertibility', values.invertibility)
     formData.append('concentrate_scale', values.concentrate_scale)
-    console.log(formData)
+
+    // console.log(formData)
     axios({
       method: 'post',
       url: 'http://127.0.0.1:8000/arima',
@@ -582,8 +585,8 @@ export default class Reports extends Component {
           handleOnError={this.handleOnError}
           handleOnRemoveFile={this.handleOnRemoveFile}
 
-          nextStep={this.nextStep}
-          previousStep={this.previousStep}
+          nextStep={this.next}
+          previousStep={this.prev}
           //visualize
           sum_values={this.state.sum_values}
           values_count={this.state.values_count}
@@ -634,8 +637,8 @@ export default class Reports extends Component {
           handleOnFileLoad2={this.handleOnFileLoad2}
           handleOnError={this.handleOnError}
 
-          nextStep={this.nextStep}
-          previousStep={this.previousStep}
+          nextStep={this.next}
+          previousStep={this.prev}
           graph={graph}
           arima_graph={arima_graph}
           handleOnRemoveFile={this.handleOnRemoveFile}
@@ -671,8 +674,8 @@ export default class Reports extends Component {
           handleOnFileLoad2={this.handleOnFileLoad2}
           handleOnError={this.handleOnError}
 
-          nextStep={this.nextStep}
-          previousStep={this.previousStep}
+          nextStep={this.next}
+          previousStep={this.prev}
 
           params={this.state.params}
           handleOnFileLoadArima={this.handleOnFileLoadArima}
@@ -713,9 +716,11 @@ export default class Reports extends Component {
           handleOnFileLoad2={this.handleOnFileLoad2}
           handleOnError={this.handleOnError}
 
-          nextStep={this.nextStep}
-          previousStep={this.previousStep}
+          nextStep={this.next}
+          previousStep={this.prev}
 
+          future_values_auto_arima={this.state.future_values_auto_arima}
+          selectedDate={this.state.selectedDate}
           drawArima={this.drawArima}
           drawAuto_Arima={this.drawAuto_Arima}
           arima_graph={arima_graph}
@@ -739,7 +744,7 @@ export default class Reports extends Component {
             <Divider />
             <Steps
               current={this.state.current}
-              // onChange={this.onChange}
+              onChange={this.onChange}
               direction="vertical"
               style={{ marginTop: "100px", background: '#ffffff', padding: '20px', borderRadius: '12px', boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)" }}
               items={[
@@ -764,7 +769,7 @@ export default class Reports extends Component {
           </div>
           <div style={{ flex: ' 5 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', overflowY: 'scroll', height: 'calc(100vh - 102px)' }}>
             <div>{steps[this.state.current].content}</div>
-            <div
+            {/* <div
               style={{
                 marginTop: 24,
               }}
@@ -780,7 +785,7 @@ export default class Reports extends Component {
                 </Button>
               )}
               {this.state.current < steps.length - 1 && (
-                <Button type="primary" onClick={() => this.next()}>
+                <Button type="primary" style={{ margin: '0 8px' }} onClick={() => this.next()}>
                   Next
                 </Button>
               )}
@@ -790,7 +795,7 @@ export default class Reports extends Component {
                 </Button>
               )}
 
-            </div>
+            </div> */}
           </div>
         </div >
       </>
