@@ -29,7 +29,7 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
-import { InputNumber, Row, Col, Tabs, Badge, Form, Button, Checkbox, Input } from 'antd';
+import { InputNumber, Row, Col, Tabs, Badge, Form, Button, Checkbox, Input, message } from 'antd';
 
 const Plot = createPlotlyComponent(Plotly);
 const onFinish = (values: any) => {
@@ -41,7 +41,7 @@ const onFinishFailed = (errorInfo: any) => {
 };
 
 const Step4 = (props) => {
-    const { hidden_step1, hidden_step3, hidden_step4, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
+    const { hidden_step1, hidden_step3, hidden_step4, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile, previousStep,
         handleOpenDialog, buttonRef, handleSelectTime, future_values_auto_arima, handleOnFileLoadAutoArima, graph, auto_arima_graph, arima_graph, drawArima, drawAuto_Arima,
         selectedDate, filename, yearx, column, timeColumn, dataColumn, time_of_TS, yearsx, data_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
     // useEffect(() => {
@@ -50,7 +50,11 @@ const Step4 = (props) => {
     return (
         <div>
             <Container >
-                <Box sx={{ m: 3, display: hidden_step4 ? 'none' : 'block' }}>
+                <Box
+                    sx={{
+                        m: 3,
+                        // display: hidden_step4 ? 'none' : 'block'
+                    }}>
                     <Card>
                         <CardContent>
                             <Box
@@ -170,18 +174,34 @@ const Step4 = (props) => {
                                     p: 2
                                 }}
                             >
-
-
-
-
-
+                                {future_values_auto_arima !== null &&
+                                    <h3> The predicted values of auto ARIMA model is  for {yearsx[selectedDate]} is :
+                                        {'  ' + future_values_auto_arima + ' DA'}
+                                    </h3>
+                                }
                             </Box>
-
                         </CardContent>
                         <Divider />
                     </Card>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                        <Button
+                            // type="primary"
+                            // variant="contained"
+                            onClick={previousStep}
+                        // sx={{ backgroundColor: '#EB2CB2', }}
+                        >
+                            Previous
+                        </Button>
+                        <Button
+                            type="primary"
+                            // variant="contained"
+                            onClick={() => message.success('Processing complete!')}
+                        // sx={{ backgroundColor: '#EB2CB2', }}
+                        >
+                            Done
+                        </Button>
+                    </div>
                 </Box>
-
 
 
 

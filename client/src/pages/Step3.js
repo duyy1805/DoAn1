@@ -88,15 +88,16 @@ const Step3 = (props) => {
                                                     <Card>
                                                         <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
                                                             <Button
-                                                                style={{ width: 80 }}
+                                                                // style={{ width: 80 }}
                                                                 type="primary"
                                                                 // variant="contained"
                                                                 onClick={handleOnFileLoadAutoArima}
 
                                                             >
-                                                                Run
+                                                                Apply auto ARIMA model
                                                             </Button>
                                                         </CardContent>
+
                                                     </Card>
 
                                             },
@@ -231,8 +232,10 @@ const Step3 = (props) => {
                                                         </div>
                                                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                                                             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                                                                <Button style={{ width: 80 }} type="primary" htmlType="submit">
-                                                                    Run
+                                                                <Button
+                                                                    // style={{ width: 80 }} 
+                                                                    type="primary" htmlType="submit">
+                                                                    Apply manual ARIMA model
                                                                 </Button>
                                                             </Form.Item>
                                                         </div>

@@ -31,7 +31,7 @@ import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
 import { Steps, Descriptions, Row, Col, Button, Tabs, Badge } from 'antd';
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
+// import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 import { animated, useSpring } from '@react-spring/web'
 
 const Plot = createPlotlyComponent(Plotly);
@@ -106,7 +106,8 @@ const Step1 = (props) => {
                           )}
                         </CSVReader>
 
-                      </Box></Col>
+                      </Box>
+                      </Col>
                       <Col style={{ display: 'flex' }}><div className='file-name' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{filename}</div></Col>
                     </Row>
                   </div>
@@ -124,7 +125,7 @@ const Step1 = (props) => {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={column[timeColumn]}
+                        value={timeColumn}
                         label="Time"
                         sx={{ borderRadius: '10px' }}
                         onChange={handleSelectTime}
@@ -140,7 +141,7 @@ const Step1 = (props) => {
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={column[dataColumn]}
+                        value={dataColumn}
                         sx={{ borderRadius: '10px' }}
                         label="Data"
                         onChange={handleSelectData}
