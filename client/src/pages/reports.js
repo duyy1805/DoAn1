@@ -41,6 +41,7 @@ export default class Reports extends Component {
   state = {
     selectedDate: '',
     future_values_auto_arima: null,
+    future_values_arima: null,
     hidden0: false,
     hidden_step1: true,
     hidden_step2: true,
@@ -67,6 +68,7 @@ export default class Reports extends Component {
     predicted_auto_arima: [],
     predicted_arima: [],
     prediction_auto_arima: [],
+    prediction_arima: [],
     activeStep: 0,
     skipped: new Set(),
     current: 0,
@@ -163,7 +165,7 @@ export default class Reports extends Component {
   handleSelectChanege = (event) => {
     // console.log(this.state.yearsx[event.target.value])
     this.setState({ future_values_auto_arima: this.state.prediction_auto_arima[event.target.value] })
-
+    this.setState({ future_values_arima: this.state.prediction_arima[event.target.value] })
     this.setState({ selectedDate: event.target.value }, () => {
       console.log(this.state.selectedDate)
     })
@@ -414,7 +416,7 @@ export default class Reports extends Component {
   }
 
   handleOnFileLoadArima = (values) => {
-    var predicted_auto_arima, predicted_arima, prediction_auto_arima
+    var predicted_auto_arima, predicted_arima, prediction_arima
     // console.log(values)
     // this.setState({ hidden2: false })
     const formData = new FormData();
@@ -444,7 +446,14 @@ export default class Reports extends Component {
       .then((response) => {
 
         predicted_arima = Object.values(JSON.parse(response.data.data1).predicted_values)
-        this.setState({ predicted_arima: predicted_arima })
+        prediction_arima = Object.values(JSON.parse(response.data.data2).predicted_values)
+        const timestamps = (Object.values(JSON.parse(response.data.data2).index))
+
+        const dates = timestamps.map(timestamp => {
+          const dateObject = new Date(timestamp);
+          return dateObject.toISOString().slice(0, 10);
+        });
+        this.setState({ predicted_arima: predicted_arima, yearsx: dates, prediction_arima: prediction_arima })
         this.setState({ arima: true, current: 3 }, () => {
           this.setState({ hidden2: true })
           this.onChange(3)
@@ -692,6 +701,8 @@ export default class Reports extends Component {
           test={this.test}
           selectedDate={this.state.selectedDate}
           future_values_auto_arima={this.state.future_values_auto_arima}
+          future_values_arima={this.state.future_values_arima}
+
           hidden_step1={this.state.hidden_step1}
           hidden_step3={this.state.hidden_step3}
           hidden_step4={this.state.hidden_step4}
@@ -719,8 +730,6 @@ export default class Reports extends Component {
           nextStep={this.next}
           previousStep={this.prev}
 
-          future_values_auto_arima={this.state.future_values_auto_arima}
-          selectedDate={this.state.selectedDate}
           drawArima={this.drawArima}
           drawAuto_Arima={this.drawAuto_Arima}
           arima_graph={arima_graph}

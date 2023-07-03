@@ -42,7 +42,8 @@ const onFinishFailed = (errorInfo: any) => {
 
 const Step4 = (props) => {
     const { hidden_step1, hidden_step3, hidden_step4, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile, previousStep,
-        handleOpenDialog, buttonRef, handleSelectTime, future_values_auto_arima, handleOnFileLoadAutoArima, graph, auto_arima_graph, arima_graph, drawArima, drawAuto_Arima,
+        handleOpenDialog, buttonRef, handleSelectTime, future_values_auto_arima, future_values_arima,
+        handleOnFileLoadAutoArima, graph, auto_arima_graph, arima_graph, drawArima, drawAuto_Arima,
         selectedDate, filename, yearx, column, timeColumn, dataColumn, time_of_TS, yearsx, data_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
     // useEffect(() => {
     //     console.log(arima_graph)
@@ -169,7 +170,7 @@ const Step4 = (props) => {
 
                             <Box
                                 sx={{
-                                    display: 'flex',
+                                    // display: 'flex',
                                     justifyContent: 'center',
                                     p: 2
                                 }}
@@ -177,6 +178,12 @@ const Step4 = (props) => {
                                 {future_values_auto_arima !== null &&
                                     <h3> The predicted values of auto ARIMA model is  for {yearsx[selectedDate]} is :
                                         {'  ' + future_values_auto_arima + ' DA'}
+                                    </h3>
+                                }
+
+                                {future_values_arima !== null &&
+                                    <h3> The predicted values of manual ARIMA model is  for {yearsx[selectedDate]} is :
+                                        {'  ' + future_values_arima + ' DA'}
                                     </h3>
                                 }
                             </Box>

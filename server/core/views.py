@@ -295,6 +295,9 @@ class Arima(views.APIView):
             values[timeColumn], errors='coerce')
         values = values.rename(columns={timeColumn: 'Time'})
         values = values.rename(columns={dataColumn: 'Data'})
+
+        freq = pd.infer_freq(values["Time"])
+
         missing_values_count = values.isna().sum().sum()
         if missing_values_count != 0:
             # if fill_method == 'delete':
@@ -328,14 +331,21 @@ class Arima(views.APIView):
         prediction.columns = ['predicted_values']
         prediction.reset_index(inplace=True)
 
-        # index_future_dates = pd.date_range(
-        #     start='2021-10-01', end='2023-01-1', freq='MS')
-        # prediction_arima = pd.DataFrame(arima_model.predict(
-        #     n_periods=36), index=index_future_dates)
-        # prediction_arima.columns = ['predicted_values']
+        x = values.index[train.shape[0]]
+        print(x)
+        n_periods = test.shape[0] + 12
 
-        # ###############################################################################
-        # print(prediction.to_json)
+        index_future_dates = pd.date_range(
+            start=x, periods=n_periods, freq=freq)
+
+        prediction_arima = pd.DataFrame(
+            model_fit.forecast(n_periods), index=index_future_dates)
+        prediction_arima.columns = ['predicted_values']
+        prediction_arima.reset_index(inplace=True)
+
+        prediction_arima = prediction_arima.tail(12)
+        print(prediction_arima)
         return Response({
             "data1": prediction.to_json(),
+            "data2": prediction_arima.to_json()
         })
