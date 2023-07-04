@@ -171,21 +171,24 @@ const Step4 = (props) => {
                             <Box
                                 sx={{
                                     // display: 'flex',
-                                    justifyContent: 'center',
+                                    // justifyContent: 'center',
                                     p: 2
                                 }}
                             >
-                                {future_values_auto_arima !== null &&
-                                    <h3> The predicted values of auto ARIMA model is  for {yearsx[selectedDate]} is :
-                                        {'  ' + future_values_auto_arima + ' DA'}
-                                    </h3>
-                                }
-
-                                {future_values_arima !== null &&
-                                    <h3> The predicted values of manual ARIMA model is  for {yearsx[selectedDate]} is :
-                                        {'  ' + future_values_arima + ' DA'}
-                                    </h3>
-                                }
+                                <div style={{ display: 'flex', justifyContent: 'center', lineHeight: 0 }}>
+                                    {future_values_auto_arima !== null &&
+                                        <h3> The predicted values of auto ARIMA model is  for {yearsx[selectedDate]} is :
+                                            {'  ' + future_values_auto_arima + ' DA'}
+                                        </h3>
+                                    }
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'center', lineHeight: 0 }}>
+                                    {future_values_arima !== null &&
+                                        <h3> The predicted values of manual ARIMA model is  for {yearsx[selectedDate]} is :
+                                            {'  ' + future_values_arima + ' DA'}
+                                        </h3>
+                                    }
+                                </div>
                             </Box>
                         </CardContent>
                         <Divider />
