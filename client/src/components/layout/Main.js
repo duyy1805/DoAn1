@@ -16,7 +16,7 @@ import { Layout, Drawer, Affix } from "antd";
 import Sidenav from "./Sidenav";
 import Header from "./Header";
 import Footer from "./Footer";
-import anime from "F:/AEP/Data chuẩn bị/vermeil1.mp4"
+// import anime from "F:/AEP/Data chuẩn bị/vermeil1.mp4"
 const { Header: AntHeader, Content, Sider } = Layout;
 
 function Main({ children }) {

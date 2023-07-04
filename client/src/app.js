@@ -21,7 +21,7 @@ import Main from "./components/layout/Main";
 import Reports from "./pages/reports"
 import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
-import anime from "F:/AEP/Data chuẩn bị/vermeil1.mp4"
+// import anime from "F:/AEP/Data chuẩn bị/vermeil1.mp4"
 
 function App() {
   return (
