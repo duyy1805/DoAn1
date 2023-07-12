@@ -29,8 +29,12 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
-import { InputNumber, Row, Select, Col, Tabs, Badge, Form, Button, Checkbox, Input } from 'antd';
+import { InputNumber, Row, Select, Col, Tabs, Badge, Form, Button, Checkbox, Input, Space, Collapse } from 'antd';
+const { Option } = Select;
 
+const handleChange = (value) => {
+    console.log(`selected ${value}`);
+};
 const Plot = createPlotlyComponent(Plotly);
 const onFinish = (values: any) => {
     console.log('Success:', values);
@@ -77,6 +81,51 @@ const Step3 = (props) => {
                                         Select Time-Series Params
                                     </Typography>
                                     <Divider />
+
+                                    <Select
+                                        mode="multiple"
+                                        style={{
+                                            width: '100%',
+                                        }}
+                                        placeholder="select one country"
+                                        defaultValue={['china']}
+                                        onChange={handleChange}
+                                        optionLabelProp="label"
+                                    >
+                                        <Option value="china" label="China">
+                                            <Space>
+                                                <span role="img" aria-label="China">
+                                                    🇨🇳
+                                                </span>
+                                                China (中国)
+                                            </Space>
+                                        </Option>
+                                        <Option value="usa" label="USA">
+                                            <Space>
+                                                <span role="img" aria-label="USA">
+                                                    🇺🇸
+                                                </span>
+                                                USA (美国)
+                                            </Space>
+                                        </Option>
+                                        <Option value="japan" label="Japan">
+                                            <Space>
+                                                <span role="img" aria-label="Japan">
+                                                    🇯🇵
+                                                </span>
+                                                Japan (日本)
+                                            </Space>
+                                        </Option>
+                                        <Option value="korea" label="Korea">
+                                            <Space>
+                                                <span role="img" aria-label="Korea">
+                                                    🇰🇷
+                                                </span>
+                                                Korea (韩国)
+                                            </Space>
+                                        </Option>
+                                    </Select>
+
                                     <Tabs
                                         defaultActiveKey="1"
                                         items={[
