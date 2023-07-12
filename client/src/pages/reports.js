@@ -58,7 +58,7 @@ export default class Reports extends Component {
     data3: null,
 
     test_size: 0.2,
-    fill_method: 'delete',
+    fill_method: '0',
 
     time_of_TS: [],
     yearsx: [],

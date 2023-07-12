@@ -146,17 +146,20 @@ class FileUpload(views.APIView):
         file_obj = request.data['file']
         timeColumn = request.data['timeColumn']
         dataColumn = request.data['dataColumn']
-        # print(dataColumn)
 
-        print('Duy')
         values = read_csv(file_obj)
 
         values[timeColumn] = pd.to_datetime(
             values[timeColumn], errors='coerce')
         values = values.rename(columns={timeColumn: 'Time'})
-        missing_values_count = values.isna().sum().sum()
+
         # print(missing_values_count)
         values = values.rename(columns={dataColumn: 'Data'})
+        if isinstance(values['Data'][0], str):
+            values['Data'] = values['Data'].apply(lambda x: float(
+                x) if x.replace('.', '', 1).isdigit() else None)
+
+        missing_values_count = values.isna().sum().sum()
         values_count = len(values.index)
         values['ID'] = 'Duy'
         # adf_test = ADFTest(alpha=0.05)
@@ -206,6 +209,10 @@ class AutoArima(views.APIView):
             values[timeColumn], errors='coerce')
         values = values.rename(columns={timeColumn: 'Time'})
         values = values.rename(columns={dataColumn: 'Data'})
+
+        if isinstance(values['Data'][0], str):
+            values['Data'] = values['Data'].apply(lambda x: float(
+                x) if x.replace('.', '', 1).isdigit() else None)
         missing_values_count = values.isna().sum().sum()
 
         freq = pd.infer_freq(values["Time"])
@@ -295,7 +302,9 @@ class Arima(views.APIView):
             values[timeColumn], errors='coerce')
         values = values.rename(columns={timeColumn: 'Time'})
         values = values.rename(columns={dataColumn: 'Data'})
-
+        if isinstance(values['Data'][0], str):
+            values['Data'] = values['Data'].apply(lambda x: float(
+                x) if x.replace('.', '', 1).isdigit() else None)
         freq = pd.infer_freq(values["Time"])
 
         missing_values_count = values.isna().sum().sum()
@@ -322,7 +331,7 @@ class Arima(views.APIView):
 
         arima_model = ARIMA(train, exog=None, order=(p, d, q), seasonal_order=(P, D, Q, m),
                             trend=None, enforce_stationarity=stationarity, enforce_invertibility=invertibility,
-                            concentrate_scale=concentrate_scale, trend_offset=1, dates=None, freq=None,
+                            concentrate_scale=concentrate_scale, trend_offset=1, dates=None, freq=freq,
                             missing='none', validate_specification=False)
         model_fit = arima_model.fit()
         n_periods = test.shape[0]
