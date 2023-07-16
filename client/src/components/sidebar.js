@@ -11,7 +11,7 @@ const items = [
     icon: HomeIcon,
     label: 'Home'
   },
-  
+
 
 
 ];
@@ -79,7 +79,7 @@ export const Sidebar = () => {
           );
         })}
       </List>
-    
+
     </Drawer >
   );
 };

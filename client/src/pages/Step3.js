@@ -32,9 +32,27 @@ import { number } from 'prop-types';
 import { InputNumber, Row, Select, Col, Tabs, Badge, Form, Button, Checkbox, Input, Space, Collapse } from 'antd';
 const { Option } = Select;
 
-const handleChange = (value) => {
-    console.log(`selected ${value}`);
+// eslint-disable-next-line
+const model = ['Auto ARIMA', 'Manual ARIMA', 'RNN'];
+const options = [];
+for (let i = 0; i < model.length; i++) {
+    options.push({
+        label: model[i],
+        value: model[i],
+    });
+}
+
+const text = `
+  A dog is a type of domesticated animal.
+  Known for its loyalty and faithfulness,
+  it can be found as a welcome guest in many households across the world.
+`;
+
+const onChange = (key) => {
+    // console.log(key);
 };
+
+
 const Plot = createPlotlyComponent(Plotly);
 const onFinish = (values: any) => {
     console.log('Success:', values);
@@ -50,9 +68,194 @@ const Step3 = (props) => {
         previousStep, nextStep, params, handleOnFileLoadArima,
         handleOnFileLoadAutoArima, graph, arima_graph,
         selectedDate, filename, yearx, column, timeColumn, dataColumn, time_of_TS, yearsx, data_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
-    // useEffect(() => {
-    //     console.log(arima_graph)
-    // }, [])
+
+    const [item, setItem] = useState([])
+    const [Items, setItems] = useState([])
+    useEffect(() => {
+        console.log(item)
+        setItems(items.filter(i => item.includes(i.key)).sort((a, b) => {
+            const keyAIndex = item.indexOf(a.key);
+            const keyBIndex = item.indexOf(b.key);
+            if (keyAIndex < keyBIndex) {
+                return -1;
+            }
+            if (keyAIndex > keyBIndex) {
+                return 1;
+            }
+            return 0;
+        }))
+    }, [item])
+    const items = [
+        {
+            key: 'Auto ARIMA',
+            label: 'Auto ARIMA',
+            children:
+                <Card>
+                    <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Button
+                            // style={{ width: 80 }}
+                            type="primary"
+                            // variant="contained"
+                            onClick={handleOnFileLoadAutoArima}
+
+                        >
+                            Apply auto ARIMA model
+                        </Button>
+                    </CardContent>
+
+                </Card>
+            ,
+        },
+        {
+            key: 'Manual ARIMA',
+            label: 'Manual ARIMA',
+            children:
+                <Form
+                    name="basic"
+                    labelCol={{ span: 18 }}
+                    wrapperCol={{ span: 6 }}
+                    style={{ maxWidth: 20000, color: 'red' }}
+                    initialValues={{
+                        p: 1, d: 1, q: 1, P: 1, D: 1, Q: 1, m: 1, concentrate_scale: 'False', invertibility: 'False', stationarity: 'False'
+                    }}
+                    onFinish={(values) => handleOnFileLoadArima(values)}
+                    onFinishFailed={onFinishFailed}
+                    autoComplete="off"
+                // disabled='true'
+                >
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', marginTop: 10 }}>
+                            <Form.Item
+                                label="p"
+                                name="p"
+                                style={{ marginRight: '100px' }}
+                            // rules={[{ required: true, message: 'Please input your username!' }]}
+                            >
+                                <InputNumber defaultValue={1} />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="d"
+                                name="d"
+                                style={{ marginRight: '100px' }}
+                            // rules={[{ required: true, message: 'Please input your username!' }]}
+                            >
+                                <InputNumber defaultValue={1} />
+                            </Form.Item>
+
+
+                            <Form.Item
+                                label="q"
+                                name="q"
+                            // rules={[{ required: true, message: 'Please input your username!' }]}
+                            >
+                                <InputNumber defaultValue={1} />
+                            </Form.Item>
+                            <Form.Item
+                                label="P"
+                                name="P"
+                                style={{ marginRight: '100px' }}
+                            // rules={[{ required: true, message: 'Please input your username!' }]}
+                            >
+                                <InputNumber defaultValue={1} />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="D"
+                                name="D"
+                                style={{ marginRight: '100px' }}
+                            // rules={[{ required: true, message: 'Please input your username!' }]}
+                            >
+                                <InputNumber defaultValue={1} />
+                            </Form.Item>
+
+
+                            <Form.Item
+                                label="Q"
+                                name="Q"
+                            // rules={[{ required: true, message: 'Please input your username!' }]}
+                            >
+                                <InputNumber defaultValue={1} />
+                            </Form.Item>
+                            <Form.Item
+                                label="m"
+                                name="m"
+                                style={{ marginRight: '100px' }}
+                            // rules={[{ required: true, message: 'Please input your username!' }]}
+                            >
+                                <InputNumber defaultValue={1} />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="stationarity"
+                                name="stationarity"
+                                style={{ marginRight: '100px' }}
+                            // rules={[{ required: true, message: 'Please input your username!' }]}
+                            >
+                                <Select
+                                    defaultValue="True"
+                                    style={{ width: 90 }}
+                                    // onChange={(value)}
+                                    options={[
+                                        { value: 'True', label: 'True' },
+                                        { value: 'False', label: 'False' }
+                                    ]}
+                                />
+                            </Form.Item>
+
+
+                            <Form.Item
+                                label="invertibility"
+                                name="invertibility"
+                            // rules={[{ required: true, message: 'Please input your username!' }]}
+                            >
+                                <Select
+                                    defaultValue="True"
+                                    style={{ width: 90 }}
+                                    // onChange={(value)}
+                                    options={[
+                                        { value: 'True', label: 'True' },
+                                        { value: 'False', label: 'False' }
+                                    ]}
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                label="concentrate_scale"
+                                name="concentrate_scale"
+                            >
+                                <Select
+                                    defaultValue="True"
+                                    style={{ width: 90 }}
+                                    // onChange={(value)}
+                                    options={[
+                                        { value: 'True', label: 'True' },
+                                        { value: 'False', label: 'False' }
+                                    ]}
+                                />
+                            </Form.Item>
+                        </div>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Form.Item >
+                            <Button
+                                // style={{ width: 80 }} 
+                                type="primary" htmlType="submit">
+                                Apply manual ARIMA model
+                            </Button>
+                        </Form.Item>
+                    </div>
+                </Form>
+            ,
+        },
+        {
+            key: 'RNN',
+            label: 'RNN',
+            children: <p>{text}</p>,
+        },
+    ];
+    const handleChange = (value) => {
+        setItem(value)
+    };
     return (
         <div>
 
@@ -78,55 +281,32 @@ const Step3 = (props) => {
                             <Card sx={{ m: 0 }}>
                                 <CardContent sx={{ width: "1000px" }}>
                                     <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
-                                        Select Time-Series Params
+                                        Select Time-Series Model
                                     </Typography>
                                     <Divider />
 
-                                    <Select
-                                        mode="multiple"
+                                    <Space
                                         style={{
                                             width: '100%',
+                                            marginTop: 10,
+                                            marginBottom: 10,
                                         }}
-                                        placeholder="select one country"
-                                        defaultValue={['china']}
-                                        onChange={handleChange}
-                                        optionLabelProp="label"
+                                        direction="vertical"
                                     >
-                                        <Option value="china" label="China">
-                                            <Space>
-                                                <span role="img" aria-label="China">
-                                                    🇨🇳
-                                                </span>
-                                                China (中国)
-                                            </Space>
-                                        </Option>
-                                        <Option value="usa" label="USA">
-                                            <Space>
-                                                <span role="img" aria-label="USA">
-                                                    🇺🇸
-                                                </span>
-                                                USA (美国)
-                                            </Space>
-                                        </Option>
-                                        <Option value="japan" label="Japan">
-                                            <Space>
-                                                <span role="img" aria-label="Japan">
-                                                    🇯🇵
-                                                </span>
-                                                Japan (日本)
-                                            </Space>
-                                        </Option>
-                                        <Option value="korea" label="Korea">
-                                            <Space>
-                                                <span role="img" aria-label="Korea">
-                                                    🇰🇷
-                                                </span>
-                                                Korea (韩国)
-                                            </Space>
-                                        </Option>
-                                    </Select>
-
-                                    <Tabs
+                                        <Select
+                                            mode="multiple"
+                                            allowClear
+                                            style={{
+                                                width: '100%',
+                                            }}
+                                            placeholder="Please select"
+                                            // defaultValue={['a10', 'c12']}
+                                            onChange={handleChange}
+                                            options={options}
+                                        />
+                                    </Space>
+                                    <Collapse items={Items} onChange={onChange} />
+                                    {/* <Tabs
                                         defaultActiveKey="1"
                                         items={[
                                             {
@@ -291,7 +471,7 @@ const Step3 = (props) => {
                                                     </Form>
                                             },
                                         ]}
-                                    />
+                                    /> */}
                                 </CardContent>
                             </Card>
                         </Box>
