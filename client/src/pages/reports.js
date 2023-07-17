@@ -150,7 +150,6 @@ export default class Reports extends Component {
   };
 
   handleSelectData = (event) => {
-    console.log(event.target.value)
     this.setState({ dataColumn: event.target.value }, () => {
       // console.log(this.state.dataColumn)
     })
@@ -158,7 +157,7 @@ export default class Reports extends Component {
   }
 
   handleSelectTime = (event) => {
-    console.log(event.target.value)
+    // console.log(event.target.value)
     this.setState({ timeColumn: event.target.value })
   }
 
@@ -189,92 +188,40 @@ export default class Reports extends Component {
   drawRnn = () => {
     this.setState({ rnn: !this.state.rnn })
   }
-  handleOnFileLoad = (data, file) => {
-    this.setState({ hidden2: false, file: file });
-    var predicted_auto_arima, predicted_arima, prediction_auto_arima
-    const formData = new FormData();
-    formData.append('test', 'test');
-    formData.append('file', file, 'file.csv')
-    axios({
-      method: 'post',
-      url: 'http://127.0.0.1:8000/upload/file',
-      data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
+  handleOnFileLoad = (file) => {
+    // this.setState({ data: data })
+    // var time_of_TS = []
+    // this.state.data.map((element, index) => {
+    //   if (index > 0)
+    //     time_of_TS.push(element.data[0])
+    // })
+
+    this.setState({ file: file });
+    // console.log(file)
+    this.setState({ filename: file['name'] })
+
+    // this.setState({ data: data });
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (result) => {
+        const columnArray = [];
+        const valueArray = [];
+        this.setState({ data: result.data });
+        result.data.map((d) => {
+          columnArray.push(Object.keys(d))
+          valueArray.push(Object.values(d))
+        });
+        this.setState({ column: columnArray[0] });
+      }
     })
-      .then((response) => {
-
-        predicted_auto_arima = Object.values(JSON.parse(response.data.data1).predicted_sales)
-        predicted_arima = Object.values(JSON.parse(response.data.data2).Predictions)
-        prediction_auto_arima = Object.values(JSON.parse(response.data.data3).predicted_sales)
-
-        this.setState({ predicted_auto_arima: predicted_auto_arima, predicted_arima: predicted_arima, prediction_auto_arima: prediction_auto_arima })
-        var yearsx = []
-        var int = 10
-        var y = "2021-"
-        prediction_auto_arima.map((element, index) => {
-
-
-          if (int > 12) {
-            y = "2022-"
-            int = 1
-            yearsx.push(y + int)
-
-          }
-          else {
-            yearsx.push(y + int)
-          }
-
-          int = int + 1
-        })
-
-
-        // console.log(yearsx)
-
-        this.setState({ yearsx: yearsx });
-        this.setState({ hidden2: true });
-        this.setState({ hidden_step1: false });
-      })
-      .catch((response) => {
-        //handle error
-        console.log(response);
-      });
-
-    this.setState({ data: data })
-    var time_of_TS = []
-    this.state.data.map((element, index) => {
-      if (index > 0)
-        time_of_TS.push(element.data[0])
-    })
-
-
-    this.setState({ time_of_TS: time_of_TS })
-
-    var time_of_predicted = time_of_TS.filter((item, index) => { return index > 84 })
-    this.setState({ time_of_predicted: time_of_predicted })
-
-    var time_of_prediction = time_of_TS.filter((item, index) => { return index > 92 })
-    this.setState({ time_of_prediction: time_of_prediction })
-
-
-
-    var data_of_TS = []
-    this.state.data.map((element, index) => {
-      if (index > 0)
-        data_of_TS.push(element.data[1])
-    })
-    this.setState({ data_of_TS: data_of_TS })
-
   };
 
   handleOnFileLoad1 = (data, file) => {
     this.setState({ data: data })
-    var time_of_TS = []
-    this.state.data.map((element, index) => {
-      if (index > 0)
-        time_of_TS.push(element.data[0])
-    })
+
     this.setState({ file: file });
-    // console.log(file['name'])
+    console.log(data)
     this.setState({ filename: file['name'] })
 
     this.setState({ data: data });
@@ -300,8 +247,8 @@ export default class Reports extends Component {
       this.setState({ hidden2: false });
       const formData = new FormData();
       formData.append('test', 'test');
-      formData.append('timeColumn', this.state.column[this.state.timeColumn]);
-      formData.append('dataColumn', this.state.column[this.state.dataColumn]);
+      formData.append('timeColumn', this.state.timeColumn);
+      formData.append('dataColumn', this.state.dataColumn);
       formData.append('file', this.state.file, 'file.csv')
       axios({
         method: 'post',
@@ -344,21 +291,20 @@ export default class Reports extends Component {
       var time_of_TS = []
       var xx = ''
       this.state.data.map((element, index) => {
-        if (index > 0)
-          time_of_TS.push(element.data[this.state.timeColumn])
-        else
-          xx = element.data
+        // if (index > 0)
+        time_of_TS.push(element[this.state.timeColumn])
+        // else
+        //   xx = element.data
       })
 
       this.setState({ time_of_TS: time_of_TS })
 
       var data_of_TS = []
       this.state.data.map((element, index) => {
-        if (index > 0)
-          data_of_TS.push(element.data[this.state.dataColumn])
+        // if (index > 0)
+        data_of_TS.push(element[this.state.dataColumn])
       })
       this.setState({ data_of_TS: data_of_TS },
-        // () => console.log(data_of_TS)
       )
       // this.setState({ hidden_step1: false });
     }
@@ -370,8 +316,8 @@ export default class Reports extends Component {
     const formData = new FormData();
     formData.append('test_size', this.state.test_size);
     formData.append('fill_method', this.state.fill_method);
-    formData.append('timeColumn', this.state.column[this.state.timeColumn]);
-    formData.append('dataColumn', this.state.column[this.state.dataColumn]);
+    formData.append('timeColumn', this.state.timeColumn);
+    formData.append('dataColumn', this.state.dataColumn);
     formData.append('file', this.state.file, 'file.csv')
     axios({
       method: 'post',
@@ -406,8 +352,8 @@ export default class Reports extends Component {
       });
     var time_of_TS = []
     this.state.data.map((element, index) => {
-      if (index > 0)
-        time_of_TS.push(element.data[0])
+      // if (index > 0)
+      time_of_TS.push(element[this.state.timeColumn])
     })
     var x = time_of_TS.length - time_of_TS.length * this.state.test_size
     // console.log(x)
@@ -422,8 +368,8 @@ export default class Reports extends Component {
     const formData = new FormData();
     formData.append('test_size', this.state.test_size);
     formData.append('fill_method', this.state.fill_method);
-    formData.append('timeColumn', this.state.column[this.state.timeColumn]);
-    formData.append('dataColumn', this.state.column[this.state.dataColumn]);
+    formData.append('timeColumn', this.state.timeColumn);
+    formData.append('dataColumn', this.state.dataColumn);
     formData.append('file', this.state.file, 'file.csv')
     formData.append('p', values.p)
     formData.append('d', values.d)
@@ -466,8 +412,8 @@ export default class Reports extends Component {
       });
     var time_of_TS = []
     this.state.data.map((element, index) => {
-      if (index > 0)
-        time_of_TS.push(element.data[0])
+      // if (index > 0)
+      time_of_TS.push(element[this.state.timeColumn])
     })
     var x = time_of_TS.length - time_of_TS.length * this.state.test_size
     console.log(x)
@@ -589,6 +535,7 @@ export default class Reports extends Component {
           handleSelectData={this.handleSelectData}
           handleSelectTime={this.handleSelectTime}
           handleOpenDialog={this.handleOpenDialog}
+          handleOnFileLoad={this.handleOnFileLoad}
           handleOnFileLoad1={this.handleOnFileLoad1}
           handleOnFileLoad2={this.handleOnFileLoad2}
           handleOnError={this.handleOnError}

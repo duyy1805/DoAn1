@@ -30,18 +30,45 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
-import { Steps, Descriptions, Row, Col, Button, Tabs, Badge } from 'antd';
+import {
+  Steps, Descriptions, Row,
+  Col, Button, Tabs, Badge,
+  message, Upload
+} from 'antd';
 // import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 import { animated, useSpring } from '@react-spring/web'
 
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import { InboxOutlined } from '@ant-design/icons';
+
+const { Dragger } = Upload;
+
 const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
-  const { hidden_step1, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
+  const { hidden_step1, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
     handleOpenDialog, buttonRef, handleSelectTime, future_values_auto_arima, nextStep, previousStep,
     //visualize
     sum_values, values_count, missing_values_count, max_values, min_values, mean_values, median_values, std_values, variance_values, skewness_values,
     selectedDate, filename, yearx, column, timeColumn, dataColumn, data_of_TS, yearsx, time_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
   // useEffect(() => { console.log(sum_values) }, [sum_values]);
+  const [fileList, setFileList] = useState([]);
+
+  const props1: UploadProps = {
+    onRemove: (file) => {
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
+      if (newFileList.length !== 0) {
+        handleOnFileLoad(newFileList[newFileList.length - 1])
+      }
+    },
+    beforeUpload: (file) => {
+      setFileList([...fileList, file]);
+      handleOnFileLoad(file)
+      return false;
+    },
+  };
   return (
     <div >
       <LoadingOverlay
@@ -63,11 +90,11 @@ const Step1 = (props) => {
               <Card sx={{ m: 0 }} style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px" }} >
                 <CardContent sx={{ width: "1000px" }}>
                   <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
-                    Time Series Forecasting using ARIMA & RNN
+                    Time Series Forecasting
                   </Typography>
 
                   <Divider />
-                  <div className='import-container' style={{}}>
+                  {/* <div className='import-container' style={{}}>
                     <Row>
                       <Col span={4} offset={10}><Box className='import-button'
                         sx={{
@@ -100,7 +127,7 @@ const Step1 = (props) => {
                                 // variant="contained"
                                 onClick={handleOpenDialog}
                               >
-                                Import CSV file
+                                Import file
                               </Button>
                             </aside>
                           )}
@@ -110,50 +137,61 @@ const Step1 = (props) => {
                       </Col>
                       <Col style={{ display: 'flex' }}><div className='file-name' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{filename}</div></Col>
                     </Row>
-                  </div>
+                  </div> */}
+                  <Dragger {...props1} style={{ marginTop: 30 }}>
+                    <p className="ant-upload-drag-icon">
+                      <InboxOutlined />
+                    </p>
+                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                    <p className="ant-upload-hint">
+                      Support for a single or bulk upload. Strictly prohibited from uploading company data or other
+                      banned files.
+                    </p>
+                  </Dragger>
+                  {fileList.length !== 0 ? (
 
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        p: 2
+                      }}
+                    >
+                      <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="time-InputLabel">Time</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={timeColumn}
+                          label="Time"
+                          sx={{ borderRadius: '10px' }}
+                          onChange={handleSelectTime}
+                        >
 
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      p: 2
-                    }}
-                  >
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                      <InputLabel id="time-InputLabel">Time</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={timeColumn}
-                        label="Time"
-                        sx={{ borderRadius: '10px' }}
-                        onChange={handleSelectTime}
-                      >
+                          {column.map((element, index) => <MenuItem key={index} value={element}>{element} </MenuItem>)}
 
-                        {column.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
+                        </Select>
+                        <FormHelperText>Select a time column</FormHelperText>
+                      </FormControl>
+                      <FormControl sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="data-InputLabel">Data</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={dataColumn}
+                          sx={{ borderRadius: '10px' }}
+                          label="Data"
+                          onChange={handleSelectData}
+                        >
 
-                      </Select>
-                      <FormHelperText>Select a time column</FormHelperText>
-                    </FormControl>
-                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                      <InputLabel id="data-InputLabel">Data</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={dataColumn}
-                        sx={{ borderRadius: '10px' }}
-                        label="Data"
-                        onChange={handleSelectData}
-                      >
+                          {column.map((element, index) => <MenuItem key={index} value={element}>{element} </MenuItem>)}
 
-                        {column.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
-
-                      </Select>
-                      <FormHelperText>Select a data column</FormHelperText>
-                    </FormControl>
-                  </Box>
-                  <aside
+                        </Select>
+                        <FormHelperText>Select a data column</FormHelperText>
+                      </FormControl>
+                    </Box>
+                  ) : null}
+                  < aside
                     style={{
                       display: 'flex',
                       flexDirection: 'row',
@@ -161,14 +199,16 @@ const Step1 = (props) => {
                       // marginBottom: 10,
                     }}
                   >
-                    <Button
-                      type="primary"
-                      // variant="contained"
-                      onClick={handleOnFileLoad2}
+                    {fileList.length !== 0 ? (
+                      <Button
+                        type="primary"
+                        // variant="contained"
+                        onClick={handleOnFileLoad2}
 
-                    >
-                      Run
-                    </Button>
+                      >
+                        Run
+                      </Button>
+                    ) : null}
                   </aside>
                 </CardContent>
               </Card>
@@ -237,13 +277,13 @@ const Step1 = (props) => {
 
                   },
                   {
-                    label: 'Visualization',
+                    label: 'Info',
                     key: '2',
                     children:
                       <Box sx={{ m: 3, display: hidden_step1 ? 'none' : 'block', }}>
                         <Card sx={{ padding: 2 }}>
                           {/* <Divider /> */}
-                          <Descriptions title="Visualization" bordered>
+                          <Descriptions title="Info" bordered>
                             <Descriptions.Item label="Values count">{values_count}</Descriptions.Item>
                             <Descriptions.Item label="Missing values">{missing_values_count}</Descriptions.Item>
                             <Descriptions.Item label="Sum values">{sum_values}</Descriptions.Item>
@@ -282,7 +322,7 @@ const Step1 = (props) => {
         </Container>
       </LoadingOverlay>
 
-    </div>
+    </div >
   );
 };
 

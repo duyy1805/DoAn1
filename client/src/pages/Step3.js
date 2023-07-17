@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useEffect, useState, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import DownloadIcon from '@material-ui/icons/PictureAsPdf';
 import LoadingOverlay from 'react-loading-overlay';
@@ -69,6 +69,14 @@ const Step3 = (props) => {
         handleOnFileLoadAutoArima, graph, arima_graph,
         selectedDate, filename, yearx, column, timeColumn, dataColumn, time_of_TS, yearsx, data_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
 
+
+    const formRef = useRef(null);
+
+    const handleApplyClick = () => {
+        if (formRef.current) {
+            formRef.current.click();
+        }
+    };
     const [item, setItem] = useState([])
     const [Items, setItems] = useState([])
     useEffect(() => {
@@ -239,6 +247,7 @@ const Step3 = (props) => {
                         <Form.Item >
                             <Button
                                 // style={{ width: 80 }} 
+                                ref={formRef}
                                 type="primary" htmlType="submit">
                                 Apply manual ARIMA model
                             </Button>
@@ -284,12 +293,14 @@ const Step3 = (props) => {
                                         Select Time-Series Model
                                     </Typography>
                                     <Divider />
-
+                                    {/* <div style={{ paddingTop: 15 }}>
+                                        Choose one or more
+                                    </div> */}
                                     <Space
                                         style={{
                                             width: '100%',
-                                            marginTop: 10,
-                                            marginBottom: 10,
+                                            marginTop: 30,
+                                            marginBottom: 30,
                                         }}
                                         direction="vertical"
                                     >
@@ -476,6 +487,16 @@ const Step3 = (props) => {
                             </Card>
                         </Box>
                     </Box>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        {/* <Form.Item > */}
+                        <Button
+                            // style={{ width: 80 }} 
+                            onClick={handleApplyClick}
+                            type="primary" htmlType="submit">
+                            Apply all models
+                        </Button>
+                        {/* </Form.Item> */}
+                    </div>
                 </LoadingOverlay>
             </Container>
         </div >
