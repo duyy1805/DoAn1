@@ -77,8 +77,8 @@ const Step3 = (props) => {
             formRef.current.click();
         }
     };
-    const [item, setItem] = useState([])
-    const [Items, setItems] = useState([])
+    const [item, setItem] = useState([]) // select
+    const [Items, setItems] = useState([]) // collapse
     useEffect(() => {
         console.log(item)
         setItems(items.filter(i => item.includes(i.key)).sort((a, b) => {
@@ -247,6 +247,7 @@ const Step3 = (props) => {
                         <Form.Item >
                             <Button
                                 // style={{ width: 80 }} 
+                                style={{ display: 'none' }}
                                 ref={formRef}
                                 type="primary" htmlType="submit">
                                 Apply manual ARIMA model
@@ -316,7 +317,7 @@ const Step3 = (props) => {
                                             options={options}
                                         />
                                     </Space>
-                                    <Collapse items={Items} onChange={onChange} />
+                                    <Collapse defaultActiveKey={['Manual ARIMA']} items={Items} onChange={onChange} />
                                     {/* <Tabs
                                         defaultActiveKey="1"
                                         items={[
@@ -487,16 +488,21 @@ const Step3 = (props) => {
                             </Card>
                         </Box>
                     </Box>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        {/* <Form.Item > */}
-                        <Button
-                            // style={{ width: 80 }} 
-                            onClick={handleApplyClick}
-                            type="primary" htmlType="submit">
-                            Apply all models
-                        </Button>
-                        {/* </Form.Item> */}
-                    </div>
+                    {item.length !== 0 ?
+                        (
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                {/* <Form.Item > */}
+                                <Button
+                                    // style={{ width: 80 }} 
+                                    onClick={handleApplyClick}
+                                    type="primary" htmlType="submit">
+                                    Apply all models
+                                </Button>
+                                {/* </Form.Item> */}
+                            </div>
+                        )
+                        : null
+                    }
                 </LoadingOverlay>
             </Container>
         </div >
