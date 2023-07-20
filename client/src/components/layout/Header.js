@@ -16,23 +16,23 @@ import {
   Row,
   Col,
   Breadcrumb,
-  Badge,
-  Dropdown,
-  Button,
+  // Badge,
+  // Dropdown,
+  // Button,
   List,
   Avatar,
-  Input,
-  Drawer,
+  // Input,
+  // Drawer,
   Typography,
-  Switch,
+  // Switch,
 } from "antd";
 
-import {
-  SearchOutlined,
-  StarOutlined,
-  TwitterOutlined,
-  FacebookFilled,
-} from "@ant-design/icons";
+// import {
+//   SearchOutlined,
+//   StarOutlined,
+//   TwitterOutlined,
+//   FacebookFilled,
+// } from "@ant-design/icons";
 
 import { NavLink, Link } from "react-router-dom";
 import styled from "styled-components";

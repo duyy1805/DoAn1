@@ -7,43 +7,36 @@
 // xóa các dữ liệu không hợp lệ
 // phân chia dữ liệu train test
 
-import React, { Component, useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
-import DownloadIcon from '@material-ui/icons/PictureAsPdf';
-import LoadingOverlay from 'react-loading-overlay';
+import React from 'react';
+// import { Helmet } from 'react-helmet';
+// import DownloadIcon from '@material-ui/icons/PictureAsPdf';
+// import LoadingOverlay from 'react-loading-overlay';
 import {
     Box,
     Container,
     Card,
     CardContent,
-    Button as ButtonMui,
-    Grid,
-    MenuItem,
+    // MenuItem,
     Divider,
     // Select,
-    FormControl,
-    InputLabel,
-    FormHelperText,
+    // FormControl,
+    // InputLabel,
+    // FormHelperText,
     Typography,
-    Step,
-    StepLabel,
-    Stepper,
-    StepContent
+
 
 
 } from '@material-ui/core';
-import Papa from "papaparse";
-import { CSVReader } from 'react-papaparse';
-import axios from 'axios';
-import Plotly from "plotly.js-basic-dist";
-import createPlotlyComponent from "react-plotly.js/factory";
-import { number } from 'prop-types';
-import { InputNumber, Select, Row, Col, Tabs, Badge, Form, Button, Checkbox, Input } from 'antd';
-import { AiOutlineArrowRight } from 'react-icons/ai';
+
+
+// import Plotly from "plotly.js-basic-dist";
+// import createPlotlyComponent from "react-plotly.js/factory";
+
+import { InputNumber, Select, Form, Button, } from 'antd';
 
 
 
-const Plot = createPlotlyComponent(Plotly);
+// const Plot = createPlotlyComponent(Plotly);
 const onFinish = (values: any) => {
     console.log('Success:', values);
 };
@@ -53,10 +46,10 @@ const onFinishFailed = (errorInfo: any) => {
 };
 
 const Step2 = (props) => {
-    const { hidden_step1, hidden_step2, hidden_step3, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
+    const {
         nextStep, previousStep,
-        handleOpenDialog, test_size, fill_method, buttonRef, handleSelectTime, future_values_auto_arima, handleOnFileLoadAutoArima, graph, arima_graph, handleUpdateTestSize, handleFillMethod,
-        selectedDate, filename, yearx, column, timeColumn, dataColumn, time_of_TS, yearsx, data_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
+        test_size, handleUpdateTestSize, handleFillMethod,
+    } = props;
 
 
     return (

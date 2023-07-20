@@ -1,40 +1,40 @@
 import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
-import DownloadIcon from '@material-ui/icons/PictureAsPdf';
+// import DownloadIcon from '@material-ui/icons/PictureAsPdf';
 import LoadingOverlay from 'react-loading-overlay';
 import {
-  Box,
-  Container,
-  Card,
-  CardContent,
-  Button as ButtonMui,
-  Grid,
-  MenuItem,
+  //   Box,
+  //   Container,
+  //   Card,
+  //   CardContent,
+  //   Button as ButtonMui,
+  //   Grid,
+  //   MenuItem,
   Divider,
-  Select,
-  FormControl,
-  InputLabel,
-  FormHelperText,
-  Typography,
-  Step,
-  StepLabel,
-  Stepper,
-  StepContent
+  //   Select,
+  //   FormControl,
+  //   InputLabel,
+  //   FormHelperText,
+  //   Typography,
+  //   Step,
+  //   StepLabel,
+  //   Stepper,
+  //   StepContent
 
 
 } from '@material-ui/core';
 import Papa from "papaparse";
-import { CSVReader } from 'react-papaparse';
+// import { CSVReader } from 'react-papaparse';
 import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
-import createPlotlyComponent from "react-plotly.js/factory";
-import { number } from 'prop-types';
-import { Steps, Descriptions, Row, Col, message, Button } from 'antd';
-import Step1 from './Step1';
-import Step2 from './Step2';
-import Step3 from './Step3';
-import Step4 from './Step4';
-const Plot = createPlotlyComponent(Plotly);
+// import createPlotlyComponent from "react-plotly.js/factory";
+// import { number } from 'prop-types';
+import { Steps, message, } from 'antd';
+import Step1 from './Steps/Step1';
+import Step2 from './Steps/Step2';
+import Step3 from './Steps/Step3';
+import Step4 from './Steps/Step4';
+// const Plot = createPlotlyComponent(Plotly);
 
 const buttonRef = React.createRef();
 export default class Reports extends Component {

@@ -30,13 +30,14 @@ function App() {
       <Switch>
         <Route path="/sign-up" exact component={SignUp} />
         <Route path="/sign-in" exact component={SignIn} />
+        <Route path="/home" exact component={Home} />
         <Main>
           <Route exact path="/dashboard" component={Reports} />
           <Route exact path="/tables" component={Tables} />
           <Route exact path="/billing" component={Billing} />
           <Route exact path="/rtl" component={Rtl} />
           <Route exact path="/profile" component={Profile} />
-          <Redirect from="*" to="/dashboard" />
+          {/* <Redirect from="*" to="/dashboard" /> */}
         </Main>
       </Switch>
     </div>

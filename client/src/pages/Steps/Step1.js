@@ -1,13 +1,13 @@
-import React, { Component, useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
-import DownloadIcon from '@material-ui/icons/PictureAsPdf';
+import React, { useState } from 'react';
+// import { Helmet } from 'react-helmet';
+// import DownloadIcon from '@material-ui/icons/PictureAsPdf';
 import LoadingOverlay from 'react-loading-overlay';
 import {
   Box,
   Container,
   Card,
   CardContent,
-  Button as ButtonMui,
+  // Button as ButtonMui,
   Grid,
   MenuItem,
   Divider,
@@ -16,40 +16,40 @@ import {
   InputLabel,
   FormHelperText,
   Typography,
-  Step,
-  StepLabel,
-  Stepper,
-  StepContent,
-  InputNumber
+  // Step,
+  // StepLabel,
+  // Stepper,
+  // StepContent,
+  // InputNumber
 
 
 } from '@material-ui/core';
-import Papa from "papaparse";
-import { CSVReader } from 'react-papaparse';
-import axios from 'axios';
+// import Papa from "papaparse";
+// import { CSVReader } from 'react-papaparse';
+// import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
-import { number } from 'prop-types';
+// import { number } from 'prop-types';
 import {
-  Steps, Descriptions, Row,
-  Col, Button, Tabs, Badge,
-  message, Upload
+  Descriptions,
+  Button, Tabs,
+  Upload
 } from 'antd';
 // import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
-import { animated, useSpring } from '@react-spring/web'
+// import { animated, useSpring } from '@react-spring/web'
 
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { UploadProps } from 'antd/es/upload/interface';
 import { InboxOutlined } from '@ant-design/icons';
 
 const { Dragger } = Upload;
 
 const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
-  const { hidden_step1, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
-    handleOpenDialog, buttonRef, handleSelectTime, future_values_auto_arima, nextStep, previousStep,
+  const { hidden_step1, hidden0, hidden2, handleOnFileLoad,
+    handleSelectTime, nextStep,
     //visualize
     sum_values, values_count, missing_values_count, max_values, min_values, mean_values, median_values, std_values, variance_values, skewness_values,
-    selectedDate, filename, yearx, column, timeColumn, dataColumn, data_of_TS, yearsx, time_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
+    column, timeColumn, dataColumn, data_of_TS, time_of_TS, handleOnFileLoad2, handleSelectData } = props;
   // useEffect(() => { console.log(sum_values) }, [sum_values]);
   const [fileList, setFileList] = useState([]);
 
