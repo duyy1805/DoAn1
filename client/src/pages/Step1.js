@@ -189,27 +189,29 @@ const Step1 = (props) => {
                         </Select>
                         <FormHelperText>Select a data column</FormHelperText>
                       </FormControl>
+                      < aside
+                        style={{
+                          position: 'absolute',
+                          // display: 'flex',
+                          // flexDirection: 'row',
+                          // justifyContent: 'center',
+                          marginTop: 15,
+                          marginLeft: 450
+                        }}
+                      >
+                        {fileList.length !== 0 ? (
+                          <Button
+                            type="primary"
+                            // variant="contained"
+                            onClick={handleOnFileLoad2}
+
+                          >
+                            Visualization
+                          </Button>
+                        ) : null}
+                      </aside>
                     </Box>
                   ) : null}
-                  < aside
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      // marginBottom: 10,
-                    }}
-                  >
-                    {fileList.length !== 0 ? (
-                      <Button
-                        type="primary"
-                        // variant="contained"
-                        onClick={handleOnFileLoad2}
-
-                      >
-                        Run
-                      </Button>
-                    ) : null}
-                  </aside>
                 </CardContent>
               </Card>
             </Box>
