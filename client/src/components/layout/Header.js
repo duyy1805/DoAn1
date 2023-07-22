@@ -16,23 +16,23 @@ import {
   Row,
   Col,
   Breadcrumb,
-  // Badge,
-  // Dropdown,
-  // Button,
+  Badge,
+  Dropdown,
+  Button,
   List,
   Avatar,
-  // Input,
-  // Drawer,
+  Input,
+  Drawer,
   Typography,
-  // Switch,
+  Switch,
 } from "antd";
 
-// import {
-//   SearchOutlined,
-//   StarOutlined,
-//   TwitterOutlined,
-//   FacebookFilled,
-// } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  StarOutlined,
+  TwitterOutlined,
+  FacebookFilled,
+} from "@ant-design/icons";
 
 import { NavLink, Link } from "react-router-dom";
 import styled from "styled-components";
@@ -292,18 +292,7 @@ function Header({
             </span>
           </div>
         </Col>
-        {/* <Col span={24} md={18} className="header-control">
-          <Badge size="small" count={4}>
-            <Dropdown overlay={menu} trigger={["click"]}>
-              <a
-                href="#pablo"
-                className="ant-dropdown-link"
-                onClick={(e) => e.preventDefault()}
-              >
-                {bell}
-              </a>
-            </Dropdown>
-          </Badge>
+        <Col span={24} md={18} className="header-control">
           <Button type="link" onClick={showDrawer}>
             {logsetting}
           </Button>
@@ -430,7 +419,7 @@ function Header({
             placeholder="Type here..."
             prefix={<SearchOutlined />}
           />
-        </Col> */}
+        </Col>
       </Row>
     </>
   );
