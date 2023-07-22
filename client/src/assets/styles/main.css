@@ -25,6 +25,7 @@ body {
 .ant-layout.ant-layout-has-sider {
   flex-direction: row;
   /* background: linear-gradient(135deg, #ff00cc, #333399); */
+  background: transparent;
 }
 
 .gradient-background {

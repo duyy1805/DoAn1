@@ -13,6 +13,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Layout, Drawer, Affix } from "antd";
+import ParticlesBg from "particles-bg";
 import Sidenav from "./Sidenav";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -52,7 +53,48 @@ function Main({ children }) {
         } ${pathname === "rtl" ? "layout-dashboard-rtl" : ""}`}
     >
       {/* <video style={{ position: "absolute", width: '100%' }} src={anime} autoPlay loop muted /> */}
-      <GradientBackground />
+      {/* <GradientBackground /> */}
+      <ParticlesBg type="circle" bg={true} style={{ position: "absolute", width: '100%' }} />
+      <nav id="nav-wrap">
+        <a className="mobile-btn" href="#nav-wrap" title="Show navigation">
+          Show navigation
+        </a>
+        <a className="mobile-btn" href="#home" title="Hide navigation">
+          Hide navigation
+        </a>
+
+        <ul id="nav" className="nav">
+          <li className="current">
+            <a className="smoothscroll" href="#home">
+              Home
+            </a>
+          </li>
+
+          <li>
+            <a className="smoothscroll" href="#about">
+              About
+            </a>
+          </li>
+
+          <li>
+            <a className="smoothscroll" href="#resume">
+              Resume
+            </a>
+          </li>
+
+          <li>
+            <a className="smoothscroll" href="#portfolio">
+              Works
+            </a>
+          </li>
+
+          <li>
+            <a className="smoothscroll" href="#contact">
+              Contact
+            </a>
+          </li>
+        </ul>
+      </nav>
       <Drawer
         title={false}
         placement={placement === "right" ? "left" : "right"}
