@@ -35,6 +35,9 @@ import Step2 from './Steps/Step2';
 import Step3 from './Steps/Step3';
 import Step4 from './Steps/Step4';
 // const Plot = createPlotlyComponent(Plotly);
+import { Fade, Slide } from "react-reveal";
+
+
 
 const buttonRef = React.createRef();
 export default class Reports extends Component {
@@ -699,65 +702,44 @@ export default class Reports extends Component {
           paddingLeft: 0, overflow: "hidden",
           // overflowY: 'scroll'
         }}>
-          <div style={{ flex: ' 3 0 0', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
-            <div>
-              {/* <Divider /> */}
-              <Steps
-                current={this.state.current}
-                onChange={this.onChange}
-                direction="horizontal"
-                style={{ marginTop: "24px", width: '1000px', background: '#ffffff', padding: '20px', paddingLeft: "40px", borderRadius: '12px', boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)" }}
-                items={[
-                  {
-                    title: 'Step 1',
-                    description: "Import time series file",
-                  },
-                  {
-                    title: 'Step 2',
-                    description: "Data preparation",
-                  },
-                  {
-                    title: 'Step 3',
-                    description: "Select Time-Series Params",
-                  },
-                  {
-                    title: 'Step 4',
-                    description: "...",
-                  },
-                ]}
-              />
+          <Fade bottom duration={1000}>
+            <div style={{ flex: ' 3 0 0', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+              <div>
+                {/* <Divider /> */}
+                <Steps
+                  current={this.state.current}
+                  onChange={this.onChange}
+                  direction="horizontal"
+                  style={{ marginTop: "24px", width: '1000px', background: '#ffffff', padding: '20px', paddingLeft: "40px", borderRadius: '12px', boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)" }}
+                  items={[
+                    {
+                      title: 'Step 1',
+                      description: "Import time series file",
+                    },
+                    {
+                      title: 'Step 2',
+                      description: "Data preparation",
+                    },
+                    {
+                      title: 'Step 3',
+                      description: "Select Time-Series Params",
+                    },
+                    {
+                      title: 'Step 4',
+                      description: "...",
+                    },
+                  ]}
+                />
+              </div>
             </div>
-          </div>
-          <div style={{ flex: ' 3 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-            <div>{steps[this.state.current].content}</div>
-            {/* <div
-              style={{
-                marginTop: 24,
-              }}
-            >
-              {this.state.current > 0 && (
-                <Button
-                  style={{
-                    margin: '0 8px',
-                  }}
-                  onClick={() => this.prev()}
-                >
-                  Previous
-                </Button>
-              )}
-              {this.state.current < steps.length - 1 && (
-                <Button type="primary" style={{ margin: '0 8px' }} onClick={() => this.next()}>
-                  Next
-                </Button>
-              )}
-              {this.state.current === steps.length - 1 && (
-                <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                  Done
-                </Button>
-              )}
-
-            </div> */}
-          </div>
+            {/* </Fade>
+          <Fade bottom duration={1000}> */}
+            <div style={{ flex: ' 3 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+              <div>
+                {steps[this.state.current].content}
+              </div>
+            </div>
+          </Fade >
         </div >
       </>
     );

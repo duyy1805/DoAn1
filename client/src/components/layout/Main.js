@@ -56,7 +56,7 @@ function Main({ children }) {
       {/* <GradientBackground /> */}
 
       {/* <ParticlesBg type="circle" bg={true} style={{ position: "absolute", width: '100%' }} /> */}
-      <nav id="nav-wrap">
+      <nav id="nav-wrap" style={{ backgroundColor: "#333" }}>
         <a className="mobile-btn" href="#nav-wrap" title="Show navigation">
           Show navigation
         </a>
@@ -66,13 +66,13 @@ function Main({ children }) {
 
         <ul id="nav" className="nav">
           <li className="current">
-            <a className="smoothscroll" href="#home">
+            <a href="/">
               Home
             </a>
           </li>
 
           <li>
-            <a className="smoothscroll" href="#about">
+            <a href="/#about">
               About
             </a>
           </li>
