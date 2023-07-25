@@ -75,7 +75,7 @@ const Step1 = (props) => {
         styles={{ display: 'none' }}
         active={!hidden2}
         spinner
-        text='Lunas'
+        text='Loading'
       >
 
         <Container >

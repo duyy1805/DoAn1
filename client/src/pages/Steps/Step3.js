@@ -33,7 +33,7 @@ import { InputNumber, Row, Select, Col, Tabs, Badge, Form, Button, Checkbox, Inp
 const { Option } = Select;
 
 // eslint-disable-next-line
-const model = ['Auto ARIMA', 'Manual ARIMA', 'RNN'];
+const model = ['MA', 'Auto ARIMA', 'Manual ARIMA', 'smooth-based', 'TBATS', 'RNN'];
 const options = [];
 for (let i = 0; i < model.length; i++) {
     options.push({
@@ -94,6 +94,11 @@ const Step3 = (props) => {
         }))
     }, [item])
     const items = [
+        {
+            key: 'MA',
+            label: 'MA',
+            children: <p>{text}</p>,
+        },
         {
             key: 'Auto ARIMA',
             label: 'Auto ARIMA',
@@ -256,6 +261,16 @@ const Step3 = (props) => {
                     </div>
                 </Form>
             ,
+        },
+        {
+            key: 'smooth-based',
+            label: 'smooth-based',
+            children: <p>{text}</p>,
+        },
+        {
+            key: 'TBATS',
+            label: 'TBATS',
+            children: <p>{text}</p>,
         },
         {
             key: 'RNN',

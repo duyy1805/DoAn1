@@ -115,7 +115,7 @@
          outline: 0;
          font-size: 100%;
          vertical-align: baseline;
-         background: transparent;
+         //  background: transparent;
      }
 
      article,
@@ -528,6 +528,10 @@
      li {
          line-height: 18px;
          margin-bottom: 12px;
+     }
+
+     li.skills {
+         margin-bottom: 60px;
      }
 
      ul.large li {}

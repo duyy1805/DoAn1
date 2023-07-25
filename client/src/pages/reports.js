@@ -695,10 +695,13 @@ export default class Reports extends Component {
         <Helmet>
           <title>Dashboard</title>
         </Helmet>
-        <div style={{ paddingLeft: 0, overflow: "hidden", overflowY: 'scroll' }}>
+        <div style={{
+          paddingLeft: 0, overflow: "hidden",
+          // overflowY: 'scroll'
+        }}>
           <div style={{ flex: ' 3 0 0', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
             <div>
-              <Divider />
+              {/* <Divider /> */}
               <Steps
                 current={this.state.current}
                 onChange={this.onChange}
@@ -725,7 +728,7 @@ export default class Reports extends Component {
               />
             </div>
           </div>
-          <div style={{ flex: ' 3 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', height: 'calc(100vh - 102px)' }}>
+          <div style={{ flex: ' 3 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
             <div>{steps[this.state.current].content}</div>
             {/* <div
               style={{

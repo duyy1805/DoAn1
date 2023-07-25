@@ -54,7 +54,8 @@ function Main({ children }) {
     >
       {/* <video style={{ position: "absolute", width: '100%' }} src={anime} autoPlay loop muted /> */}
       {/* <GradientBackground /> */}
-      <ParticlesBg type="circle" bg={true} style={{ position: "absolute", width: '100%' }} />
+
+      {/* <ParticlesBg type="circle" bg={true} style={{ position: "absolute", width: '100%' }} /> */}
       <nav id="nav-wrap">
         <a className="mobile-btn" href="#nav-wrap" title="Show navigation">
           Show navigation
@@ -122,7 +123,8 @@ function Main({ children }) {
           </Sider>
         </Layout>
       </Drawer>
-      <Sider
+      <img src="https://antley.biz/wp-content/uploads/coffee-work-desk-mug-keyboard-162616.jpg" style={{ position: "absolute", width: '100%', filter: 'brightness(70%) contrast(120%)' }} />
+      {/* <Sider
         breakpoint="lg"
         collapsedWidth="0"
         onCollapse={(collapsed, type) => {
@@ -136,7 +138,7 @@ function Main({ children }) {
         style={{ background: sidenavType }}
       >
         <Sidenav color={sidenavColor} />
-      </Sider>
+      </Sider> */}
       <Layout>
         {fixed ? (
           <Affix>

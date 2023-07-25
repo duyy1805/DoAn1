@@ -13,8 +13,8 @@ class Header extends Component {
 
     return (
       <header id="home">
-        <ParticlesBg type="circle" bg={true} />
-
+        {/* <ParticlesBg type="circle" bg={true} /> */}
+        <img src="https://antley.biz/wp-content/uploads/coffee-work-desk-mug-keyboard-162616.jpg" style={{ position: "absolute", top: 0, left: 0, width: '100%', filter: 'brightness(70%) contrast(120%)' }} />
         <nav id="nav-wrap">
           <a className="mobile-btn" href="#nav-wrap" title="Show navigation">
             Show navigation
