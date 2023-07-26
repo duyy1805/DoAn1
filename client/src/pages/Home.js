@@ -29,7 +29,6 @@ class Home extends Component {
             cache: false,
             success: function (data) {
                 this.setState({ resumeData: data });
-                console.log('Duy')
             }.bind(this),
             error: function (xhr, status, err) {
                 console.log(err);

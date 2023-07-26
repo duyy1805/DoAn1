@@ -68,7 +68,7 @@ const Step2 = (props) => {
                             m: 3,
                             // display: hidden_step2 ? 'none' : 'block',
                         }}>
-                        <Card sx={{ m: 0 }}>
+                        <Card sx={{ m: 0 }} style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px" }}>
                             <CardContent sx={{ width: "1000px" }}>
                                 <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
                                     Data preparation

@@ -303,7 +303,7 @@ const Step3 = (props) => {
                                 m: 3,
                                 // display: hidden_step3 ? 'none' : 'block',
                             }}>
-                            <Card sx={{ m: 0 }}>
+                            <Card sx={{ m: 0 }} style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px" }}>
                                 <CardContent sx={{ width: "1000px" }}>
                                     <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
                                         Select Time-Series Model
@@ -332,173 +332,12 @@ const Step3 = (props) => {
                                             options={options}
                                         />
                                     </Space>
-                                    <Collapse defaultActiveKey={['Manual ARIMA']} items={Items} onChange={onChange} />
-                                    {/* <Tabs
-                                        defaultActiveKey="1"
-                                        items={[
-                                            {
-                                                label: 'Auto',
-                                                key: '1',
-                                                children:
-
-                                                    <Card>
-                                                        <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
-                                                            <Button
-                                                                // style={{ width: 80 }}
-                                                                type="primary"
-                                                                // variant="contained"
-                                                                onClick={handleOnFileLoadAutoArima}
-
-                                                            >
-                                                                Apply auto ARIMA model
-                                                            </Button>
-                                                        </CardContent>
-
-                                                    </Card>
-
-                                            },
-                                            {
-                                                label: 'Manual',
-                                                key: '2',
-                                                children:
-                                                    <Form
-                                                        name="basic"
-                                                        labelCol={{ span: 18 }}
-                                                        wrapperCol={{ span: 6 }}
-                                                        style={{ maxWidth: 20000, color: 'red' }}
-                                                        initialValues={{
-                                                            p: 1, d: 1, q: 1, P: 1, D: 1, Q: 1, m: 1, concentrate_scale: 'False', invertibility: 'False', stationarity: 'False'
-                                                        }}
-                                                        onFinish={(values) => handleOnFileLoadArima(values)}
-                                                        onFinishFailed={onFinishFailed}
-                                                        autoComplete="off"
-                                                    // disabled='true'
-                                                    >
-                                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', marginTop: 10 }}>
-                                                                <Form.Item
-                                                                    label="p"
-                                                                    name="p"
-                                                                    style={{ marginRight: '100px' }}
-                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                                >
-                                                                    <InputNumber defaultValue={1} />
-                                                                </Form.Item>
-
-                                                                <Form.Item
-                                                                    label="d"
-                                                                    name="d"
-                                                                    style={{ marginRight: '100px' }}
-                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                                >
-                                                                    <InputNumber defaultValue={1} />
-                                                                </Form.Item>
-
-
-                                                                <Form.Item
-                                                                    label="q"
-                                                                    name="q"
-                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                                >
-                                                                    <InputNumber defaultValue={1} />
-                                                                </Form.Item>
-                                                                <Form.Item
-                                                                    label="P"
-                                                                    name="P"
-                                                                    style={{ marginRight: '100px' }}
-                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                                >
-                                                                    <InputNumber defaultValue={1} />
-                                                                </Form.Item>
-
-                                                                <Form.Item
-                                                                    label="D"
-                                                                    name="D"
-                                                                    style={{ marginRight: '100px' }}
-                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                                >
-                                                                    <InputNumber defaultValue={1} />
-                                                                </Form.Item>
-
-
-                                                                <Form.Item
-                                                                    label="Q"
-                                                                    name="Q"
-                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                                >
-                                                                    <InputNumber defaultValue={1} />
-                                                                </Form.Item>
-                                                                <Form.Item
-                                                                    label="m"
-                                                                    name="m"
-                                                                    style={{ marginRight: '100px' }}
-                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                                >
-                                                                    <InputNumber defaultValue={1} />
-                                                                </Form.Item>
-
-                                                                <Form.Item
-                                                                    label="stationarity"
-                                                                    name="stationarity"
-                                                                    style={{ marginRight: '100px' }}
-                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                                >
-                                                                    <Select
-                                                                        defaultValue="True"
-                                                                        style={{ width: 90 }}
-                                                                        // onChange={(value)}
-                                                                        options={[
-                                                                            { value: 'True', label: 'True' },
-                                                                            { value: 'False', label: 'False' }
-                                                                        ]}
-                                                                    />
-                                                                </Form.Item>
-
-
-                                                                <Form.Item
-                                                                    label="invertibility"
-                                                                    name="invertibility"
-                                                                // rules={[{ required: true, message: 'Please input your username!' }]}
-                                                                >
-                                                                    <Select
-                                                                        defaultValue="True"
-                                                                        style={{ width: 90 }}
-                                                                        // onChange={(value)}
-                                                                        options={[
-                                                                            { value: 'True', label: 'True' },
-                                                                            { value: 'False', label: 'False' }
-                                                                        ]}
-                                                                    />
-                                                                </Form.Item>
-                                                                <Form.Item
-                                                                    label="concentrate_scale"
-                                                                    name="concentrate_scale"
-                                                                >
-                                                                    <Select
-                                                                        defaultValue="True"
-                                                                        style={{ width: 90 }}
-                                                                        // onChange={(value)}
-                                                                        options={[
-                                                                            { value: 'True', label: 'True' },
-                                                                            { value: 'False', label: 'False' }
-                                                                        ]}
-                                                                    />
-                                                                </Form.Item>
-                                                            </div>
-                                                        </div>
-                                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                                            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                                                                <Button
-                                                                    // style={{ width: 80 }} 
-                                                                    type="primary" htmlType="submit">
-                                                                    Apply manual ARIMA model
-                                                                </Button>
-                                                            </Form.Item>
-                                                        </div>
-                                                    </Form>
-                                            },
-                                        ]}
-                                    /> */}
+                                    {item.length !== 0 ?
+                                        (
+                                            <Collapse defaultActiveKey={['Manual ARIMA']} items={Items} onChange={onChange} />
+                                        )
+                                        : null
+                                    }
                                 </CardContent>
                             </Card>
                         </Box>
