@@ -78,19 +78,19 @@ function Main({ children }) {
           </li>
 
           <li>
-            <a className="smoothscroll" href="#resume">
+            <a href="#resume">
               Resume
             </a>
           </li>
 
           <li>
-            <a className="smoothscroll" href="#portfolio">
+            <a href="#portfolio">
               Works
             </a>
           </li>
 
           <li>
-            <a className="smoothscroll" href="#contact">
+            <a href="#contact">
               Contact
             </a>
           </li>
