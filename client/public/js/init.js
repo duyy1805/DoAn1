@@ -3,11 +3,30 @@ jQuery(document).ready(function ($) {
   setTimeout(function () {
     $("h1.responsive-headline").fitText(1, { minFontSize: "40px", maxFontSize: "90px" });
 
+    const hashValue = window.location.hash;
+    // hashValue = ('#' + hashValue)
+    if (hashValue === '#about' || hashValue === '#resume' || hashValue === '#work' || hashValue === '#contact') {
+      $hashValue = $(hashValue)
+      console.log(hashValue); // In giá trị "about" vào console
+      $("html, body")
+        .stop()
+        .animate(
+          {
+            scrollTop: $hashValue.offset().top
+          },
+          800,
+          "swing",
+          function () {
+            window.location.hash = hashValue;
+          }
+        );
+    }
+
+
     $(".smoothscroll").on("click", function (e) {
       e.preventDefault();
       var target = this.hash,
         $target = $(target);
-
       $("html, body")
         .stop()
         .animate(
