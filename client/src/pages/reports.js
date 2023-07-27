@@ -60,6 +60,7 @@ export default class Reports extends Component {
     data2: null,
     data3: null,
 
+    response_data: [],
     test_size: 0.2,
     fill_method: '0',
 
@@ -72,26 +73,17 @@ export default class Reports extends Component {
     predicted_arima: [],
     prediction_auto_arima: [],
     prediction_arima: [],
+
+
     activeStep: 0,
     skipped: new Set(),
+    FileList: [],
     current: 0,
     column: [],
     timeColumn: null,
     dataColumn: null,
     filename: '',
 
-    //visualize
-
-    values_count: 0,
-    missing_values_count: 0,
-    sum_values: 0,
-    max_values: 0,
-    min_values: 0,
-    mean_values: 0,
-    median_values: 0,
-    std_values: 0,
-    variance_values: 0,
-    skewness_values: 0,
     //step3
 
     params: []
@@ -173,6 +165,9 @@ export default class Reports extends Component {
     })
   }
 
+  handleSelectFileList = (fileList) => {
+    this.setState({ FileList: fileList })
+  }
 
   handleUpdateTestSize = (value) => {
     this.setState({ test_size: value });
@@ -260,32 +255,9 @@ export default class Reports extends Component {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
         .then((response) => {
-          var values_count = response.data.values_count
-          var missing_values_count = response.data.missing_values_count
-          var sum_values = response.data.sum_values
-          var max_values = response.data.max_values
-          var min_values = response.data.min_values
-          var mean_values = response.data.mean_values
-          var median_values = response.data.median_values
-          var std_values = response.data.std_values
-          var variance_values = response.data.variance_values
-          var skewness_values = response.data.skewness_values
+          this.setState({ response_data: response.data })
           this.setState({ hidden_step1: false });
           this.setState({ hidden2: true });
-          this.setState({
-            sum_values: sum_values,
-            values_count: values_count,
-            missing_values_count: missing_values_count,
-            max_values: max_values,
-            min_values: min_values,
-            mean_values: mean_values,
-            median_values: median_values,
-            std_values: std_values,
-            variance_values: variance_values,
-            skewness_values: skewness_values,
-          }, () => {
-            // console.log(response.data.max_values)
-          })
         })
         .catch((response) => {
           //handle error
@@ -532,6 +504,10 @@ export default class Reports extends Component {
           data_of_TS={this.state.data_of_TS}
           predicted_auto_arima={this.state.predicted_auto_arima}
           column={this.state.column}
+
+          FileList={this.state.FileList}
+          handleSelectFileList={this.handleSelectFileList}
+
           buttonRef={buttonRef}
           timeColumn={this.state.timeColumn}
           dataColumn={this.state.dataColumn}
@@ -547,17 +523,8 @@ export default class Reports extends Component {
           nextStep={this.next}
           previousStep={this.prev}
           //visualize
-          sum_values={this.state.sum_values}
-          values_count={this.state.values_count}
-          missing_values_count={this.state.missing_values_count}
-          max_values={this.state.max_values}
-          min_values={this.state.min_values}
-          mean_values={this.state.mean_values}
-          median_values={this.state.median_values}
-          std_values={this.state.std_values}
-          variance_values={this.state.variance_values}
-          skewness_values={this.state.skewness_values}
 
+          response_data={this.state.response_data}
           filename={this.state.filename}></Step1 >,
       },
       {
@@ -702,7 +669,7 @@ export default class Reports extends Component {
           paddingLeft: 0, overflow: "hidden",
           // overflowY: 'scroll'
         }}>
-          <Fade bottom duration={1000}>
+          <Fade top duration={1000}>
             <div style={{ flex: ' 3 0 0', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
               <div>
                 {/* <Divider /> */}
@@ -732,14 +699,14 @@ export default class Reports extends Component {
                 />
               </div>
             </div>
-            {/* </Fade>
-          <Fade bottom duration={1000}> */}
-            <div style={{ flex: ' 3 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-              <div>
-                {steps[this.state.current].content}
-              </div>
+          </Fade>
+          {/* <Fade bottom duration={1000}> */}
+          <div style={{ flex: ' 3 0 0', display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+            <div>
+              {steps[this.state.current].content}
             </div>
-          </Fade >
+          </div>
+          {/* </Fade > */}
         </div >
       </>
     );

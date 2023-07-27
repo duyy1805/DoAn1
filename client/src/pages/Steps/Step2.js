@@ -29,12 +29,9 @@ import {
 } from '@material-ui/core';
 
 
-// import Plotly from "plotly.js-basic-dist";
-// import createPlotlyComponent from "react-plotly.js/factory";
-
 import { InputNumber, Select, Form, Button, } from 'antd';
 
-
+import { Fade, Slide, Zoom, LightSpeed, Bounce } from "react-reveal";
 
 // const Plot = createPlotlyComponent(Plotly);
 const onFinish = (values: any) => {
@@ -68,82 +65,88 @@ const Step2 = (props) => {
                             m: 3,
                             // display: hidden_step2 ? 'none' : 'block',
                         }}>
-                        <Card sx={{ m: 0 }} style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px" }}>
-                            <CardContent sx={{ width: "1000px" }}>
-                                <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
-                                    Data preparation
-                                </Typography>
-                                <Divider />
-                                <Form
-                                    name="basic"
-                                    labelCol={{ span: 18 }}
-                                    wrapperCol={{ span: 6 }}
-                                    style={{ maxWidth: 20000, color: 'red' }}
-                                    initialValues={{ test_size: 0.2, fill: '0' }}
-                                    onFinish={onFinish}
-                                    onFinishFailed={onFinishFailed}
-                                    autoComplete="off"
-                                    disable="false"
-                                >
-                                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
-                                        <Form.Item
-                                            label="Test size"
-                                            name="test_size"
-                                            style={{ marginRight: '100px' }}
-                                            rules={[{ required: true, message: 'Please input!' }]}
-                                        >
-                                            <InputNumber
-                                                defaultValue={0.2}
-                                                max={1} min={0} step={0.01}
-                                                value={test_size}
-                                                onChange={(value) => (handleUpdateTestSize(value))}
-                                            />
-                                        </Form.Item>
-                                        <Form.Item
-                                            label="Fill missing data method"
-                                            name="fill"
-                                            style={{ marginRight: '100px' }}
-                                            rules={[{ required: true, message: 'Please input!' }]}
-                                        >
-                                            <Select
-                                                defaultValue="0"
-                                                style={{ width: 180 }}
-                                                onChange={(value) => handleFillMethod(value)}
-                                                options={[
-                                                    { value: 'delete', label: 'Delete mising column' },
-                                                    { value: '0', label: 'Fill with 0' },
-                                                    { value: 'mean', label: 'Fill with mean values' },
-                                                    { value: 'forward', label: 'Forward fill' },
-                                                    { value: 'backward', label: 'backward fill' },
-                                                ]}
-                                            />
-                                        </Form.Item>
-                                        {/* <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                        <Fade bottom duration={1000}>
+                            <Card sx={{ m: 0 }} style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px" }}>
+                                <CardContent sx={{ width: "1000px" }}>
+                                    <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
+                                        Data preparation
+                                    </Typography>
+                                    <Divider />
+                                    <Form
+                                        name="basic"
+                                        labelCol={{ span: 18 }}
+                                        wrapperCol={{ span: 6 }}
+                                        style={{ maxWidth: 20000, color: 'red' }}
+                                        initialValues={{ test_size: 0.2, fill: '0' }}
+                                        onFinish={onFinish}
+                                        onFinishFailed={onFinishFailed}
+                                        autoComplete="off"
+                                        disable="false"
+                                    >
+                                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
+                                            <Form.Item
+                                                label="Test size"
+                                                name="test_size"
+                                                style={{ marginRight: '100px' }}
+                                                rules={[{ required: true, message: 'Please input!' }]}
+                                            >
+                                                <InputNumber
+                                                    defaultValue={0.2}
+                                                    max={1} min={0} step={0.01}
+                                                    value={test_size}
+                                                    onChange={(value) => (handleUpdateTestSize(value))}
+                                                />
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="Fill missing data method"
+                                                name="fill"
+                                                style={{ marginRight: '100px' }}
+                                                rules={[{ required: true, message: 'Please input!' }]}
+                                            >
+                                                <Select
+                                                    defaultValue="0"
+                                                    style={{ width: 180 }}
+                                                    onChange={(value) => handleFillMethod(value)}
+                                                    options={[
+                                                        { value: 'delete', label: 'Delete mising column' },
+                                                        { value: '0', label: 'Fill with 0' },
+                                                        { value: 'mean', label: 'Fill with mean values' },
+                                                        { value: 'forward', label: 'Forward fill' },
+                                                        { value: 'backward', label: 'backward fill' },
+                                                    ]}
+                                                />
+                                            </Form.Item>
+                                            {/* <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                                                 <Button type="primary" htmlType="submit">
                                                     Submit
                                                 </Button>
                                             </Form.Item> */}
-                                    </div>
-                                </Form>
-                            </CardContent>
-                        </Card>
+                                        </div>
+                                    </Form>
+                                </CardContent>
+                            </Card>
+                        </Fade>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-                            <Button
-                                // type="primary"
-                                // variant="contained"
-                                onClick={previousStep}
-                            // sx={{ backgroundColor: '#EB2CB2', }}
-                            >
-                                Previous
-                            </Button>
-                            <Button
-                                type="primary"
-                                // variant="contained"
-                                onClick={nextStep}
-                            // sx={{ backgroundColor: '#EB2CB2', }}
-                            >
-                                Next
-                            </Button>
+                            <Slide left duration={1000}>
+                                <Button
+                                    // type="primary"
+                                    // variant="contained"
+                                    onClick={previousStep}
+                                // sx={{ backgroundColor: '#EB2CB2', }}
+                                >
+                                    Previous
+                                </Button>
+                            </Slide>
+                            <Slide right duration={1000}>
+                                <Button
+                                    type="primary"
+                                    // variant="contained"
+                                    onClick={nextStep}
+                                // sx={{ backgroundColor: '#EB2CB2', }}
+                                >
+                                    Next
+                                </Button>
+                            </Slide>
                         </div>
                     </Box>
                 </Box>

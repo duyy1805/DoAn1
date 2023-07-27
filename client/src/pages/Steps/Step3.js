@@ -29,6 +29,8 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
+
+import { Fade, Slide, Zoom, LightSpeed, Bounce } from "react-reveal";
 import { InputNumber, Row, Select, Col, Tabs, Badge, Form, Button, Checkbox, Input, Space, Collapse } from 'antd';
 const { Option } = Select;
 
@@ -71,10 +73,14 @@ const Step3 = (props) => {
 
 
     const formRef = useRef(null);
+    const formRef2 = useRef(null);
 
     const handleApplyClick = () => {
         if (formRef.current) {
-            formRef.current.click();
+            formRef.current.click(); // Giả lập việc nhấn vào button ref1
+        }
+        if (formRef2.current) {
+            formRef2.current.click(); // Giả lập việc nhấn vào button ref2
         }
     };
     const [item, setItem] = useState([]) // select
@@ -106,14 +112,16 @@ const Step3 = (props) => {
                 <Card>
                     <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Button
-                            // style={{ width: 80 }}
+                            style={{ display: 'none' }}
                             type="primary"
                             // variant="contained"
+                            ref={formRef2}
                             onClick={handleOnFileLoadAutoArima}
 
                         >
                             Apply auto ARIMA model
                         </Button>
+                        You don't need to fill in any parameters, the algorithm will automatically find suitable parameters to apply to your data
                     </CardContent>
 
                 </Card>
@@ -283,82 +291,85 @@ const Step3 = (props) => {
     };
     return (
         <div>
+            <Slide right duration={1000}>
+                <Zoom duration={1000}>
+                    <Container >
+                        <LoadingOverlay
+                            styles={{ display: 'none' }}
+                            active={!hidden2}
+                            spinner
+                            text='Applying ARIMA algorithms '
+                        >
+                            <Box
+                                sx={{
+                                    // backgroundColor: 'background.default',
+                                    minHeight: '100%',
 
-            <Container >
-                <LoadingOverlay
-                    styles={{ display: 'none' }}
-                    active={!hidden2}
-                    spinner
-                    text='Applying ARIMA algorithms '
-                >
-                    <Box
-                        sx={{
-                            // backgroundColor: 'background.default',
-                            minHeight: '100%',
-
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                m: 3,
-                                // display: hidden_step3 ? 'none' : 'block',
-                            }}>
-                            <Card sx={{ m: 0 }} style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px" }}>
-                                <CardContent sx={{ width: "1000px" }}>
-                                    <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
-                                        Select Time-Series Model
-                                    </Typography>
-                                    <Divider />
-                                    {/* <div style={{ paddingTop: 15 }}>
-                                        Choose one or more
-                                    </div> */}
-                                    <Space
-                                        style={{
-                                            width: '100%',
-                                            marginTop: 30,
-                                            marginBottom: 30,
-                                        }}
-                                        direction="vertical"
-                                    >
-                                        <Select
-                                            mode="multiple"
-                                            allowClear
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                            placeholder="Please select"
-                                            // defaultValue={['a10', 'c12']}
-                                            onChange={handleChange}
-                                            options={options}
-                                        />
-                                    </Space>
-                                    {item.length !== 0 ?
-                                        (
-                                            <Collapse defaultActiveKey={['Manual ARIMA']} items={Items} onChange={onChange} />
-                                        )
-                                        : null
-                                    }
-                                </CardContent>
-                            </Card>
-                        </Box>
-                    </Box>
-                    {item.length !== 0 ?
-                        (
-                            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                {/* <Form.Item > */}
-                                <Button
-                                    // style={{ width: 80 }} 
-                                    onClick={handleApplyClick}
-                                    type="primary" htmlType="submit">
-                                    Apply all models
-                                </Button>
-                                {/* </Form.Item> */}
-                            </div>
-                        )
-                        : null
-                    }
-                </LoadingOverlay>
-            </Container>
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        m: 3,
+                                        // display: hidden_step3 ? 'none' : 'block',
+                                    }}>
+                                    <Card sx={{ m: 0 }} style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px" }}>
+                                        <CardContent sx={{ width: "1000px" }}>
+                                            <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
+                                                Select Time-Series Model
+                                            </Typography>
+                                            <Divider />
+                                            <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'left', p: 1, fontSize: '1rem' }}>
+                                                Click then choose one or more algorithms
+                                            </Typography>
+                                            <Space
+                                                style={{
+                                                    width: '100%',
+                                                    marginTop: 30,
+                                                    marginBottom: 30,
+                                                }}
+                                                direction="vertical"
+                                            >
+                                                <Select
+                                                    mode="multiple"
+                                                    allowClear
+                                                    style={{
+                                                        width: '100%',
+                                                    }}
+                                                    placeholder="Please select"
+                                                    // defaultValue={['a10', 'c12']}
+                                                    onChange={handleChange}
+                                                    options={options}
+                                                />
+                                            </Space>
+                                            {item.length !== 0 ?
+                                                (
+                                                    <Collapse defaultActiveKey={model} items={Items} onChange={onChange} />
+                                                )
+                                                : null
+                                            }
+                                        </CardContent>
+                                    </Card>
+                                </Box>
+                            </Box>
+                            {item.length !== 0 ?
+                                (
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        {/* <Form.Item > */}
+                                        <Button
+                                            // style={{ width: 80 }} 
+                                            onClick={handleApplyClick}
+                                            type="primary" htmlType="submit">
+                                            Apply all models
+                                        </Button>
+                                        {/* </Form.Item> */}
+                                    </div>
+                                )
+                                : null
+                            }
+                        </LoadingOverlay>
+                    </Container>
+                </Zoom>
+            </Slide>
         </div >
     );
 };

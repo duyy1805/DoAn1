@@ -170,26 +170,19 @@ class FileUpload(views.APIView):
         features = extract_features(
             values, column_id='ID', column_sort='Time', n_jobs=8)
 
-        sum_values = features.Data__sum_values[0]
-        max_values = features.Data__maximum[0]
-        min_values = features.Data__minimum[0]
-        mean_values = features.Data__mean[0]
-        median_values = features.Data__median[0]
-        std_values = features.Data__standard_deviation[0]
-        variance_values = features.Data__variance[0]
-        skewness_values = features.Data__skewness[0]
-        return Response({
+        response_data = {
             "values_count": values_count,
             "missing_values_count": missing_values_count,
-            "sum_values": sum_values,
-            "max_values": max_values,
-            "min_values": min_values,
-            "mean_values": mean_values,
-            "median_values": median_values,
-            "std_values": std_values,
-            "variance_values": variance_values,
-            "skewness_values": skewness_values
-        })
+            "sum_values": features.Data__sum_values[0],
+            "max_values": features.Data__maximum[0],
+            "min_values": features.Data__minimum[0],
+            "mean_values": features.Data__mean[0],
+            "median_values": features.Data__median[0],
+            "std_values": features.Data__standard_deviation[0],
+            "variance_values": features.Data__variance[0],
+            "skewness_values": features.Data__skewness[0]
+        }
+        return Response(response_data)
 
 
 class AutoArima(views.APIView):
