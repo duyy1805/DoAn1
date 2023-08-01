@@ -5,7 +5,7 @@ jQuery(document).ready(function ($) {
 
     const hashValue = window.location.hash;
     // hashValue = ('#' + hashValue)
-    if (hashValue === '#about' || hashValue === '#resume' || hashValue === '#work' || hashValue === '#contact') {
+    if (hashValue === '#about' || hashValue === '#resume' || hashValue === '#portfolio' || hashValue === '#contact') {
       $hashValue = $(hashValue)
       console.log(hashValue); // In giá trị "about" vào console
       $("html, body")

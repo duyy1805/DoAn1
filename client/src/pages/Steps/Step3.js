@@ -35,7 +35,7 @@ import { InputNumber, Row, Select, Col, Tabs, Badge, Form, Button, Checkbox, Inp
 const { Option } = Select;
 
 // eslint-disable-next-line
-const model = ['MA', 'Auto ARIMA', 'Manual ARIMA', 'smooth-based', 'TBATS', 'RNN'];
+const model = ['MA', 'Auto ARIMA', 'Manual ARIMA', 'Exponential Smoothing', 'TBATS', 'RNN'];
 const options = [];
 for (let i = 0; i < model.length; i++) {
     options.push({
@@ -271,8 +271,8 @@ const Step3 = (props) => {
             ,
         },
         {
-            key: 'smooth-based',
-            label: 'smooth-based',
+            key: 'Exponential Smoothing',
+            label: 'Exponential Smoothing',
             children: <p>{text}</p>,
         },
         {
@@ -293,7 +293,7 @@ const Step3 = (props) => {
         <div>
             <Slide right duration={1000}>
                 <Zoom duration={1000}>
-                    <Container >
+                    <Container style={{ padding: 0 }}>
                         <LoadingOverlay
                             styles={{ display: 'none' }}
                             active={!hidden2}
@@ -308,23 +308,21 @@ const Step3 = (props) => {
                                 }}
                             >
                                 <Box
-                                    sx={{
-                                        m: 3,
-                                        // display: hidden_step3 ? 'none' : 'block',
-                                    }}>
+                                    style={{ marginTop: 24 }}
+                                >
                                     <Card sx={{ m: 0 }} style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px" }}>
-                                        <CardContent sx={{ width: "1000px" }}>
+                                        <CardContent sx={{ width: "1200px" }}>
                                             <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
                                                 Select Time-Series Model
                                             </Typography>
                                             <Divider />
-                                            <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'left', p: 1, fontSize: '1rem' }}>
+                                            <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'left', p: 1, fontSize: '1rem', marginTop: 3 }}>
                                                 Click then choose one or more algorithms
                                             </Typography>
                                             <Space
                                                 style={{
                                                     width: '100%',
-                                                    marginTop: 30,
+                                                    // marginTop: 30,
                                                     marginBottom: 30,
                                                 }}
                                                 direction="vertical"
@@ -353,7 +351,7 @@ const Step3 = (props) => {
                             </Box>
                             {item.length !== 0 ?
                                 (
-                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
                                         {/* <Form.Item > */}
                                         <Button
                                             // style={{ width: 80 }} 

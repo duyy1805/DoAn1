@@ -74,7 +74,7 @@ const Step1 = (props) => {
         text='Loading'
       >
 
-        <Container >
+        <Container style={{ padding: 0 }} >
           <Box
             sx={{
               // backgroundColor: 'background.default',
@@ -82,10 +82,10 @@ const Step1 = (props) => {
               display: hidden0 ? 'none' : 'block',
             }}
           >
-            <Box sx={{ m: 3, }} >
+            <Box sx={{ m: 0, }} style={{ marginTop: 24 }} >
               <Fade bottom duration={1000}>
                 <Card sx={{ m: 0 }} style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px" }} >
-                  <CardContent sx={{ width: "1000px" }}>
+                  <CardContent sx={{ width: "1200px" }}>
                     <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
                       Time Series Forecasting
                     </Typography>

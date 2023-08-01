@@ -20,6 +20,7 @@ body {
   font-weight: 400;
   margin: 0;
   font-family: open sans, Helvetica, Arial, sans-serif;
+  scroll-behavior: smooth;
 }
 
 .ant-layout.ant-layout-has-sider {
@@ -94,6 +95,34 @@ body {
   100% {
     background-position: 0% 50%;
   }
+}
+
+.social-links {
+  list-style: none;
+  padding: 20px;
+  margin-bottom: 0px !important;
+}
+
+.social-links li {
+  margin-left: 24px;
+}
+
+.social-links li:first-child {
+  margin-left: 0;
+}
+
+.copyright {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0px !important;
+}
+
+.copyright li {
+  margin-left: 24px;
+}
+
+.copyright li:first-child {
+  margin-left: 0;
 }
 
 .layout-dashboard {

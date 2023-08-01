@@ -258,6 +258,10 @@ export default class Reports extends Component {
           this.setState({ response_data: response.data })
           this.setState({ hidden_step1: false });
           this.setState({ hidden2: true });
+          window.scrollTo({
+            top: 700,
+            behavior: "smooth", // Sử dụng smooth behavior để kích hoạt cuộn mềm mại
+          });
         })
         .catch((response) => {
           //handle error
@@ -677,11 +681,11 @@ export default class Reports extends Component {
                   current={this.state.current}
                   onChange={this.onChange}
                   direction="horizontal"
-                  style={{ marginTop: "24px", width: '1000px', background: '#ffffff', padding: '20px', paddingLeft: "40px", borderRadius: '12px', boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)" }}
+                  style={{ marginTop: "24px", width: '1200px', background: '#ffffff', padding: '20px', paddingLeft: "40px", borderRadius: '12px', boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)" }}
                   items={[
                     {
                       title: 'Step 1',
-                      description: "Import time series file",
+                      description: "Import Time Series File",
                     },
                     {
                       title: 'Step 2',
@@ -689,7 +693,7 @@ export default class Reports extends Component {
                     },
                     {
                       title: 'Step 3',
-                      description: "Select Time-Series Params",
+                      description: "Select Time Series Models",
                     },
                     {
                       title: 'Step 4',

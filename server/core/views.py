@@ -171,16 +171,16 @@ class FileUpload(views.APIView):
             values, column_id='ID', column_sort='Time', n_jobs=8)
 
         response_data = {
-            "values_count": values_count,
-            "missing_values_count": missing_values_count,
-            "sum_values": features.Data__sum_values[0],
-            "max_values": features.Data__maximum[0],
-            "min_values": features.Data__minimum[0],
-            "mean_values": features.Data__mean[0],
-            "median_values": features.Data__median[0],
-            "std_values": features.Data__standard_deviation[0],
-            "variance_values": features.Data__variance[0],
-            "skewness_values": features.Data__skewness[0]
+            "values_count": round(values_count, 2),
+            "missing_values_count": round(missing_values_count, 2),
+            "sum_values": round(features.Data__sum_values[0], 2),
+            "max_values": round(features.Data__maximum[0], 2),
+            "min_values": round(features.Data__minimum[0], 2),
+            "mean_values": round(features.Data__mean[0], 2),
+            "median_values": round(features.Data__median[0], 2),
+            "std_values": round(features.Data__standard_deviation[0], 2),
+            "variance_values": round(features.Data__variance[0], 2),
+            "skewness_values": round(features.Data__skewness[0], 2),
         }
         return Response(response_data)
 

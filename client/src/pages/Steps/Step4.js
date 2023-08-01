@@ -50,12 +50,10 @@ const Step4 = (props) => {
     // }, [])
     return (
         <div>
-            <Container >
+            <Container style={{ padding: 0 }}>
                 <Box
-                    sx={{
-                        m: 3,
-                        // display: hidden_step4 ? 'none' : 'block'
-                    }}>
+                    style={{ marginTop: 24 }}
+                >
                     <Card>
                         <CardContent>
                             <Box
@@ -98,7 +96,7 @@ const Step4 = (props) => {
                                 </Button> */}
 
                             </Box>
-                            <Box sx={{ maxWidth: 1000 }}>
+                            <Box sx={{ maxWidth: 1200 }}>
 
                                 <Box sx={{ m: 3 }} display="flex" justifyContent="center">
                                     <Grid
@@ -128,7 +126,7 @@ const Step4 = (props) => {
 
                                                 ]}
                                                 layout={{
-                                                    width: 900, height: 700, title: 'Time series data',
+                                                    width: 1200, height: 800, title: 'Time series data',
                                                     xaxis: {
                                                         title: 'Time',
                                                     },

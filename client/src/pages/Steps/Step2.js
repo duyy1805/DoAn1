@@ -52,7 +52,7 @@ const Step2 = (props) => {
     return (
         <div>
 
-            <Container >
+            <Container style={{ padding: 0 }}>
                 <Box
                     sx={{
                         // backgroundColor: 'background.default',
@@ -61,13 +61,12 @@ const Step2 = (props) => {
                     }}
                 >
                     <Box
-                        sx={{
-                            m: 3,
-                            // display: hidden_step2 ? 'none' : 'block',
-                        }}>
+
+                        style={{ marginTop: 24 }}
+                    >
                         <Fade bottom duration={1000}>
                             <Card sx={{ m: 0 }} style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px" }}>
-                                <CardContent sx={{ width: "1000px" }}>
+                                <CardContent sx={{ width: "1200px" }}>
                                     <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
                                         Data preparation
                                     </Typography>

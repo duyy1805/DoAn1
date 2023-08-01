@@ -16,7 +16,9 @@ import { Layout, Drawer, Affix } from "antd";
 import ParticlesBg from "particles-bg";
 import Sidenav from "./Sidenav";
 import Header from "./Header";
-import Footer from "./Footer";
+import Footer from "../../Components1/Footer";
+import { Fade, Slide, Zoom, LightSpeed, Bounce } from "react-reveal";
+import $ from "jquery";
 // import anime from "F:/AEP/Data chuẩn bị/vermeil1.mp4"
 const { Header: AntHeader, Content, Sider } = Layout;
 
@@ -26,16 +28,44 @@ function Main({ children }) {
   const [sidenavColor, setSidenavColor] = useState("#1890ff");
   const [sidenavType, setSidenavType] = useState("ffffff");
   const [fixed, setFixed] = useState(false);
+  const [resume, setResume] = useState([]);
 
   const openDrawer = () => setVisible(!visible);
   const handleSidenavType = (type) => setSidenavType(type);
   const handleSidenavColor = (color) => setSidenavColor(color);
   const handleFixedNavbar = (type) => setFixed(type);
 
+  const getResumeData = () => {
+    $.ajax({
+      url: "./resumeData.json",
+      dataType: "json",
+      cache: false,
+      success: function (data) {
+        setResume(data.main.social);
+        console.log(data.main.social)
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log(err);
+        alert(err);
+      }
+    });
+  }
+
+  const networks = resume.map(function (network) {
+    return (
+      <li key={network.name}>
+        <a href={network.url}>
+          <i className={network.className}></i>
+        </a>
+      </li>
+    );
+  });
+
   let { pathname } = useLocation();
   pathname = pathname.replace("/", "");
 
   useEffect(() => {
+    getResumeData();
     if (pathname === "rtl") {
       setPlacement("left");
     } else {
@@ -78,19 +108,19 @@ function Main({ children }) {
           </li>
 
           <li>
-            <a href="#resume">
+            <a href="/#resume">
               Resume
             </a>
           </li>
 
           <li>
-            <a href="#portfolio">
-              Works
+            <a href="/#portfolio">
+              Demo
             </a>
           </li>
 
           <li>
-            <a href="#contact">
+            <a href="/#contact">
               Contact
             </a>
           </li>
@@ -166,7 +196,31 @@ function Main({ children }) {
           </AntHeader>
         )}
         <Content className="content-ant">{children}</Content>
-        {/* <Footer /> */}
+        <div className="footer-css" style={{ backgroundColor: '#000' }}>
+          <div className="row">
+            <Fade bottom>
+              <div className="twelve columns">
+                <ul className="social-links" style={{ display: "flex", justifyContent: 'center' }}>{networks}</ul>
+
+                <ul className="copyright" >
+                  <li>&copy; Copyright 2023 Diễm Linh Cơ</li>
+                  <li>
+                    Design by{" Diễm Linh Cơ "}
+                    <a title="Styleshout" href="http://www.styleshout.com/">
+                      Styleshout
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </Fade>
+
+            <div id="go-top">
+              <a className="smoothscroll" title="Back to Top" href="#home">
+                <i className="icon-up-open"></i>
+              </a>
+            </div>
+          </div>
+        </div>
       </Layout>
     </Layout>
   );
