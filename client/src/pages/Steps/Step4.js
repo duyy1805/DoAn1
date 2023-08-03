@@ -50,144 +50,173 @@ const Step4 = (props) => {
     // }, [])
     return (
         <div>
-            <Container style={{ padding: 0 }}>
+            <Container style={{ padding: 0, maxWidth: 2000 }}>
                 <Box
                     style={{ marginTop: 24 }}
                 >
-                    <Card>
-                        <CardContent>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    justifyContent: 'flex-end',
-                                    p: 2
-                                }}
-                            >
-                                <Button
-                                    type="primary"
-                                    // variant="contained"
-                                    onClick={drawAuto_Arima}
-                                    sx={{
-                                        m: 1,
-                                    }}
+                    <Card style={{ backgroundColor: "transparent" }}>
+                        <CardContent style={{ backgroundColor: "transparent", display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', marginTop: 10 }}>
+
+
+                            <Box sx={{ m: 3 }} >
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
                                 >
-                                    Apply Auto ARIMA Model
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    // variant="contained"
-                                    onClick={drawArima}
-                                    style={{ marginLeft: 5 }}
-                                    sx={{
-                                        m: 1,
-                                    }}
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: ' before prediction ',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                auto_arima_graph,
+                                                // rnn_graph
+
+
+                                            ]}
+                                            layout={{
+                                                width: 600, height: 400, title: 'Time series data',
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
+
+                            <Box sx={{ m: 3 }} >
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
                                 >
-                                    Apply ARIMA Model
-                                </Button>
-                                {/* <Button
-                                    color="primary"
-                                    variant="contained"
-                                    onClick={this.drawRnn}
-                                    sx={{
-                                        m: 1,
-                                    }}
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: ' before prediction ',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                arima_graph,
+                                                // rnn_graph
+
+
+                                            ]}
+                                            layout={{
+                                                width: 600, height: 400, title: 'Time series data',
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
+
+                            <Box sx={{ m: 3 }} >
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
                                 >
-                                    Apply RNN Model
-                                </Button> */}
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
 
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: ' before prediction ',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                arima_graph,
+                                                // rnn_graph
+
+
+                                            ]}
+                                            layout={{
+                                                width: 600, height: 400, title: 'Time series data',
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
                             </Box>
-                            <Box sx={{ maxWidth: 1200 }}>
+                            <Box sx={{ m: 3 }} >
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
 
-                                <Box sx={{ m: 3 }} display="flex" justifyContent="center">
-                                    <Grid
-                                        container
-                                        spacing={0}
-                                        direction="column"
-                                        alignItems="center"
-                                        justify="center"
-                                    >
-                                        <div>
-                                            <Plot
-                                                data={[
-                                                    {
-
-                                                        type: "scatter",
-                                                        mode: "lines",
-                                                        name: ' before prediction ',
-                                                        x: time_of_TS,
-                                                        y: data_of_TS,
-                                                        line: { color: '#17BECF' }
-                                                    }
-                                                    ,
-                                                    auto_arima_graph,
-                                                    arima_graph,
-                                                    // rnn_graph
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: ' before prediction ',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                arima_graph,
+                                                // rnn_graph
 
 
-                                                ]}
-                                                layout={{
-                                                    width: 1200, height: 800, title: 'Time series data',
-                                                    xaxis: {
-                                                        title: 'Time',
-                                                    },
-                                                    yaxis: {
-                                                        title: 'Data'
-                                                    },
-                                                }}
-                                            />
-                                        </div>
-                                    </Grid>
-                                </Box>
-                            </Box>
-
-
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    p: 2
-                                }}
-                            >
-                                <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                    <InputLabel id="demo-simple-select-helper-label">Select</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={selectedDate}
-                                        label="Date_prediction"
-                                        onChange={handleSelectChanege}
-                                    >
-
-                                        {yearsx.map((element, index) => <MenuItem key={index} value={index}>{element} </MenuItem>)}
-
-                                    </Select>
-                                    <FormHelperText>Select a date to make prediction</FormHelperText>
-                                </FormControl>
-
+                                            ]}
+                                            layout={{
+                                                width: 600, height: 400, title: 'Time series data',
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
                             </Box>
 
-                            <Box
-                                sx={{
-                                    // display: 'flex',
-                                    // justifyContent: 'center',
-                                    p: 2
-                                }}
-                            >
-                                <div style={{ display: 'flex', justifyContent: 'center', lineHeight: 0 }}>
-                                    {future_values_auto_arima !== null &&
-                                        <h3> The predicted values of auto ARIMA model is  for {yearsx[selectedDate]} is :
-                                            {'  ' + future_values_auto_arima + ' DA'}
-                                        </h3>
-                                    }
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'center', lineHeight: 0 }}>
-                                    {future_values_arima !== null &&
-                                        <h3> The predicted values of manual ARIMA model is  for {yearsx[selectedDate]} is :
-                                            {'  ' + future_values_arima + ' DA'}
-                                        </h3>
-                                    }
-                                </div>
-                            </Box>
                         </CardContent>
                         <Divider />
                     </Card>

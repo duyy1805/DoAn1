@@ -36,6 +36,10 @@ import { Fade, Slide, Zoom, LightSpeed, Bounce } from "react-reveal";
 import type { UploadProps } from 'antd/es/upload/interface';
 import { InboxOutlined } from '@ant-design/icons';
 
+
+import ZoomableComponent from '../../Components1/ZoomableComponent';
+import imageSrc from '../../assets/images/face-2.jpg';
+
 const { Dragger } = Upload;
 
 const Plot = createPlotlyComponent(Plotly);

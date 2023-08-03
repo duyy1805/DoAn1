@@ -289,6 +289,112 @@ export default class Reports extends Component {
     }
   };
 
+  testAllModel = () => {
+    var predicted_auto_arima, predicted_arima, prediction_auto_arima
+    this.setState({ hidden2: false })
+    var formData = new FormData();
+    formData.append('test_size', this.state.test_size);
+    formData.append('fill_method', this.state.fill_method);
+    formData.append('timeColumn', this.state.timeColumn);
+    formData.append('dataColumn', this.state.dataColumn);
+    formData.append('file', this.state.file, 'file.csv')
+    axios({
+      method: 'post',
+      url: 'http://127.0.0.1:8000/autoarima',
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+      .then((response) => {
+
+        predicted_auto_arima = Object.values(JSON.parse(response.data.data1).predicted_values)
+        prediction_auto_arima = Object.values(JSON.parse(response.data.data2).predicted_values)
+
+
+        var timestamps = (Object.values(JSON.parse(response.data.data2).index))
+
+        var dates = timestamps.map(timestamp => {
+          var dateObject = new Date(timestamp);
+          return dateObject.toISOString().slice(0, 10);
+        });
+        // console.log(dates)
+        this.setState({ predicted_auto_arima: predicted_auto_arima, yearsx: dates, prediction_auto_arima: prediction_auto_arima })
+      })
+      .catch((response) => {
+        //handle error
+        console.log(response);
+      });
+    var time_of_TS = []
+    this.state.data.map((element, index) => {
+      // if (index > 0)
+      time_of_TS.push(element[this.state.timeColumn])
+    })
+    var x = time_of_TS.length - time_of_TS.length * this.state.test_size
+    // console.log(x)
+    var time_of_predicted = time_of_TS.filter((item, index) => { return index > x })
+    this.setState({ time_of_predicted: time_of_predicted })
+
+    var predicted_arima, prediction_arima
+    // console.log(values)
+    // this.setState({ hidden2: false })
+    formData = new FormData();
+    formData.append('test_size', this.state.test_size);
+    formData.append('fill_method', this.state.fill_method);
+    formData.append('timeColumn', this.state.timeColumn);
+    formData.append('dataColumn', this.state.dataColumn);
+    formData.append('file', this.state.file, 'file.csv')
+    formData.append('p', 1)
+    formData.append('d', 2)
+    formData.append('q', 1)
+    formData.append('P', 1)
+    formData.append('D', 1)
+    formData.append('Q', 1)
+    formData.append('m', 12)
+    formData.append('stationarity', false)
+    formData.append('invertibility', false)
+    formData.append('concentrate_scale', false)
+
+    console.log('duy')
+    // console.log(formData)
+    axios({
+      method: 'post',
+      url: 'http://127.0.0.1:8000/arima',
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+      .then((response) => {
+
+        predicted_arima = Object.values(JSON.parse(response.data.data1).predicted_values)
+        prediction_arima = Object.values(JSON.parse(response.data.data2).predicted_values)
+        var timestamps = (Object.values(JSON.parse(response.data.data2).index))
+
+        var dates = timestamps.map(timestamp => {
+          var dateObject = new Date(timestamp);
+          return dateObject.toISOString().slice(0, 10);
+        });
+        this.setState({ predicted_arima: predicted_arima, yearsx: dates, prediction_arima: prediction_arima })
+      })
+      .catch((response) => {
+        //handle error
+        console.log(response);
+      });
+    var time_of_TS = []
+    this.state.data.map((element, index) => {
+      // if (index > 0)
+      time_of_TS.push(element[this.state.timeColumn])
+    })
+    var x = time_of_TS.length - time_of_TS.length * this.state.test_size
+    console.log(x)
+    var time_of_predicted = time_of_TS.filter((item, index) => { return index > x })
+    this.setState({ time_of_predicted: time_of_predicted })
+    this.setState({ auto_arima: true, arima: true, current: 3 }, () => {
+      this.setState({ hidden2: true })
+      message.success("Complete")
+      // this.onChange(3)
+      // this.render()
+    })
+
+  }
+
   handleOnFileLoadAutoArima = () => {
     var predicted_auto_arima, predicted_arima, prediction_auto_arima
     this.setState({ hidden2: false })
@@ -557,10 +663,11 @@ export default class Reports extends Component {
           test_size={this.state.test_size}
           fill_method={this.state.fill_method}
 
-          handleSelectData={this.handleSelectData}
-          handleSelectTime={this.handleSelectTime}
+
           handleUpdateTestSize={this.handleUpdateTestSize}
           handleFillMethod={this.handleFillMethod}
+
+          testAllModel={this.testAllModel}
 
           handleOpenDialog={this.handleOpenDialog}
           handleOnFileLoad1={this.handleOnFileLoad1}

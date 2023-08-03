@@ -44,7 +44,7 @@ const onFinishFailed = (errorInfo: any) => {
 
 const Step2 = (props) => {
     const {
-        nextStep, previousStep,
+        nextStep, previousStep, testAllModel,
         test_size, handleUpdateTestSize, handleFillMethod,
     } = props;
 
@@ -96,8 +96,8 @@ const Step2 = (props) => {
                                                     onChange={(value) => (handleUpdateTestSize(value))}
                                                 />
                                             </Form.Item>
-                                            <Form.Item
-                                                label="Fill missing data method"
+                                            {/* <Form.Item
+                                                label="Filling missing data method"
                                                 name="fill"
                                                 style={{ marginRight: '100px' }}
                                                 rules={[{ required: true, message: 'Please input!' }]}
@@ -114,11 +114,6 @@ const Step2 = (props) => {
                                                         { value: 'backward', label: 'backward fill' },
                                                     ]}
                                                 />
-                                            </Form.Item>
-                                            {/* <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                                                <Button type="primary" htmlType="submit">
-                                                    Submit
-                                                </Button>
                                             </Form.Item> */}
                                         </div>
                                     </Form>
@@ -140,7 +135,7 @@ const Step2 = (props) => {
                                 <Button
                                     type="primary"
                                     // variant="contained"
-                                    onClick={nextStep}
+                                    onClick={testAllModel}
                                 // sx={{ backgroundColor: '#EB2CB2', }}
                                 >
                                     Next
