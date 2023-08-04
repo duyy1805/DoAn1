@@ -154,6 +154,7 @@ function Main({ children }) {
         </Layout>
       </Drawer>
       <img src="https://antley.biz/wp-content/uploads/coffee-work-desk-mug-keyboard-162616.jpg" style={{ position: "absolute", width: '100%', filter: 'brightness(70%) contrast(120%)' }} />
+      <img src="https://antley.biz/wp-content/uploads/coffee-work-desk-mug-keyboard-162616.jpg" style={{ position: "absolute", marginTop: 1260, width: '100%', filter: 'brightness(70%) contrast(120%)', transform: 'scaleY(-1)' }} />
       {/* <Sider
         breakpoint="lg"
         collapsedWidth="0"

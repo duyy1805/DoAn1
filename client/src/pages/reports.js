@@ -69,7 +69,9 @@ export default class Reports extends Component {
     data_of_TS: [],
     time_of_predicted: [],
     time_of_prediction: [],
-    predicted_auto_arima: [],
+
+
+    predicted_auto_arima: [], predicted_auto_arima_0: [], predicted_auto_arima_1: [], predicted_auto_arima_2: [], predicted_auto_arima_3: [],
     predicted_arima: [],
     prediction_auto_arima: [],
     prediction_arima: [],
@@ -289,103 +291,11 @@ export default class Reports extends Component {
     }
   };
 
-  testAllModel = () => {
-    var predicted_auto_arima, predicted_arima, prediction_auto_arima
-    this.setState({ hidden2: false })
-    var formData = new FormData();
-    formData.append('test_size', this.state.test_size);
-    formData.append('fill_method', this.state.fill_method);
-    formData.append('timeColumn', this.state.timeColumn);
-    formData.append('dataColumn', this.state.dataColumn);
-    formData.append('file', this.state.file, 'file.csv')
-    axios({
-      method: 'post',
-      url: 'http://127.0.0.1:8000/autoarima',
-      data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-      .then((response) => {
-
-        predicted_auto_arima = Object.values(JSON.parse(response.data.data1).predicted_values)
-        prediction_auto_arima = Object.values(JSON.parse(response.data.data2).predicted_values)
+  testAllModel = async () => {
+    await this.handleOnFileLoadAutoArima()
 
 
-        var timestamps = (Object.values(JSON.parse(response.data.data2).index))
 
-        var dates = timestamps.map(timestamp => {
-          var dateObject = new Date(timestamp);
-          return dateObject.toISOString().slice(0, 10);
-        });
-        // console.log(dates)
-        this.setState({ predicted_auto_arima: predicted_auto_arima, yearsx: dates, prediction_auto_arima: prediction_auto_arima })
-      })
-      .catch((response) => {
-        //handle error
-        console.log(response);
-      });
-    var time_of_TS = []
-    this.state.data.map((element, index) => {
-      // if (index > 0)
-      time_of_TS.push(element[this.state.timeColumn])
-    })
-    var x = time_of_TS.length - time_of_TS.length * this.state.test_size
-    // console.log(x)
-    var time_of_predicted = time_of_TS.filter((item, index) => { return index > x })
-    this.setState({ time_of_predicted: time_of_predicted })
-
-    var predicted_arima, prediction_arima
-    // console.log(values)
-    // this.setState({ hidden2: false })
-    formData = new FormData();
-    formData.append('test_size', this.state.test_size);
-    formData.append('fill_method', this.state.fill_method);
-    formData.append('timeColumn', this.state.timeColumn);
-    formData.append('dataColumn', this.state.dataColumn);
-    formData.append('file', this.state.file, 'file.csv')
-    formData.append('p', 1)
-    formData.append('d', 2)
-    formData.append('q', 1)
-    formData.append('P', 1)
-    formData.append('D', 1)
-    formData.append('Q', 1)
-    formData.append('m', 12)
-    formData.append('stationarity', false)
-    formData.append('invertibility', false)
-    formData.append('concentrate_scale', false)
-
-    console.log('duy')
-    // console.log(formData)
-    axios({
-      method: 'post',
-      url: 'http://127.0.0.1:8000/arima',
-      data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-      .then((response) => {
-
-        predicted_arima = Object.values(JSON.parse(response.data.data1).predicted_values)
-        prediction_arima = Object.values(JSON.parse(response.data.data2).predicted_values)
-        var timestamps = (Object.values(JSON.parse(response.data.data2).index))
-
-        var dates = timestamps.map(timestamp => {
-          var dateObject = new Date(timestamp);
-          return dateObject.toISOString().slice(0, 10);
-        });
-        this.setState({ predicted_arima: predicted_arima, yearsx: dates, prediction_arima: prediction_arima })
-      })
-      .catch((response) => {
-        //handle error
-        console.log(response);
-      });
-    var time_of_TS = []
-    this.state.data.map((element, index) => {
-      // if (index > 0)
-      time_of_TS.push(element[this.state.timeColumn])
-    })
-    var x = time_of_TS.length - time_of_TS.length * this.state.test_size
-    console.log(x)
-    var time_of_predicted = time_of_TS.filter((item, index) => { return index > x })
-    this.setState({ time_of_predicted: time_of_predicted })
     this.setState({ auto_arima: true, arima: true, current: 3 }, () => {
       this.setState({ hidden2: true })
       message.success("Complete")
@@ -393,48 +303,58 @@ export default class Reports extends Component {
       // this.render()
     })
 
-  }
 
-  handleOnFileLoadAutoArima = () => {
-    var predicted_auto_arima, predicted_arima, prediction_auto_arima
+  }
+  callApiAutoARIMA = async () => {
+
     this.setState({ hidden2: false })
-    const formData = new FormData();
+    var formData = new FormData();
     formData.append('test_size', this.state.test_size);
     formData.append('fill_method', this.state.fill_method);
     formData.append('timeColumn', this.state.timeColumn);
     formData.append('dataColumn', this.state.dataColumn);
     formData.append('file', this.state.file, 'file.csv')
-    axios({
-      method: 'post',
-      url: 'http://127.0.0.1:8000/autoarima',
-      data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-      .then((response) => {
-
-        predicted_auto_arima = Object.values(JSON.parse(response.data.data1).predicted_values)
-        prediction_auto_arima = Object.values(JSON.parse(response.data.data2).predicted_values)
-
-
-        const timestamps = (Object.values(JSON.parse(response.data.data2).index))
-
-        const dates = timestamps.map(timestamp => {
-          const dateObject = new Date(timestamp);
-          return dateObject.toISOString().slice(0, 10);
-        });
-        // console.log(dates)
-        this.setState({ predicted_auto_arima: predicted_auto_arima, yearsx: dates, prediction_auto_arima: prediction_auto_arima })
-        this.setState({ auto_arima: true, current: 3 }, () => {
-          this.setState({ hidden2: true })
-          message.success("Complete")
-          // this.onChange(3)
-          // this.render()
-        })
-      })
-      .catch((response) => {
-        //handle error
-        console.log(response);
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/autoarima',
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
+      return response;
+
+    } catch (error) {
+
+    }
+  }
+
+  handleOnFileLoadAutoArima = async () => {
+    var predicted_auto_arima, predicted_arima, prediction_auto_arima
+    var predicted_auto_arima_0, predicted_auto_arima_1, predicted_auto_arima_2, predicted_auto_arima_3
+    const response = await this.callApiAutoARIMA();
+    console.log(Object.values(JSON.parse(response.data.data1[0]).predicted_values))
+    predicted_auto_arima_0 = Object.values(JSON.parse(response.data.data1[0]).predicted_values)
+    predicted_auto_arima_1 = Object.values(JSON.parse(response.data.data1[1]).predicted_values)
+    predicted_auto_arima_2 = Object.values(JSON.parse(response.data.data1[2]).predicted_values)
+    predicted_auto_arima_3 = Object.values(JSON.parse(response.data.data1[3]).predicted_values)
+    prediction_auto_arima = Object.values(JSON.parse(response.data.data2).predicted_values)
+
+
+    var timestamps = (Object.values(JSON.parse(response.data.data2).index))
+
+    var dates = timestamps.map(timestamp => {
+      var dateObject = new Date(timestamp);
+      return dateObject.toISOString().slice(0, 10);
+    });
+    // console.log(dates)
+    this.setState({
+      predicted_auto_arima: predicted_auto_arima,
+      predicted_auto_arima_0: predicted_auto_arima_0,
+      predicted_auto_arima_1: predicted_auto_arima_1,
+      predicted_auto_arima_2: predicted_auto_arima_2,
+      predicted_auto_arima_3: predicted_auto_arima_3,
+      yearsx: dates, prediction_auto_arima: prediction_auto_arima
+    });
     var time_of_TS = []
     this.state.data.map((element, index) => {
       // if (index > 0)
@@ -541,14 +461,62 @@ export default class Reports extends Component {
       y: this.state.data_of_TS,
       line: { color: '#17BECF' }
     }
-    var auto_arima_graph =
+    var auto_arima_graph_0 =
       this.state.auto_arima ? {
         type: "scatter",
         mode: "lines",
-        name: ' after prediction auto Arima ',
+        name: 'Filling with 0',
         x: this.state.time_of_predicted,
-        y: this.state.predicted_auto_arima,
+        y: this.state.predicted_auto_arima_0,
         line: { color: '#FF0000' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var auto_arima_graph_1 =
+      this.state.auto_arima ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with mean value',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_auto_arima_1,
+        line: { color: '#E82CB2' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var auto_arima_graph_2 =
+      this.state.auto_arima ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with forward value',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_auto_arima_2,
+        line: { color: '#FFDDDD' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var auto_arima_graph_3 =
+      this.state.auto_arima ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with backward values',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_auto_arima_3,
+        line: { color: '#fd70a1' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -761,7 +729,10 @@ export default class Reports extends Component {
           drawArima={this.drawArima}
           drawAuto_Arima={this.drawAuto_Arima}
           arima_graph={arima_graph}
-          auto_arima_graph={auto_arima_graph}
+          auto_arima_graph_0={auto_arima_graph_0}
+          auto_arima_graph_1={auto_arima_graph_1}
+          auto_arima_graph_2={auto_arima_graph_2}
+          auto_arima_graph_3={auto_arima_graph_3}
           handleOnRemoveFile={this.handleOnRemoveFile}
           handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
           filename={this.state.filename}></Step4>,
@@ -788,7 +759,7 @@ export default class Reports extends Component {
                   current={this.state.current}
                   onChange={this.onChange}
                   direction="horizontal"
-                  style={{ marginTop: "24px", width: '1200px', background: '#ffffff', padding: '20px', paddingLeft: "40px", borderRadius: '12px', boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)" }}
+                  style={{ marginTop: "24px", width: '1200px', background: '#f9f9f9 ', padding: '20px', paddingLeft: "40px", borderRadius: '12px', boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)" }}
                   items={[
                     {
                       title: 'Step 1',
