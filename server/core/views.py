@@ -193,8 +193,8 @@ class AutoArima(views.APIView):
         timeColumn = request.data['timeColumn']
         dataColumn = request.data['dataColumn']
         test_size = request.data['test_size']
-        fill_method = request.data['fill_method']
-
+        fill_method = ['0', 'mean', 'backward', 'forward']
+        all_arrays = []
         test_size = float(test_size)
         values = read_csv(file_obj)
 
@@ -209,60 +209,64 @@ class AutoArima(views.APIView):
         missing_values_count = values.isna().sum().sum()
 
         freq = pd.infer_freq(values["Time"])
+        for method in fill_method:
+            if missing_values_count != 0:
+                # if fill_method == 'delete':
+                #     values = values[~(values.isna().any(axis=1))]
 
-        if missing_values_count != 0:
-            # if fill_method == 'delete':
-            #     values = values[~(values.isna().any(axis=1))]
-            if fill_method == '0':
-                values['Data'].fillna(0, inplace=True)
-            if fill_method == 'mean':
-                values['Data'].fillna(values['Data'].mean, inplace=True)
-            if fill_method == 'forward':
-                values['Data'].fillna(method='ffill', inplace=True)
-            if fill_method == 'backward':
-                values['Data'].fillna(method='bfill', inplace=True)
+                if method == '0':
+                    values['Data'].fillna(0, inplace=True)
+                if method == 'mean':
+                    values['Data'].fillna(values['Data'].mean, inplace=True)
+                if method == 'forward':
+                    values['Data'].fillna(method='ffill', inplace=True)
+                if method == 'backward':
+                    values['Data'].fillna(method='bfill', inplace=True)
 
-        values.set_index('Time', inplace=True)
+            values.set_index('Time', inplace=True)
 
-        adf_test = ADFTest(alpha=0.05)
-        adf_test.should_diff(values)
+            adf_test = ADFTest(alpha=0.05)
+            adf_test.should_diff(values)
 
-        from sklearn.model_selection import train_test_split
-        train, test = train_test_split(
-            values, test_size=test_size, shuffle=False)
+            from sklearn.model_selection import train_test_split
+            train, test = train_test_split(
+                values, test_size=test_size, shuffle=False)
 
-        arima_model = auto_arima(train, start_p=0, d=1, start_q=0,
-                                 max_p=5, max_d=5, max_q=5, start_P=0,
-                                 D=1, start_Q=0, max_P=5, max_D=5,
-                                 max_Q=5, m=12, seasonal=True,
-                                 error_action='warn', trace=True,
-                                 supress_warnings=True, stepwise=True,
-                                 random_state=20, n_fits=50)
+            arima_model = auto_arima(train, start_p=0, d=1, start_q=0,
+                                     max_p=5, max_d=5, max_q=5, start_P=0,
+                                     D=1, start_Q=0, max_P=5, max_D=5,
+                                     max_Q=5, m=12, seasonal=True,
+                                     error_action='warn', trace=True,
+                                     supress_warnings=True, stepwise=True,
+                                     random_state=20, n_fits=50)
 
-        n_periods = test.shape[0]
-        prediction = pd.DataFrame(
-            arima_model.predict(n_periods=n_periods), index=test.index)
-        prediction.columns = ['predicted_values']
-        prediction.reset_index(inplace=True)
+            n_periods = test.shape[0]
+            prediction = pd.DataFrame(
+                arima_model.predict(n_periods=n_periods), index=test.index)
+            prediction.columns = ['predicted_values']
+            prediction.reset_index(inplace=True)
 
-        x = values.index[train.shape[0]]
-        print(x)
-        n_periods = test.shape[0] + 12
+            x = values.index[train.shape[0]]
+            print(x)
+            n_periods = test.shape[0] + 12
 
-        index_future_dates = pd.date_range(
-            start=x, periods=n_periods, freq=freq)
+            index_future_dates = pd.date_range(
+                start=x, periods=n_periods, freq=freq)
 
-        prediction_auto_arima = pd.DataFrame(arima_model.predict(
-            n_periods=n_periods), index=index_future_dates)
-        prediction_auto_arima.columns = ['predicted_values']
-        prediction_auto_arima.reset_index(inplace=True)
+            prediction_auto_arima = pd.DataFrame(arima_model.predict(
+                n_periods=n_periods), index=index_future_dates)
+            prediction_auto_arima.columns = ['predicted_values']
+            prediction_auto_arima.reset_index(inplace=True)
 
-        prediction_auto_arima = prediction_auto_arima.tail(12)
+            prediction_auto_arima = prediction_auto_arima.tail(12)
+            all_arrays.append(prediction.to_json())
+            values.reset_index(inplace=True)
 
+        print(all_arrays)
         ###############################################################################
 
         return Response({
-            "data1": prediction.to_json(),
+            "data1": all_arrays,
             "data2": prediction_auto_arima.to_json()
         })
 
