@@ -36,6 +36,7 @@ import Step3 from './Steps/Step3';
 import Step4 from './Steps/Step4';
 // const Plot = createPlotlyComponent(Plotly);
 import { Fade, Slide } from "react-reveal";
+import { object } from 'prop-types';
 
 
 
@@ -54,8 +55,9 @@ export default class Reports extends Component {
     hidden3: true,
     arima: false,
     auto_arima: false,
+    missing: false,
     file: null,
-    rnn: false,
+    rnn: true,
     data: null,
     data2: null,
     data3: null,
@@ -75,6 +77,8 @@ export default class Reports extends Component {
     predicted_arima: [],
     prediction_auto_arima: [],
     prediction_arima: [],
+
+    predicted_RNN: [], predicted_RNN_0: [], predicted_RNN_1: [], predicted_RNN_2: [], predicted_RNN_3: [],
 
 
     activeStep: 0,
@@ -293,7 +297,7 @@ export default class Reports extends Component {
 
   testAllModel = async () => {
     await this.handleOnFileLoadAutoArima()
-
+    await this.handleOnFileLoadRNN()
 
 
     this.setState({ auto_arima: true, arima: true, current: 3 }, () => {
@@ -328,18 +332,43 @@ export default class Reports extends Component {
     }
   }
 
+  callApiRNN = async () => {
+
+    this.setState({ hidden2: false })
+    var formData = new FormData();
+    formData.append('test_size', this.state.test_size);
+    formData.append('fill_method', this.state.fill_method);
+    formData.append('timeColumn', this.state.timeColumn);
+    formData.append('dataColumn', this.state.dataColumn);
+    formData.append('file', this.state.file, 'file.csv')
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/rnn',
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      return response;
+
+    } catch (error) {
+
+    }
+  }
   handleOnFileLoadAutoArima = async () => {
     var predicted_auto_arima, predicted_arima, prediction_auto_arima
     var predicted_auto_arima_0, predicted_auto_arima_1, predicted_auto_arima_2, predicted_auto_arima_3
     const response = await this.callApiAutoARIMA();
-    console.log(Object.values(JSON.parse(response.data.data1[0]).predicted_values))
-    predicted_auto_arima_0 = Object.values(JSON.parse(response.data.data1[0]).predicted_values)
-    predicted_auto_arima_1 = Object.values(JSON.parse(response.data.data1[1]).predicted_values)
-    predicted_auto_arima_2 = Object.values(JSON.parse(response.data.data1[2]).predicted_values)
-    predicted_auto_arima_3 = Object.values(JSON.parse(response.data.data1[3]).predicted_values)
-    prediction_auto_arima = Object.values(JSON.parse(response.data.data2).predicted_values)
+    if (response.data.data1.length > 1) {
+      this.setState({ missing: true })
+      console.log(Object.values(JSON.parse(response.data.data1[0]).predicted_values))
+      predicted_auto_arima_0 = Object.values(JSON.parse(response.data.data1[0]).predicted_values)
+      predicted_auto_arima_1 = Object.values(JSON.parse(response.data.data1[1]).predicted_values)
+      predicted_auto_arima_2 = Object.values(JSON.parse(response.data.data1[2]).predicted_values)
+      predicted_auto_arima_3 = Object.values(JSON.parse(response.data.data1[3]).predicted_values)
+      prediction_auto_arima = Object.values(JSON.parse(response.data.data2).predicted_values)
+    }
 
-
+    predicted_auto_arima = Object.values(JSON.parse(response.data.data1[0]).predicted_values)
     var timestamps = (Object.values(JSON.parse(response.data.data2).index))
 
     var dates = timestamps.map(timestamp => {
@@ -363,6 +392,38 @@ export default class Reports extends Component {
     var x = time_of_TS.length - time_of_TS.length * this.state.test_size
     // console.log(x)
     var time_of_predicted = time_of_TS.filter((item, index) => { return index > x })
+    this.setState({ time_of_predicted: time_of_predicted })
+  }
+
+  handleOnFileLoadRNN = async () => {
+    var predicted, prediction
+    var predicted_0, predicted_1, predicted_2, predicted_3
+    const response = await this.callApiRNN();
+    if (response.data.data1.length > 1) {
+      this.setState({ missing: true })
+      console.log(Object.values((JSON.parse(response.data.data1[0])).Time))
+      predicted_0 = Object.values((JSON.parse(response.data.data1[0]).Predictions))
+      predicted_1 = Object.values((JSON.parse(response.data.data1[1]).Predictions))
+      predicted_2 = Object.values((JSON.parse(response.data.data1[2]).Predictions))
+      predicted_3 = Object.values((JSON.parse(response.data.data1[3]).Predictions))
+    }
+    predicted = Object.values((JSON.parse(response.data.data1[0]).Predictions))
+
+    this.setState({
+      predicted_RNN: predicted,
+      predicted_RNN_0: predicted_0,
+      predicted_RNN_1: predicted_1,
+      predicted_RNN_2: predicted_2,
+      predicted_RNN_3: predicted_3,
+    });
+    var time_of_TS = []
+    this.state.data.map((element, index) => {
+      // if (index > 0)
+      time_of_TS.push(element[this.state.timeColumn])
+    })
+    var x = time_of_TS.length - time_of_TS.length * this.state.test_size
+    var time_of_predicted = time_of_TS.filter((item, index) => { return index > x })
+
     this.setState({ time_of_predicted: time_of_predicted })
   }
 
@@ -461,8 +522,24 @@ export default class Reports extends Component {
       y: this.state.data_of_TS,
       line: { color: '#17BECF' }
     }
+    var auto_arima_graph =
+      !this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with 0',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_auto_arima,
+        line: { color: '#FF0000' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
     var auto_arima_graph_0 =
-      this.state.auto_arima ? {
+      this.state.missing ? {
         type: "scatter",
         mode: "lines",
         name: 'Filling with 0',
@@ -478,7 +555,7 @@ export default class Reports extends Component {
         line: { color: '#17BECF' }
       }
     var auto_arima_graph_1 =
-      this.state.auto_arima ? {
+      this.state.missing ? {
         type: "scatter",
         mode: "lines",
         name: 'Filling with mean value',
@@ -494,7 +571,7 @@ export default class Reports extends Component {
         line: { color: '#17BECF' }
       }
     var auto_arima_graph_2 =
-      this.state.auto_arima ? {
+      this.state.missing ? {
         type: "scatter",
         mode: "lines",
         name: 'Filling with forward value',
@@ -510,7 +587,7 @@ export default class Reports extends Component {
         line: { color: '#17BECF' }
       }
     var auto_arima_graph_3 =
-      this.state.auto_arima ? {
+      this.state.missing ? {
         type: "scatter",
         mode: "lines",
         name: 'Filling with backward values',
@@ -542,12 +619,28 @@ export default class Reports extends Component {
         line: { color: '#17BECF' }
       }
     var rnn_graph =
+      !this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Không filling',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_RNN,
+        line: { color: '#FF0000' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var rnn_graph_0 =
       this.state.rnn ? {
         type: "scatter",
         mode: "lines",
         name: ' after prediction RNN',
-        x: this.state.time_of_prediction,
-        y: this.state.predicted_arima,
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_RNN_0,
         line: { color: '#0000FF' }
       } : {
         type: "scatter",
@@ -729,10 +822,13 @@ export default class Reports extends Component {
           drawArima={this.drawArima}
           drawAuto_Arima={this.drawAuto_Arima}
           arima_graph={arima_graph}
+          auto_arima_graph={auto_arima_graph}
           auto_arima_graph_0={auto_arima_graph_0}
           auto_arima_graph_1={auto_arima_graph_1}
           auto_arima_graph_2={auto_arima_graph_2}
           auto_arima_graph_3={auto_arima_graph_3}
+          rnn_graph={rnn_graph}
+
           handleOnRemoveFile={this.handleOnRemoveFile}
           handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
           filename={this.state.filename}></Step4>,

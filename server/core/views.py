@@ -11,6 +11,10 @@ from .serializers import SalesSerializer, ClientSerializer, EmployeeSerializer
 from statsmodels.tsa.arima.model import ARIMA
 import json
 
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import LSTM
+
 import pandas as pd
 import numpy as np
 from pandas import read_csv
@@ -208,12 +212,14 @@ class AutoArima(views.APIView):
                 x) if x.replace('.', '', 1).isdigit() else None)
         missing_values_count = values.isna().sum().sum()
 
+        if missing_values_count != 0:
+            fill_method = ['0', 'mean', 'backward', 'forward']
+        else:
+            fill_method = ['1']
+
         freq = pd.infer_freq(values["Time"])
         for method in fill_method:
             if missing_values_count != 0:
-                # if fill_method == 'delete':
-                #     values = values[~(values.isna().any(axis=1))]
-
                 if method == '0':
                     values['Data'].fillna(0, inplace=True)
                 if method == 'mean':
@@ -257,8 +263,8 @@ class AutoArima(views.APIView):
                 n_periods=n_periods), index=index_future_dates)
             prediction_auto_arima.columns = ['predicted_values']
             prediction_auto_arima.reset_index(inplace=True)
-
             prediction_auto_arima = prediction_auto_arima.tail(12)
+
             all_arrays.append(prediction.to_json())
             values.reset_index(inplace=True)
 
@@ -354,4 +360,112 @@ class Arima(views.APIView):
         return Response({
             "data1": prediction.to_json(),
             "data2": prediction_arima.to_json()
+        })
+
+
+class RNN(views.APIView):
+    parser_classes = [MultiPartParser]
+
+    def post(self, request, format=None):
+        file_obj = request.data['file']
+        timeColumn = request.data['timeColumn']
+        dataColumn = request.data['dataColumn']
+        test_size = request.data['test_size']
+        fill_method = ['0', 'mean', 'backward', 'forward']
+        all_arrays = []
+        test_size = float(test_size)
+        values = read_csv(file_obj)
+
+        values[timeColumn] = pd.to_datetime(
+            values[timeColumn], errors='coerce')
+        values = values.rename(columns={timeColumn: 'Time'})
+        values = values.rename(columns={dataColumn: 'Data'})
+
+        if isinstance(values['Data'][0], str):
+            values['Data'] = values['Data'].apply(lambda x: float(
+                x) if x.replace('.', '', 1).isdigit() else None)
+        missing_values_count = values.isna().sum().sum()
+
+        freq = pd.infer_freq(values["Time"])
+
+        if missing_values_count != 0:
+            fill_method = ['0', 'mean', 'backward', 'forward']
+        else:
+            fill_method = ['1']
+        for method in fill_method:
+            if missing_values_count != 0:
+                if method == '0':
+                    values['Data'].fillna(0, inplace=True)
+                if method == 'mean':
+                    values['Data'].fillna(values['Data'].mean, inplace=True)
+                if method == 'forward':
+                    values['Data'].fillna(method='ffill', inplace=True)
+                if method == 'backward':
+                    values['Data'].fillna(method='bfill', inplace=True)
+
+            values.set_index('Time', inplace=True)
+
+            adf_test = ADFTest(alpha=0.05)
+            adf_test.should_diff(values)
+
+            from sklearn.model_selection import train_test_split
+            train, test = train_test_split(
+                values, test_size=test_size, shuffle=False)
+
+            rnn_train = train
+            rnn_test = test
+
+            from sklearn.preprocessing import MinMaxScaler
+            scaler = MinMaxScaler()
+
+            scaler.fit(rnn_train)
+            scaled_train = scaler.transform(rnn_train)
+            scaled_test = scaler.transform(rnn_test)
+
+            from keras.preprocessing.sequence import TimeseriesGenerator
+
+            # define generator
+            n_input = 12
+            n_features = 1
+            generator = TimeseriesGenerator(
+                scaled_train, scaled_train, length=n_input, batch_size=1)
+
+            # define model
+            model = Sequential()
+            model.add(LSTM(100, activation='relu',
+                           input_shape=(n_input, n_features)))
+            model.add(Dense(1))
+            model.compile(optimizer='adam', loss='mse')
+
+            model.summary()
+            model.fit(generator, epochs=50)
+
+            last_train_batch = scaled_train[-12:]
+            last_train_batch = last_train_batch.reshape(
+                (1, n_input, n_features))
+            model.predict(last_train_batch)
+
+            test_predictions = []
+
+            first_eval_batch = scaled_train[-n_input:]
+            current_batch = first_eval_batch.reshape((1, n_input, n_features))
+
+            for i in range(len(rnn_test)):
+                # get the prediction value for the first batch
+                current_pred = model.predict(current_batch)[0]
+
+                # append the prediction into the array
+                test_predictions.append(current_pred)
+
+                # use the prediction to update the batch and remove the first value
+                current_batch = np.append(current_batch[:, 1:, :], [
+                    [current_pred]], axis=1)
+
+            true_predictions = scaler.inverse_transform(test_predictions)
+            rnn_test['Predictions'] = true_predictions
+            rnn_test.reset_index(inplace=True)
+            all_arrays.append(rnn_test.to_json())
+            values.reset_index(inplace=True)
+        return Response({
+            "data1": all_arrays
         })

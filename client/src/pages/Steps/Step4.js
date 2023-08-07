@@ -43,12 +43,13 @@ const onFinishFailed = (errorInfo: any) => {
 const Step4 = (props) => {
     const { hidden_step1, hidden_step3, hidden_step4, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile, previousStep,
         handleOpenDialog, buttonRef, handleSelectTime, future_values_auto_arima, future_values_arima,
-        handleOnFileLoadAutoArima, graph, auto_arima_graph_0, auto_arima_graph_1, auto_arima_graph_2, auto_arima_graph_3,
-        arima_graph, drawArima, drawAuto_Arima,
+        handleOnFileLoadAutoArima, graph,
+        auto_arima_graph, auto_arima_graph_0, auto_arima_graph_1, auto_arima_graph_2, auto_arima_graph_3,
+        arima_graph, drawArima, drawAuto_Arima, rnn_graph,
         selectedDate, filename, yearx, column, timeColumn, dataColumn, time_of_TS, yearsx, data_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
-    // useEffect(() => {
-    //     console.log(arima_graph)
-    // }, [])
+    useEffect(() => {
+        console.log(rnn_graph)
+    }, [])
     return (
         <div>
             <Container style={{ padding: 0, maxWidth: 1700 }}>
@@ -181,6 +182,7 @@ const Step4 = (props) => {
                                                     line: { color: '#17BECF' }
                                                 }
                                                 ,
+                                                auto_arima_graph,
                                                 auto_arima_graph_0,
                                                 auto_arima_graph_1,
                                                 auto_arima_graph_2,
@@ -223,8 +225,8 @@ const Step4 = (props) => {
                                                     line: { color: '#17BECF' }
                                                 }
                                                 ,
-                                                arima_graph,
-                                                // rnn_graph
+                                                // arima_graph,
+                                                rnn_graph
 
 
                                             ]}
