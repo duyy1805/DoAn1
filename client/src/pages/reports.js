@@ -635,13 +635,61 @@ export default class Reports extends Component {
         line: { color: '#17BECF' }
       }
     var rnn_graph_0 =
-      this.state.rnn ? {
+      this.state.missing ? {
         type: "scatter",
         mode: "lines",
-        name: ' after prediction RNN',
+        name: 'Filling with 0',
         x: this.state.time_of_predicted,
         y: this.state.predicted_RNN_0,
-        line: { color: '#0000FF' }
+        line: { color: '#FF0000' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var rnn_graph_1 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with mean value',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_RNN_1,
+        line: { color: '#E82CB2' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var rnn_graph_2 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with forward value',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_RNN_2,
+        line: { color: '#FFDDDD' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var rnn_graph_3 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with backward values',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_RNN_3,
+        line: { color: '#fd70a1' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -787,14 +835,10 @@ export default class Reports extends Component {
       {
         title: 'Step 4',
         content: <Step4
-          test={this.test}
-          selectedDate={this.state.selectedDate}
+
           future_values_auto_arima={this.state.future_values_auto_arima}
           future_values_arima={this.state.future_values_arima}
 
-          hidden_step1={this.state.hidden_step1}
-          hidden_step3={this.state.hidden_step3}
-          hidden_step4={this.state.hidden_step4}
           hidden0={this.state.hidden0}
           hidden2={this.state.hidden2}
           hidden3={this.state.hidden3}
@@ -804,17 +848,6 @@ export default class Reports extends Component {
           yearsx={this.state.yearsx}
           data_of_TS={this.state.data_of_TS}
           predicted_auto_arima={this.state.predicted_auto_arima}
-          column={this.state.column}
-          buttonRef={buttonRef}
-          timeColumn={this.state.timeColumn}
-          dataColumn={this.state.dataColumn}
-          handleSelectData={this.handleSelectData}
-          handleSelectTime={this.handleSelectTime}
-          handleOpenDialog={this.handleOpenDialog}
-          handleSelectChanege={this.handleSelectChanege}
-          handleOnFileLoad1={this.handleOnFileLoad1}
-          handleOnFileLoad2={this.handleOnFileLoad2}
-          handleOnError={this.handleOnError}
 
           nextStep={this.next}
           previousStep={this.prev}
@@ -828,9 +861,8 @@ export default class Reports extends Component {
           auto_arima_graph_2={auto_arima_graph_2}
           auto_arima_graph_3={auto_arima_graph_3}
           rnn_graph={rnn_graph}
+          rnn_graph_0={rnn_graph_0} rnn_graph_1={rnn_graph_1} rnn_graph_2={rnn_graph_2} rnn_graph_3={rnn_graph_3}
 
-          handleOnRemoveFile={this.handleOnRemoveFile}
-          handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
           filename={this.state.filename}></Step4>,
       },
     ];

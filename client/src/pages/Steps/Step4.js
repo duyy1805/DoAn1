@@ -41,12 +41,11 @@ const onFinishFailed = (errorInfo: any) => {
 };
 
 const Step4 = (props) => {
-    const { hidden_step1, hidden_step3, hidden_step4, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile, previousStep,
-        handleOpenDialog, buttonRef, handleSelectTime, future_values_auto_arima, future_values_arima,
-        handleOnFileLoadAutoArima, graph,
+    const { hidden_step1, hidden2, previousStep, handleSelectTime, future_values_auto_arima, future_values_arima, graph,
         auto_arima_graph, auto_arima_graph_0, auto_arima_graph_1, auto_arima_graph_2, auto_arima_graph_3,
-        arima_graph, drawArima, drawAuto_Arima, rnn_graph,
-        selectedDate, filename, yearx, column, timeColumn, dataColumn, time_of_TS, yearsx, data_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
+        arima_graph, rnn_graph, rnn_graph_0, rnn_graph_1, rnn_graph_2, rnn_graph_3,
+        column, timeColumn, dataColumn, time_of_TS, data_of_TS, predicted_auto_arima
+    } = props;
     useEffect(() => {
         console.log(rnn_graph)
     }, [])
@@ -162,9 +161,6 @@ const Step4 = (props) => {
                                     <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
                                         <Button
                                             type="primary"
-                                            // variant="contained"
-                                            onClick={handleOnFileLoad2}
-
                                         >
                                             Select
                                         </Button>
@@ -226,9 +222,11 @@ const Step4 = (props) => {
                                                 }
                                                 ,
                                                 // arima_graph,
-                                                rnn_graph
-
-
+                                                rnn_graph,
+                                                rnn_graph_0,
+                                                rnn_graph_1,
+                                                rnn_graph_2,
+                                                rnn_graph_3,
                                             ]}
                                             layout={{
                                                 width: 550, height: 400, title: 'Time series data',
