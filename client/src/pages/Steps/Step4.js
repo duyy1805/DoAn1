@@ -172,7 +172,7 @@ const Step4 = (props) => {
 
                                                     type: "scatter",
                                                     mode: "lines",
-                                                    name: 'Origin data',
+                                                    name: 'Original data',
                                                     x: time_of_TS,
                                                     y: data_of_TS,
                                                     line: { color: '#17BECF' }
@@ -215,7 +215,7 @@ const Step4 = (props) => {
 
                                                     type: "scatter",
                                                     mode: "lines",
-                                                    name: ' before prediction ',
+                                                    name: 'Original series',
                                                     x: time_of_TS,
                                                     y: data_of_TS,
                                                     line: { color: '#17BECF' }
