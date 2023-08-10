@@ -32,8 +32,8 @@ import Plotly from "plotly.js-basic-dist";
 import { Steps, message, } from 'antd';
 import Step1 from './Steps/Step1';
 import Step2 from './Steps/Step2';
-import Step3 from './Steps/Step3';
-import Step4 from './Steps/Step4';
+// import Step3 from './Steps/Step3';
+import Step3 from './Steps/Step4';
 // const Plot = createPlotlyComponent(Plotly);
 import { Fade, Slide } from "react-reveal";
 import { object } from 'prop-types';
@@ -80,6 +80,11 @@ export default class Reports extends Component {
 
     predicted_RNN: [], predicted_RNN_0: [], predicted_RNN_1: [], predicted_RNN_2: [], predicted_RNN_3: [],
 
+
+
+    //=====sai số
+
+    mae: [],
 
     activeStep: 0,
     skipped: new Set(),
@@ -297,10 +302,10 @@ export default class Reports extends Component {
 
   testAllModel = async () => {
     await this.handleOnFileLoadAutoArima()
-    await this.handleOnFileLoadRNN()
+    // await this.handleOnFileLoadRNN()
 
 
-    this.setState({ auto_arima: true, arima: true, current: 3 }, () => {
+    this.setState({ auto_arima: true, arima: true, current: 2 }, () => {
       this.setState({ hidden2: true })
       message.success("Complete")
       // this.onChange(3)
@@ -358,9 +363,13 @@ export default class Reports extends Component {
     var predicted_auto_arima, predicted_arima, prediction_auto_arima
     var predicted_auto_arima_0, predicted_auto_arima_1, predicted_auto_arima_2, predicted_auto_arima_3
     const response = await this.callApiAutoARIMA();
+    console.log(response.data.mae)
+    console.log(response.data.mse)
+    var new_values = this.state.mae.concat(response.data.mae)
+    this.setState({ mae: new_values });
     if (response.data.data1.length > 1) {
       this.setState({ missing: true })
-      console.log(Object.values(JSON.parse(response.data.data1[0]).predicted_values))
+      // console.log(Object.values(JSON.parse(response.data.data1[0]).predicted_values))
       predicted_auto_arima_0 = Object.values(JSON.parse(response.data.data1[0]).predicted_values)
       predicted_auto_arima_1 = Object.values(JSON.parse(response.data.data1[1]).predicted_values)
       predicted_auto_arima_2 = Object.values(JSON.parse(response.data.data1[2]).predicted_values)
@@ -526,7 +535,7 @@ export default class Reports extends Component {
       !this.state.missing ? {
         type: "scatter",
         mode: "lines",
-        name: 'Filling with 0',
+        name: 'No filling',
         x: this.state.time_of_predicted,
         y: this.state.predicted_auto_arima,
         line: { color: '#FF0000' }
@@ -622,7 +631,7 @@ export default class Reports extends Component {
       !this.state.missing ? {
         type: "scatter",
         mode: "lines",
-        name: 'Không filling',
+        name: 'No filling',
         x: this.state.time_of_predicted,
         y: this.state.predicted_RNN,
         line: { color: '#FF0000' }
@@ -794,47 +803,6 @@ export default class Reports extends Component {
       {
         title: 'Step 3',
         content: <Step3
-          test={this.test}
-          selectedDate={this.state.selectedDate}
-          future_values_auto_arima={this.state.future_values_auto_arima}
-          hidden_step1={this.state.hidden_step1}
-          hidden_step2={this.state.hidden_step2}
-          hidden_step3={this.state.hidden_step3}
-          hidden0={this.state.hidden0}
-          hidden2={this.state.hidden2}
-          hidden3={this.state.hidden3}
-          file={this.state.file}
-          data={this.state.data}
-          time_of_TS={this.state.time_of_TS}
-          yearsx={this.state.yearsx}
-          data_of_TS={this.state.data_of_TS}
-          predicted_auto_arima={this.state.predicted_auto_arima}
-          column={this.state.column}
-          buttonRef={buttonRef}
-          timeColumn={this.state.timeColumn}
-          dataColumn={this.state.dataColumn}
-          handleSelectData={this.handleSelectData}
-          handleSelectTime={this.handleSelectTime}
-          handleOpenDialog={this.handleOpenDialog}
-          handleOnFileLoad1={this.handleOnFileLoad1}
-          handleOnFileLoad2={this.handleOnFileLoad2}
-          handleOnError={this.handleOnError}
-
-          nextStep={this.next}
-          previousStep={this.prev}
-
-          params={this.state.params}
-          handleOnFileLoadArima={this.handleOnFileLoadArima}
-
-          graph={graph}
-          arima_graph={arima_graph}
-          handleOnRemoveFile={this.handleOnRemoveFile}
-          handleOnFileLoadAutoArima={this.handleOnFileLoadAutoArima}
-          filename={this.state.filename}></Step3>,
-      },
-      {
-        title: 'Step 4',
-        content: <Step4
 
           future_values_auto_arima={this.state.future_values_auto_arima}
           future_values_arima={this.state.future_values_arima}
@@ -862,8 +830,41 @@ export default class Reports extends Component {
           auto_arima_graph_3={auto_arima_graph_3}
           rnn_graph={rnn_graph}
           rnn_graph_0={rnn_graph_0} rnn_graph_1={rnn_graph_1} rnn_graph_2={rnn_graph_2} rnn_graph_3={rnn_graph_3}
+          //error
+          mae={this.state.mae}
+          filename={this.state.filename}></Step3>,
+      },
+      {
+        title: 'Step 4',
+        content: <Step3
 
-          filename={this.state.filename}></Step4>,
+          future_values_auto_arima={this.state.future_values_auto_arima}
+          future_values_arima={this.state.future_values_arima}
+
+          hidden0={this.state.hidden0}
+          hidden2={this.state.hidden2}
+          hidden3={this.state.hidden3}
+          file={this.state.file}
+          data={this.state.data}
+          time_of_TS={this.state.time_of_TS}
+          yearsx={this.state.yearsx}
+          data_of_TS={this.state.data_of_TS}
+          predicted_auto_arima={this.state.predicted_auto_arima}
+
+          nextStep={this.next}
+          previousStep={this.prev}
+
+          drawArima={this.drawArima}
+          drawAuto_Arima={this.drawAuto_Arima}
+          arima_graph={arima_graph}
+          auto_arima_graph={auto_arima_graph}
+          auto_arima_graph_0={auto_arima_graph_0}
+          auto_arima_graph_1={auto_arima_graph_1}
+          auto_arima_graph_2={auto_arima_graph_2}
+          auto_arima_graph_3={auto_arima_graph_3}
+          rnn_graph={rnn_graph}
+          rnn_graph_0={rnn_graph_0} rnn_graph_1={rnn_graph_1} rnn_graph_2={rnn_graph_2} rnn_graph_3={rnn_graph_3}
+          filename={this.state.filename}></Step3>,
       },
     ];
 
@@ -895,7 +896,7 @@ export default class Reports extends Component {
                     },
                     {
                       title: 'Step 2',
-                      description: "Data preparation",
+                      description: "Data preprocessing",
                     },
                     {
                       title: 'Step 3',

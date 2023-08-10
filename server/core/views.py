@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from .models import Times, Client, Employee
 from .serializers import SalesSerializer, ClientSerializer, EmployeeSerializer
 from statsmodels.tsa.arima.model import ARIMA
+from sklearn.metrics import mean_absolute_error, mean_squared_error, mean_absolute_percentage_error
 import json
 
 from keras.models import Sequential
@@ -199,6 +200,8 @@ class AutoArima(views.APIView):
         test_size = request.data['test_size']
         fill_method = ['0', 'mean', 'backward', 'forward']
         all_arrays = []
+        all_mae = []
+        all_mse = []
         test_size = float(test_size)
         values = read_csv(file_obj)
 
@@ -252,6 +255,11 @@ class AutoArima(views.APIView):
             prediction.columns = ['predicted_values']
             prediction.reset_index(inplace=True)
 
+            mae = mean_absolute_error(
+                test['Data'], prediction['predicted_values'])
+
+            mse = mean_squared_error(
+                test['Data'], prediction['predicted_values'])
             x = values.index[train.shape[0]]
             print(x)
             n_periods = test.shape[0] + 12
@@ -265,6 +273,8 @@ class AutoArima(views.APIView):
             prediction_auto_arima.reset_index(inplace=True)
             prediction_auto_arima = prediction_auto_arima.tail(12)
 
+            all_mae.append(round(mae, 2))
+            all_mse.append(round(mse, 2))
             all_arrays.append(prediction.to_json())
             values.reset_index(inplace=True)
 
@@ -273,7 +283,9 @@ class AutoArima(views.APIView):
 
         return Response({
             "data1": all_arrays,
-            "data2": prediction_auto_arima.to_json()
+            "data2": prediction_auto_arima.to_json(),
+            "mae": all_mae,
+            "mse": all_mse,
         })
 
 

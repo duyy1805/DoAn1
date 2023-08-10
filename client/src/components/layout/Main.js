@@ -42,7 +42,6 @@ function Main({ children }) {
       cache: false,
       success: function (data) {
         setResume(data.main.social);
-        console.log(data.main.social)
       }.bind(this),
       error: function (xhr, status, err) {
         console.log(err);
