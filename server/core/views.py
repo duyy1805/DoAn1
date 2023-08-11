@@ -48,8 +48,7 @@ class FileUploadView(views.APIView):
 
     def post(self, request, filename, format=None):
         file_obj = request.data['file']
-        print(filename)
-        print(request.data['test'])
+
         values = read_csv(file_obj)
 
         values['Month'] = pd.to_datetime(values['Month'], errors='coerce')
