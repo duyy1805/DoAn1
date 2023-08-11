@@ -102,6 +102,24 @@ const Step4 = (props) => {
                                     <Column title="Fill_3" dataIndex="fill_3" key="fill_3" />
                                     <Column title="Fill_4" dataIndex="fill_4" key="fill_4" />
                                 </ColumnGroup>
+                                <ColumnGroup title="ARIMA">
+                                    <Column title="Fill_1" dataIndex="fill_1" key="fill_1" />
+                                    <Column title="Fill_2" dataIndex="fill_2" key="fill_2" />
+                                    <Column title="Fill_3" dataIndex="fill_3" key="fill_3" />
+                                    <Column title="Fill_4" dataIndex="fill_4" key="fill_4" />
+                                </ColumnGroup>
+                                <ColumnGroup title="RNN">
+                                    <Column title="Fill_1" dataIndex="fill_1" key="fill_1" />
+                                    <Column title="Fill_2" dataIndex="fill_2" key="fill_2" />
+                                    <Column title="Fill_3" dataIndex="fill_3" key="fill_3" />
+                                    <Column title="Fill_4" dataIndex="fill_4" key="fill_4" />
+                                </ColumnGroup>
+                                <ColumnGroup title="Name">
+                                    <Column title="Fill_1" dataIndex="fill_1" key="fill_1" />
+                                    <Column title="Fill_2" dataIndex="fill_2" key="fill_2" />
+                                    <Column title="Fill_3" dataIndex="fill_3" key="fill_3" />
+                                    <Column title="Fill_4" dataIndex="fill_4" key="fill_4" />
+                                </ColumnGroup>
                             </Table>
                         </CardContent>
                         <Card sx={{ m: 0 }} style={{ width: 1650, boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px", marginLeft: 20, backgroundColor: '#1677ff' }}>
