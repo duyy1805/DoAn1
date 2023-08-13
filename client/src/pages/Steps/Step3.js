@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState, useRef } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import DownloadIcon from '@material-ui/icons/PictureAsPdf';
 import LoadingOverlay from 'react-loading-overlay';
@@ -11,7 +11,7 @@ import {
     Grid,
     MenuItem,
     Divider,
-    // Select,
+    Select,
     FormControl,
     InputLabel,
     FormHelperText,
@@ -29,31 +29,11 @@ import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
 import { number } from 'prop-types';
-
-import { Fade, Slide, Zoom, LightSpeed, Bounce } from "react-reveal";
-import { InputNumber, Row, Select, Col, Tabs, Badge, Form, Button, Checkbox, Input, Space, Collapse } from 'antd';
-const { Option } = Select;
-
-// eslint-disable-next-line
-const model = ['MA', 'Auto ARIMA', 'Manual ARIMA', 'Exponential Smoothing', 'TBATS', 'RNN'];
-const options = [];
-for (let i = 0; i < model.length; i++) {
-    options.push({
-        label: model[i],
-        value: model[i],
-    });
-}
-
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
-
-const onChange = (key) => {
-    // console.log(key);
-};
-
+import {
+    InputNumber, Row, Col, Tabs, Badge, Form,
+    Tag, Button, Checkbox, Input, message, Space, Table
+} from 'antd';
+const { Column, ColumnGroup } = Table;
 
 const Plot = createPlotlyComponent(Plotly);
 const onFinish = (values: any) => {
@@ -65,309 +45,355 @@ const onFinishFailed = (errorInfo: any) => {
 };
 
 const Step3 = (props) => {
-    const { hidden_step1, hidden_step3, hidden0, hidden2, handleSelectChanege, test, handleOnFileLoad1, handleOnError, handleOnRemoveFile,
-        handleOpenDialog, buttonRef, handleSelectTime, future_values_auto_arima,
-        previousStep, nextStep, params, handleOnFileLoadArima,
-        handleOnFileLoadAutoArima, graph, arima_graph,
-        selectedDate, filename, yearx, column, timeColumn, dataColumn, time_of_TS, yearsx, data_of_TS, predicted_auto_arima, handleOnFileLoad2, handleSelectData } = props;
-
-
-    const formRef = useRef(null);
-    const formRef2 = useRef(null);
-
-    const handleApplyClick = () => {
-        if (formRef.current) {
-            formRef.current.click(); // Giả lập việc nhấn vào button ref1
-        }
-        if (formRef2.current) {
-            formRef2.current.click(); // Giả lập việc nhấn vào button ref2
-        }
-    };
-    const [item, setItem] = useState([]) // select
-    const [Items, setItems] = useState([]) // collapse
+    const { hidden_step1, hidden2, previousStep, handleSelectTime, future_values_auto_arima, future_values_arima, graph,
+        auto_arima_graph, auto_arima_graph_0, auto_arima_graph_1, auto_arima_graph_2, auto_arima_graph_3,
+        arima_graph, rnn_graph, rnn_graph_0, rnn_graph_1, rnn_graph_2, rnn_graph_3,
+        //error
+        mae,
+        column, timeColumn, dataColumn, time_of_TS, data_of_TS, predicted_auto_arima
+    } = props;
     useEffect(() => {
-        console.log(item)
-        setItems(items.filter(i => item.includes(i.key)).sort((a, b) => {
-            const keyAIndex = item.indexOf(a.key);
-            const keyBIndex = item.indexOf(b.key);
-            if (keyAIndex < keyBIndex) {
-                return -1;
-            }
-            if (keyAIndex > keyBIndex) {
-                return 1;
-            }
-            return 0;
-        }))
-    }, [item])
-    const items = [
+        console.log(mae)
+    }, [])
+
+    const data = [
         {
-            key: 'MA',
-            label: 'MA',
-            children: <p>{text}</p>,
+            key: '1',
+            err: 'MAE',
+            fill_1: mae[0], fill_2: mae[1], fill_3: mae[2], fill_4: mae[3],
+            fill_5: mae[4], fill_6: mae[5], fill_7: mae[6], fill_8: mae[7],
+            fill_9: mae[8], fill_10: mae[9], fill_11: mae[10], fill_12: mae[11],
+            fill_13: mae[12], fill_14: mae[13], fill_15: mae[14], fill_16: mae[15],
         },
         {
-            key: 'Auto ARIMA',
-            label: 'Auto ARIMA',
-            children:
-                <Card>
-                    <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Button
-                            style={{ display: 'none' }}
-                            type="primary"
-                            // variant="contained"
-                            ref={formRef2}
-                            onClick={handleOnFileLoadAutoArima}
-
-                        >
-                            Apply auto ARIMA model
-                        </Button>
-                        You don't need to fill in any parameters, the algorithm will automatically find suitable parameters to apply to your data
-                    </CardContent>
-
-                </Card>
-            ,
-        },
-        {
-            key: 'Manual ARIMA',
-            label: 'Manual ARIMA',
-            children:
-                <Form
-                    name="basic"
-                    labelCol={{ span: 18 }}
-                    wrapperCol={{ span: 6 }}
-                    style={{ maxWidth: 20000, color: 'red' }}
-                    initialValues={{
-                        p: 1, d: 1, q: 1, P: 1, D: 1, Q: 1, m: 1, concentrate_scale: 'False', invertibility: 'False', stationarity: 'False'
-                    }}
-                    onFinish={(values) => handleOnFileLoadArima(values)}
-                    onFinishFailed={onFinishFailed}
-                    autoComplete="off"
-                // disabled='true'
-                >
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', marginTop: 10 }}>
-                            <Form.Item
-                                label="p"
-                                name="p"
-                                style={{ marginRight: '100px' }}
-                            // rules={[{ required: true, message: 'Please input your username!' }]}
-                            >
-                                <InputNumber defaultValue={1} />
-                            </Form.Item>
-
-                            <Form.Item
-                                label="d"
-                                name="d"
-                                style={{ marginRight: '100px' }}
-                            // rules={[{ required: true, message: 'Please input your username!' }]}
-                            >
-                                <InputNumber defaultValue={1} />
-                            </Form.Item>
-
-
-                            <Form.Item
-                                label="q"
-                                name="q"
-                            // rules={[{ required: true, message: 'Please input your username!' }]}
-                            >
-                                <InputNumber defaultValue={1} />
-                            </Form.Item>
-                            <Form.Item
-                                label="P"
-                                name="P"
-                                style={{ marginRight: '100px' }}
-                            // rules={[{ required: true, message: 'Please input your username!' }]}
-                            >
-                                <InputNumber defaultValue={1} />
-                            </Form.Item>
-
-                            <Form.Item
-                                label="D"
-                                name="D"
-                                style={{ marginRight: '100px' }}
-                            // rules={[{ required: true, message: 'Please input your username!' }]}
-                            >
-                                <InputNumber defaultValue={1} />
-                            </Form.Item>
-
-
-                            <Form.Item
-                                label="Q"
-                                name="Q"
-                            // rules={[{ required: true, message: 'Please input your username!' }]}
-                            >
-                                <InputNumber defaultValue={1} />
-                            </Form.Item>
-                            <Form.Item
-                                label="m"
-                                name="m"
-                                style={{ marginRight: '100px' }}
-                            // rules={[{ required: true, message: 'Please input your username!' }]}
-                            >
-                                <InputNumber defaultValue={1} />
-                            </Form.Item>
-
-                            <Form.Item
-                                label="stationarity"
-                                name="stationarity"
-                                style={{ marginRight: '100px' }}
-                            // rules={[{ required: true, message: 'Please input your username!' }]}
-                            >
-                                <Select
-                                    defaultValue="True"
-                                    style={{ width: 90 }}
-                                    // onChange={(value)}
-                                    options={[
-                                        { value: 'True', label: 'True' },
-                                        { value: 'False', label: 'False' }
-                                    ]}
-                                />
-                            </Form.Item>
-
-
-                            <Form.Item
-                                label="invertibility"
-                                name="invertibility"
-                            // rules={[{ required: true, message: 'Please input your username!' }]}
-                            >
-                                <Select
-                                    defaultValue="True"
-                                    style={{ width: 90 }}
-                                    // onChange={(value)}
-                                    options={[
-                                        { value: 'True', label: 'True' },
-                                        { value: 'False', label: 'False' }
-                                    ]}
-                                />
-                            </Form.Item>
-                            <Form.Item
-                                label="concentrate_scale"
-                                name="concentrate_scale"
-                            >
-                                <Select
-                                    defaultValue="True"
-                                    style={{ width: 90 }}
-                                    // onChange={(value)}
-                                    options={[
-                                        { value: 'True', label: 'True' },
-                                        { value: 'False', label: 'False' }
-                                    ]}
-                                />
-                            </Form.Item>
-                        </div>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Form.Item >
-                            <Button
-                                // style={{ width: 80 }} 
-                                style={{ display: 'none' }}
-                                ref={formRef}
-                                type="primary" htmlType="submit">
-                                Apply manual ARIMA model
-                            </Button>
-                        </Form.Item>
-                    </div>
-                </Form>
-            ,
-        },
-        {
-            key: 'Exponential Smoothing',
-            label: 'Exponential Smoothing',
-            children: <p>{text}</p>,
-        },
-        {
-            key: 'TBATS',
-            label: 'TBATS',
-            children: <p>{text}</p>,
-        },
-        {
-            key: 'RNN',
-            label: 'RNN',
-            children: <p>{text}</p>,
+            key: '2',
+            err: 'MSE',
+            fill_1: mae[0], fill_2: mae[1], fill_3: mae[2], fill_4: mae[3],
+            fill_5: mae[4], fill_6: mae[5], fill_7: mae[6], fill_8: mae[7],
+            fill_9: mae[8], fill_10: mae[9], fill_11: mae[10], fill_12: mae[11],
+            fill_13: mae[12], fill_14: mae[13], fill_15: mae[14], fill_16: mae[15],
         },
     ];
-    const handleChange = (value) => {
-        setItem(value)
-    };
+
+    const columnGroups = [
+        { title: "ARIMA", startKey: "fill_1", endKey: "fill_4" },
+        { title: "RNN", startKey: "fill_5", endKey: "fill_8" },
+        { title: "3", startKey: "fill_9", endKey: "fill_12" },
+        { title: "4", startKey: "fill_13", endKey: "fill_16" },
+        { title: "5", startKey: "fill_17", endKey: "fill_20" },
+        { title: "6", startKey: "fill_21", endKey: "fill_24" },
+    ];
+    const columnGroupsAndColumns = columnGroups.map(group => {
+        const columns = [];
+        for (let i = parseInt(group.startKey.split('_')[1]); i <= parseInt(group.endKey.split('_')[1]); i++) {
+            columns.push(<Column title={`Fill_${i}`} dataIndex={`fill_${i}`} key={`fill_${i}`} />);
+        }
+        return {
+            groupTitle: group.title,
+            columns: columns,
+        };
+    });
+
     return (
         <div>
-            <Slide right duration={1000}>
-                <Zoom duration={1000}>
-                    <Container style={{ padding: 0 }}>
-                        <LoadingOverlay
-                            styles={{ display: 'none' }}
-                            active={!hidden2}
-                            spinner
-                            text='Applying ARIMA algorithms '
-                        >
-                            <Box
-                                sx={{
-                                    // backgroundColor: 'background.default',
-                                    minHeight: '100%',
+            <Container style={{ padding: 0, maxWidth: 1700 }}>
+                <Box
+                    style={{ marginTop: 24 }}
+                >
+                    <Card style={{ backgroundColor: "transparent" }}>
+                        <CardContent style={{ backgroundColor: "transparent", marginTop: 10 }}>
+                            <Table style={{ tableLayout: "auto" }} dataSource={data} pagination={false} scroll={{ x: 1600 }} >
+                                <Column title="" dataIndex="err" key="err" />
+                                {columnGroupsAndColumns.map(groupWithColumns => (
+                                    <ColumnGroup title={groupWithColumns.groupTitle}>
+                                        {groupWithColumns.columns}
+                                    </ColumnGroup>
+                                ))}
 
-                                }}
-                            >
-                                <Box
-                                    style={{ marginTop: 24 }}
+                            </Table>
+                        </CardContent>
+                        <Card sx={{ m: 0 }} style={{ width: 1650, boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px", marginLeft: 20, backgroundColor: '#1677ff' }}>
+                            <CardContent sx={{ width: "1700px", backgroundColor: '#fafafa', marginLeft: 4 }} style={{ padding: 0, paddingLeft: 5 }}>
+                                <Typography component="div" sx={{ textAlign: '', p: 1, fontSize: '1.5rem', }}>
+                                    Time-Series Forecasting Models
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                        <CardContent style={{ backgroundColor: "transparent", display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', marginTop: 10 }}>
+                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
                                 >
-                                    <Card sx={{ m: 0 }} style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px" }}>
-                                        <CardContent sx={{ width: "1200px" }}>
-                                            <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'center', p: 1, fontSize: '2.5rem' }}>
-                                                Select Time-Series Model
-                                            </Typography>
-                                            <Divider />
-                                            <Typography component="div" align="center" variant="h3" sx={{ textAlign: 'left', p: 1, fontSize: '1rem', marginTop: 3 }}>
-                                                Click then choose one or more algorithms
-                                            </Typography>
-                                            <Space
-                                                style={{
-                                                    width: '100%',
-                                                    // marginTop: 30,
-                                                    marginBottom: 30,
-                                                }}
-                                                direction="vertical"
-                                            >
-                                                <Select
-                                                    mode="multiple"
-                                                    allowClear
-                                                    style={{
-                                                        width: '100%',
-                                                    }}
-                                                    placeholder="Please select"
-                                                    // defaultValue={['a10', 'c12']}
-                                                    onChange={handleChange}
-                                                    options={options}
-                                                />
-                                            </Space>
-                                            {item.length !== 0 ?
-                                                (
-                                                    <Collapse defaultActiveKey={model} items={Items} onChange={onChange} />
-                                                )
-                                                : null
-                                            }
-                                        </CardContent>
-                                    </Card>
-                                </Box>
-                            </Box>
-                            {item.length !== 0 ?
-                                (
-                                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
-                                        {/* <Form.Item > */}
+                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
                                         <Button
-                                            // style={{ width: 80 }} 
-                                            onClick={handleApplyClick}
-                                            type="primary" htmlType="submit">
-                                            Apply all models
+                                            type="primary"
+                                        >
+                                            Select
                                         </Button>
-                                        {/* </Form.Item> */}
                                     </div>
-                                )
-                                : null
-                            }
-                        </LoadingOverlay>
-                    </Container>
-                </Zoom>
-            </Slide>
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: 'Original data',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                auto_arima_graph,
+                                                auto_arima_graph_0,
+                                                auto_arima_graph_1,
+                                                auto_arima_graph_2,
+                                                auto_arima_graph_3,
+                                                // rnn_graph
+
+
+                                            ]}
+                                            layout={{
+                                                width: 550, height: 400, title: 'ARMIA Model',
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
+                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: 'Original series',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                // arima_graph,
+                                                rnn_graph,
+                                                rnn_graph_0,
+                                                rnn_graph_1,
+                                                rnn_graph_2,
+                                                rnn_graph_3,
+                                            ]}
+                                            layout={{
+                                                width: 550, height: 400, title: 'Time series data',
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
+                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: ' before prediction ',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                arima_graph,
+                                                // rnn_graph
+
+
+                                            ]}
+                                            layout={{
+                                                width: 550, height: 400, title: 'Time series data',
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
+                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: ' before prediction ',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                arima_graph,
+                                                // rnn_graph
+
+
+                                            ]}
+                                            layout={{
+                                                width: 550, height: 400, title: 'Time series data',
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
+                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: ' before prediction ',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                arima_graph,
+                                                // rnn_graph
+
+
+                                            ]}
+                                            layout={{
+                                                width: 550, height: 400, title: 'Time series data',
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
+                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: ' before prediction ',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                arima_graph,
+                                                // rnn_graph
+
+
+                                            ]}
+                                            layout={{
+                                                width: 550, height: 400, title: 'Time series data',
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
+
+                        </CardContent>
+                        <Divider />
+                    </Card>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                        <Button
+                            // type="primary"
+                            // variant="contained"
+                            onClick={previousStep}
+                        // sx={{ backgroundColor: '#EB2CB2', }}
+                        >
+                            Previous
+                        </Button>
+                        <Button
+                            type="primary"
+                            // variant="contained"
+                            onClick={() => message.success('Processing complete!')}
+                        // sx={{ backgroundColor: '#EB2CB2', }}
+                        >
+                            Done
+                        </Button>
+                    </div>
+                </Box>
+
+
+
+            </Container>
         </div >
     );
 };

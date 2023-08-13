@@ -33,7 +33,7 @@ import { Steps, message, } from 'antd';
 import Step1 from './Steps/Step1';
 import Step2 from './Steps/Step2';
 // import Step3 from './Steps/Step3';
-import Step3 from './Steps/Step4';
+import Step3 from './Steps/Step3';
 // const Plot = createPlotlyComponent(Plotly);
 import { Fade, Slide } from "react-reveal";
 import { object } from 'prop-types';
@@ -302,7 +302,7 @@ export default class Reports extends Component {
 
   testAllModel = async () => {
     await this.handleOnFileLoadAutoArima()
-    // await this.handleOnFileLoadRNN()
+    await this.handleOnFileLoadRNN()
 
 
     this.setState({ auto_arima: true, arima: true, current: 2 }, () => {
@@ -363,8 +363,6 @@ export default class Reports extends Component {
     var predicted_auto_arima, predicted_arima, prediction_auto_arima
     var predicted_auto_arima_0, predicted_auto_arima_1, predicted_auto_arima_2, predicted_auto_arima_3
     const response = await this.callApiAutoARIMA();
-    console.log(response.data.mae)
-    console.log(response.data.mse)
     var new_values = this.state.mae.concat(response.data.mae)
     this.setState({ mae: new_values });
     if (response.data.data1.length > 1) {
@@ -408,6 +406,10 @@ export default class Reports extends Component {
     var predicted, prediction
     var predicted_0, predicted_1, predicted_2, predicted_3
     const response = await this.callApiRNN();
+    console.log(this.state.mae)
+    console.log(response.data.mae)
+    var new_values = this.state.mae.concat(response.data.mae)
+    this.setState({ mae: new_values });
     if (response.data.data1.length > 1) {
       this.setState({ missing: true })
       console.log(Object.values((JSON.parse(response.data.data1[0])).Time))

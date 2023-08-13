@@ -241,9 +241,9 @@ class AutoArima(views.APIView):
                 values, test_size=test_size, shuffle=False)
 
             arima_model = auto_arima(train, start_p=0, d=1, start_q=0,
-                                     max_p=5, max_d=5, max_q=5, start_P=0,
-                                     D=1, start_Q=0, max_P=5, max_D=5,
-                                     max_Q=5, m=12, seasonal=True,
+                                     max_p=2, max_d=2, max_q=2, start_P=0,
+                                     D=1, start_Q=0, max_P=2, max_D=2,
+                                     max_Q=2, m=12, seasonal=True,
                                      error_action='warn', trace=True,
                                      supress_warnings=True, stepwise=True,
                                      random_state=20, n_fits=50)
@@ -384,6 +384,8 @@ class RNN(views.APIView):
         test_size = request.data['test_size']
         fill_method = ['0', 'mean', 'backward', 'forward']
         all_arrays = []
+        all_mae = []
+        all_mse = []
         test_size = float(test_size)
         values = read_csv(file_obj)
 
@@ -474,9 +476,19 @@ class RNN(views.APIView):
 
             true_predictions = scaler.inverse_transform(test_predictions)
             rnn_test['Predictions'] = true_predictions
+            mae = mean_absolute_error(
+                test['Data'], rnn_test['Predictions'])
+
+            mse = mean_squared_error(
+                test['Data'], rnn_test['Predictions'])
             rnn_test.reset_index(inplace=True)
+
+            all_mae.append(round(mae, 2))
+            all_mse.append(round(mse, 2))
             all_arrays.append(rnn_test.to_json())
             values.reset_index(inplace=True)
         return Response({
-            "data1": all_arrays
+            "data1": all_arrays,
+            "mae": all_mae,
+            "mse": all_mse,
         })
