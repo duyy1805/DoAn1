@@ -49,40 +49,63 @@ const Step3 = (props) => {
         auto_arima_graph, auto_arima_graph_0, auto_arima_graph_1, auto_arima_graph_2, auto_arima_graph_3,
         arima_graph, rnn_graph, rnn_graph_0, rnn_graph_1, rnn_graph_2, rnn_graph_3,
         //error
-        mae,
+        mae, mse, missing,
         column, timeColumn, dataColumn, time_of_TS, data_of_TS, predicted_auto_arima
     } = props;
     useEffect(() => {
         console.log(mae)
     }, [])
 
-    const data = [
-        {
-            key: '1',
-            err: 'MAE',
-            fill_1: mae[0], fill_2: mae[1], fill_3: mae[2], fill_4: mae[3],
-            fill_5: mae[4], fill_6: mae[5], fill_7: mae[6], fill_8: mae[7],
-            fill_9: mae[8], fill_10: mae[9], fill_11: mae[10], fill_12: mae[11],
-            fill_13: mae[12], fill_14: mae[13], fill_15: mae[14], fill_16: mae[15],
-        },
-        {
-            key: '2',
-            err: 'MSE',
-            fill_1: mae[0], fill_2: mae[1], fill_3: mae[2], fill_4: mae[3],
-            fill_5: mae[4], fill_6: mae[5], fill_7: mae[6], fill_8: mae[7],
-            fill_9: mae[8], fill_10: mae[9], fill_11: mae[10], fill_12: mae[11],
-            fill_13: mae[12], fill_14: mae[13], fill_15: mae[14], fill_16: mae[15],
-        },
-    ];
 
-    const columnGroups = [
-        { title: "ARIMA", startKey: "fill_1", endKey: "fill_4" },
-        { title: "RNN", startKey: "fill_5", endKey: "fill_8" },
-        { title: "3", startKey: "fill_9", endKey: "fill_12" },
-        { title: "4", startKey: "fill_13", endKey: "fill_16" },
-        { title: "5", startKey: "fill_17", endKey: "fill_20" },
-        { title: "6", startKey: "fill_21", endKey: "fill_24" },
-    ];
+    var data = missing ?
+        [
+            {
+                key: '1',
+                err: 'MAE',
+                fill_1: mae[0], fill_2: mae[1], fill_3: mae[2], fill_4: mae[3],
+                fill_5: mae[4], fill_6: mae[5], fill_7: mae[6], fill_8: mae[7],
+                fill_9: mae[8], fill_10: mae[9], fill_11: mae[10], fill_12: mae[11],
+                fill_13: mae[12], fill_14: mae[13], fill_15: mae[14], fill_16: mae[15],
+            },
+            {
+                key: '2',
+                err: 'MSE',
+                fill_1: mse[0], fill_2: mse[1], fill_3: mse[2], fill_4: mse[3],
+                fill_5: mse[4], fill_6: mse[5], fill_7: mse[6], fill_8: mse[7],
+                fill_9: mse[8], fill_10: mse[9], fill_11: mse[10], fill_12: mse[11],
+                fill_13: mse[12], fill_14: mse[13], fill_15: mse[14], fill_16: mse[15],
+            },
+        ] :
+        [
+            {
+                key: '1',
+                err: 'MAE',
+                fill_1: mae[0], fill_2: mae[1], fill_3: mae[2], fill_4: mae[3],
+            },
+            {
+                key: '2',
+                err: 'MSE',
+                fill_1: mse[0], fill_2: mse[1], fill_3: mse[2], fill_4: mse[3],
+            },
+        ]
+
+    var columnGroups = missing ?
+        [
+            { title: "ARIMA", startKey: "fill_1", endKey: "fill_4" },
+            { title: "RNN", startKey: "fill_5", endKey: "fill_8" },
+            { title: "3", startKey: "fill_9", endKey: "fill_12" },
+            { title: "4", startKey: "fill_13", endKey: "fill_16" },
+            { title: "5", startKey: "fill_17", endKey: "fill_20" },
+            { title: "6", startKey: "fill_21", endKey: "fill_24" },
+        ] :
+        [
+            { title: "ARIMA", startKey: "fill_1", endKey: "fill_1" },
+            { title: "RNN", startKey: "fill_2", endKey: "fill_2" },
+            { title: "3", startKey: "fill_3", endKey: "fill_3" },
+            { title: "4", startKey: "fill_4", endKey: "fill_4" },
+            { title: "5", startKey: "fill_5", endKey: "fill_5" },
+            { title: "6", startKey: "fill_6", endKey: "fill_6" },
+        ]
     const columnGroupsAndColumns = columnGroups.map(group => {
         const columns = [];
         for (let i = parseInt(group.startKey.split('_')[1]); i <= parseInt(group.endKey.split('_')[1]); i++) {
