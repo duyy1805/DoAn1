@@ -79,8 +79,9 @@ export default class Reports extends Component {
     prediction_arima: [],
 
     predicted_RNN: [], predicted_RNN_0: [], predicted_RNN_1: [], predicted_RNN_2: [], predicted_RNN_3: [],
-
-
+    predicted_SES: [], predicted_SES_0: [], predicted_SES_1: [], predicted_SES_2: [], predicted_SES_3: [],
+    predicted_DES: [], predicted_DES_0: [], predicted_DES_1: [], predicted_DES_2: [], predicted_DES_3: [],
+    predicted_TES: [], predicted_TES_0: [], predicted_TES_1: [], predicted_TES_2: [], predicted_TES_3: [],
 
     //=====sai số
 
@@ -187,6 +188,10 @@ export default class Reports extends Component {
 
   handleFillMethod = (value) => {
     this.setState({ fill_method: value });
+  };
+
+  handleSetError = () => {
+    this.setState({ mae: [], mse: [] });
   };
 
   drawArima = () => {
@@ -304,6 +309,9 @@ export default class Reports extends Component {
   testAllModel = async () => {
     await this.handleOnFileLoadAutoArima()
     await this.handleOnFileLoadRNN()
+    await this.handleOnFileLoadSES()
+    await this.handleOnFileLoadDES()
+    await this.handleOnFileLoadTES()
 
 
     this.setState({ auto_arima: true, arima: true, current: 2 }, () => {
@@ -351,6 +359,73 @@ export default class Reports extends Component {
       const response = await axios({
         method: 'post',
         url: 'http://127.0.0.1:8000/rnn',
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      return response;
+
+    } catch (error) {
+
+    }
+  }
+
+  callApiSES = async () => {
+
+    this.setState({ hidden2: false })
+    var formData = new FormData();
+    formData.append('test_size', this.state.test_size);
+    formData.append('fill_method', this.state.fill_method);
+    formData.append('timeColumn', this.state.timeColumn);
+    formData.append('dataColumn', this.state.dataColumn);
+    formData.append('file', this.state.file, 'file.csv')
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/ses',
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      return response;
+
+    } catch (error) {
+
+    }
+  }
+  callApiDES = async () => {
+
+    this.setState({ hidden2: false })
+    var formData = new FormData();
+    formData.append('test_size', this.state.test_size);
+    formData.append('fill_method', this.state.fill_method);
+    formData.append('timeColumn', this.state.timeColumn);
+    formData.append('dataColumn', this.state.dataColumn);
+    formData.append('file', this.state.file, 'file.csv')
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/des',
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      return response;
+
+    } catch (error) {
+
+    }
+  }
+  callApiTES = async () => {
+
+    this.setState({ hidden2: false })
+    var formData = new FormData();
+    formData.append('test_size', this.state.test_size);
+    formData.append('fill_method', this.state.fill_method);
+    formData.append('timeColumn', this.state.timeColumn);
+    formData.append('dataColumn', this.state.dataColumn);
+    formData.append('file', this.state.file, 'file.csv')
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/tes',
         data: formData,
         headers: { 'Content-Type': 'multipart/form-data' }
       });
@@ -439,6 +514,108 @@ export default class Reports extends Component {
     this.setState({ time_of_predicted: time_of_predicted })
   }
 
+  handleOnFileLoadSES = async () => {
+    var predicted, prediction
+    var predicted_0, predicted_1, predicted_2, predicted_3
+    const response = await this.callApiSES();
+    var new_values1 = this.state.mae.concat(response.data.mae)
+    var new_values2 = this.state.mse.concat(response.data.mse)
+    this.setState({ mae: new_values1, mse: new_values2 });
+    if (response.data.data1.length > 1) {
+      this.setState({ missing: true })
+      console.log(Object.values((JSON.parse(response.data.data1[0])).Time))
+      predicted_0 = Object.values((JSON.parse(response.data.data1[0]).Predictions))
+      predicted_1 = Object.values((JSON.parse(response.data.data1[1]).Predictions))
+      predicted_2 = Object.values((JSON.parse(response.data.data1[2]).Predictions))
+      predicted_3 = Object.values((JSON.parse(response.data.data1[3]).Predictions))
+    }
+    predicted = Object.values((JSON.parse(response.data.data1[0]).Predictions))
+
+    this.setState({
+      predicted_SES: predicted,
+      predicted_SES_0: predicted_0,
+      predicted_SES_1: predicted_1,
+      predicted_SES_2: predicted_2,
+      predicted_SES_3: predicted_3,
+    });
+    var time_of_TS = []
+    this.state.data.map((element, index) => {
+      // if (index > 0)
+      time_of_TS.push(element[this.state.timeColumn])
+    })
+    var x = time_of_TS.length - time_of_TS.length * this.state.test_size
+    var time_of_predicted = time_of_TS.filter((item, index) => { return index > x })
+
+    this.setState({ time_of_predicted: time_of_predicted })
+  }
+  handleOnFileLoadDES = async () => {
+    var predicted, prediction
+    var predicted_0, predicted_1, predicted_2, predicted_3
+    const response = await this.callApiDES();
+    var new_values1 = this.state.mae.concat(response.data.mae)
+    var new_values2 = this.state.mse.concat(response.data.mse)
+    this.setState({ mae: new_values1, mse: new_values2 });
+    if (response.data.data1.length > 1) {
+      this.setState({ missing: true })
+      console.log(Object.values((JSON.parse(response.data.data1[0])).Time))
+      predicted_0 = Object.values((JSON.parse(response.data.data1[0]).Predictions))
+      predicted_1 = Object.values((JSON.parse(response.data.data1[1]).Predictions))
+      predicted_2 = Object.values((JSON.parse(response.data.data1[2]).Predictions))
+      predicted_3 = Object.values((JSON.parse(response.data.data1[3]).Predictions))
+    }
+    predicted = Object.values((JSON.parse(response.data.data1[0]).Predictions))
+
+    this.setState({
+      predicted_DES: predicted,
+      predicted_DES_0: predicted_0,
+      predicted_DES_1: predicted_1,
+      predicted_DES_2: predicted_2,
+      predicted_DES_3: predicted_3,
+    });
+    var time_of_TS = []
+    this.state.data.map((element, index) => {
+      // if (index > 0)
+      time_of_TS.push(element[this.state.timeColumn])
+    })
+    var x = time_of_TS.length - time_of_TS.length * this.state.test_size
+    var time_of_predicted = time_of_TS.filter((item, index) => { return index > x })
+
+    this.setState({ time_of_predicted: time_of_predicted })
+  }
+  handleOnFileLoadTES = async () => {
+    var predicted, prediction
+    var predicted_0, predicted_1, predicted_2, predicted_3
+    const response = await this.callApiTES();
+    var new_values1 = this.state.mae.concat(response.data.mae)
+    var new_values2 = this.state.mse.concat(response.data.mse)
+    this.setState({ mae: new_values1, mse: new_values2 });
+    if (response.data.data1.length > 1) {
+      this.setState({ missing: true })
+      console.log(Object.values((JSON.parse(response.data.data1[0])).Time))
+      predicted_0 = Object.values((JSON.parse(response.data.data1[0]).Predictions))
+      predicted_1 = Object.values((JSON.parse(response.data.data1[1]).Predictions))
+      predicted_2 = Object.values((JSON.parse(response.data.data1[2]).Predictions))
+      predicted_3 = Object.values((JSON.parse(response.data.data1[3]).Predictions))
+    }
+    predicted = Object.values((JSON.parse(response.data.data1[0]).Predictions))
+
+    this.setState({
+      predicted_TES: predicted,
+      predicted_TES_0: predicted_0,
+      predicted_TES_1: predicted_1,
+      predicted_TES_2: predicted_2,
+      predicted_TES_3: predicted_3,
+    });
+    var time_of_TS = []
+    this.state.data.map((element, index) => {
+      // if (index > 0)
+      time_of_TS.push(element[this.state.timeColumn])
+    })
+    var x = time_of_TS.length - time_of_TS.length * this.state.test_size
+    var time_of_predicted = time_of_TS.filter((item, index) => { return index > x })
+
+    this.setState({ time_of_predicted: time_of_predicted })
+  }
   handleOnFileLoadArima = (values) => {
     var predicted_auto_arima, predicted_arima, prediction_arima
     // console.log(values)
@@ -710,6 +887,250 @@ export default class Reports extends Component {
         y: [],
         line: { color: '#17BECF' }
       }
+
+    var ses_graph =
+      !this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'No filling',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_SES,
+        line: { color: '#FF0000' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var ses_graph_0 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with 0',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_SES_0,
+        line: { color: '#FF0000' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var ses_graph_1 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with mean value',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_SES_1,
+        line: { color: '#E82CB2' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var ses_graph_2 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with forward value',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_SES_2,
+        line: { color: '#FFDDDD' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var ses_graph_3 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with backward values',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_SES_3,
+        line: { color: '#fd70a1' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+
+    var des_graph =
+      !this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'No filling',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_DES,
+        line: { color: '#FF0000' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var des_graph_0 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with 0',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_DES_0,
+        line: { color: '#FF0000' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var des_graph_1 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with mean value',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_DES_1,
+        line: { color: '#E82CB2' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var des_graph_2 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with forward value',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_DES_2,
+        line: { color: '#FFDDDD' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var des_graph_3 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with backward values',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_DES_3,
+        line: { color: '#fd70a1' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+
+    var tes_graph =
+      !this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'No filling',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_TES,
+        line: { color: '#FF0000' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var tes_graph_0 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with 0',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_TES_0,
+        line: { color: '#FF0000' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var tes_graph_1 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with mean value',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_TES_1,
+        line: { color: '#E82CB2' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var tes_graph_2 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with forward value',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_TES_2,
+        line: { color: '#FFDDDD' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+    var tes_graph_3 =
+      this.state.missing ? {
+        type: "scatter",
+        mode: "lines",
+        name: 'Filling with backward values',
+        x: this.state.time_of_predicted,
+        y: this.state.predicted_TES_3,
+        line: { color: '#fd70a1' }
+      } : {
+        type: "scatter",
+        mode: "lines",
+        name: 'no graph ',
+        x: [],
+        y: [],
+        line: { color: '#17BECF' }
+      }
+
     const isStepOptional = (step) => {
       return step === 1;
     };
@@ -754,7 +1175,9 @@ export default class Reports extends Component {
           nextStep={this.next}
           previousStep={this.prev}
           //visualize
-
+          handleSetError={this.handleSetError}
+          mae={this.state.mae}
+          mse={this.state.mse}
           response_data={this.state.response_data}
           filename={this.state.filename}></Step1 >,
       },
@@ -833,6 +1256,12 @@ export default class Reports extends Component {
           auto_arima_graph_3={auto_arima_graph_3}
           rnn_graph={rnn_graph}
           rnn_graph_0={rnn_graph_0} rnn_graph_1={rnn_graph_1} rnn_graph_2={rnn_graph_2} rnn_graph_3={rnn_graph_3}
+          ses_graph={ses_graph}
+          ses_graph_0={ses_graph_0} ses_graph_1={ses_graph_1} ses_graph_2={ses_graph_2} ses_graph_3={ses_graph_3}
+          des_graph={des_graph}
+          des_graph_0={des_graph_0} des_graph_1={des_graph_1} des_graph_2={des_graph_2} des_graph_3={des_graph_3}
+          tes_graph={tes_graph}
+          tes_graph_0={ses_graph_0} tes_graph_1={tes_graph_1} tes_graph_2={tes_graph_2} tes_graph_3={tes_graph_3}
           //error
           mae={this.state.mae}
           mse={this.state.mse}
@@ -844,7 +1273,7 @@ export default class Reports extends Component {
         content: <Step3
 
           future_values_auto_arima={this.state.future_values_auto_arima}
-          future_values_arima={this.state.future_values_arima}
+          future_values_arima={this.future_values_arima}
 
           hidden0={this.state.hidden0}
           hidden2={this.state.hidden2}

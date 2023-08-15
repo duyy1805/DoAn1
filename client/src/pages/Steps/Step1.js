@@ -45,7 +45,7 @@ const { Dragger } = Upload;
 const Plot = createPlotlyComponent(Plotly);
 const Step1 = (props) => {
   const { hidden_step1, hidden0, hidden2, handleOnFileLoad, response_data,
-    handleSelectTime, nextStep, FileList, handleSelectFileList,
+    handleSelectTime, nextStep, FileList, handleSelectFileList, mae, mse, handleSetError,
     //visualize
     column, timeColumn, dataColumn, data_of_TS, time_of_TS, handleOnFileLoad2, handleSelectData } = props;
   const [fileList, setFileList] = useState([]);
@@ -67,7 +67,10 @@ const Step1 = (props) => {
     },
   };
   useEffect(() => { setFileList(FileList) }, [])
-  useEffect(() => { handleSelectFileList(fileList) }, [fileList]);
+  useEffect(() => {
+    handleSelectFileList(fileList)
+    // handleSetError()
+  }, [fileList]);
 
   return (
     <div >

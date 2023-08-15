@@ -48,12 +48,15 @@ const Step3 = (props) => {
     const { hidden_step1, hidden2, previousStep, handleSelectTime, future_values_auto_arima, future_values_arima, graph,
         auto_arima_graph, auto_arima_graph_0, auto_arima_graph_1, auto_arima_graph_2, auto_arima_graph_3,
         arima_graph, rnn_graph, rnn_graph_0, rnn_graph_1, rnn_graph_2, rnn_graph_3,
+        ses_graph, ses_graph_0, ses_graph_1, ses_graph_2, ses_graph_3,
+        des_graph, des_graph_0, des_graph_1, des_graph_2, des_graph_3,
+        tes_graph, tes_graph_0, tes_graph_1, tes_graph_2, tes_graph_3,
         //error
         mae, mse, missing,
         column, timeColumn, dataColumn, time_of_TS, data_of_TS, predicted_auto_arima
     } = props;
     useEffect(() => {
-        console.log(mae)
+        console.log(ses_graph)
     }, [])
 
 
@@ -80,12 +83,12 @@ const Step3 = (props) => {
             {
                 key: '1',
                 err: 'MAE',
-                fill_1: mae[0], fill_2: mae[1], fill_3: mae[2], fill_4: mae[3],
+                fill_1: mae[0], fill_2: mae[1], fill_3: mae[2], fill_4: mae[3], fill_5: mae[4]
             },
             {
                 key: '2',
                 err: 'MSE',
-                fill_1: mse[0], fill_2: mse[1], fill_3: mse[2], fill_4: mse[3],
+                fill_1: mse[0], fill_2: mse[1], fill_3: mse[2], fill_4: mse[3], fill_5: mse[4]
             },
         ]
 
@@ -94,17 +97,17 @@ const Step3 = (props) => {
             { title: "ARIMA", startKey: "fill_1", endKey: "fill_4" },
             { title: "RNN", startKey: "fill_5", endKey: "fill_8" },
             { title: "3", startKey: "fill_9", endKey: "fill_12" },
-            { title: "4", startKey: "fill_13", endKey: "fill_16" },
-            { title: "5", startKey: "fill_17", endKey: "fill_20" },
-            { title: "6", startKey: "fill_21", endKey: "fill_24" },
+            { title: "SES", startKey: "fill_13", endKey: "fill_16" },
+            { title: "DES", startKey: "fill_17", endKey: "fill_20" },
+            { title: "TES", startKey: "fill_21", endKey: "fill_24" },
         ] :
         [
             { title: "ARIMA", startKey: "fill_1", endKey: "fill_1" },
             { title: "RNN", startKey: "fill_2", endKey: "fill_2" },
             { title: "3", startKey: "fill_3", endKey: "fill_3" },
-            { title: "4", startKey: "fill_4", endKey: "fill_4" },
-            { title: "5", startKey: "fill_5", endKey: "fill_5" },
-            { title: "6", startKey: "fill_6", endKey: "fill_6" },
+            { title: "SES", startKey: "fill_4", endKey: "fill_4" },
+            { title: "DES", startKey: "fill_5", endKey: "fill_5" },
+            { title: "TES", startKey: "fill_6", endKey: "fill_6" },
         ]
     const columnGroupsAndColumns = columnGroups.map(group => {
         const columns = [];
@@ -124,6 +127,13 @@ const Step3 = (props) => {
                     style={{ marginTop: 24 }}
                 >
                     <Card style={{ backgroundColor: "transparent" }}>
+                        <Card sx={{ m: 0 }} style={{ width: 1650, boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px", marginLeft: 20, backgroundColor: '#1677ff' }}>
+                            <CardContent sx={{ width: "1700px", backgroundColor: '#fafafa', marginLeft: 4 }} style={{ padding: 0, paddingLeft: 5 }}>
+                                <Typography component="div" sx={{ textAlign: '', p: 1, fontSize: '1.5rem', }}>
+                                    Comparision Of Time-Series Forecasting Models
+                                </Typography>
+                            </CardContent>
+                        </Card>
                         <CardContent style={{ backgroundColor: "transparent", marginTop: 10 }}>
                             <Table style={{ tableLayout: "auto" }} dataSource={data} pagination={false} scroll={{ x: 1600 }} >
                                 <Column title="" dataIndex="err" key="err" />
@@ -138,7 +148,7 @@ const Step3 = (props) => {
                         <Card sx={{ m: 0 }} style={{ width: 1650, boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px", marginLeft: 20, backgroundColor: '#1677ff' }}>
                             <CardContent sx={{ width: "1700px", backgroundColor: '#fafafa', marginLeft: 4 }} style={{ padding: 0, paddingLeft: 5 }}>
                                 <Typography component="div" sx={{ textAlign: '', p: 1, fontSize: '1.5rem', }}>
-                                    Time-Series Forecasting Models
+                                    Graph Of Time-Series Forecasting Models
                                 </Typography>
                             </CardContent>
                         </Card>
@@ -181,7 +191,7 @@ const Step3 = (props) => {
 
                                             ]}
                                             layout={{
-                                                width: 550, height: 400, title: 'ARMIA Model',
+                                                width: 550, height: 400, title: 'ARIMA Model',
                                                 xaxis: {
                                                     title: 'Time',
                                                 },
@@ -222,7 +232,7 @@ const Step3 = (props) => {
                                                 rnn_graph_3,
                                             ]}
                                             layout={{
-                                                width: 550, height: 400, title: 'Time series data',
+                                                width: 550, height: 400, title: 'RNN Model',
                                                 xaxis: {
                                                     title: 'Time',
                                                 },
@@ -249,7 +259,7 @@ const Step3 = (props) => {
 
                                                     type: "scatter",
                                                     mode: "lines",
-                                                    name: ' before prediction ',
+                                                    name: 'Original series',
                                                     x: time_of_TS,
                                                     y: data_of_TS,
                                                     line: { color: '#17BECF' }
@@ -288,16 +298,58 @@ const Step3 = (props) => {
 
                                                     type: "scatter",
                                                     mode: "lines",
-                                                    name: ' before prediction ',
+                                                    name: 'Original series',
                                                     x: time_of_TS,
                                                     y: data_of_TS,
                                                     line: { color: '#17BECF' }
                                                 }
                                                 ,
-                                                arima_graph,
-                                                // rnn_graph
+                                                ses_graph,
+                                                ses_graph_0,
+                                                ses_graph_1,
+                                                ses_graph_2,
+                                                ses_graph_3,
 
 
+                                            ]}
+                                            layout={{
+                                                width: 550, height: 400, title: 'SES Model',
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
+                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: 'Original series',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                des_graph,
+                                                des_graph_0,
+                                                des_graph_1,
+                                                des_graph_2,
+                                                des_graph_3,
                                             ]}
                                             layout={{
                                                 width: 550, height: 400, title: 'Time series data',
@@ -324,58 +376,19 @@ const Step3 = (props) => {
                                         <Plot
                                             data={[
                                                 {
-
                                                     type: "scatter",
                                                     mode: "lines",
-                                                    name: ' before prediction ',
+                                                    name: 'Original series',
                                                     x: time_of_TS,
                                                     y: data_of_TS,
                                                     line: { color: '#17BECF' }
                                                 }
                                                 ,
-                                                arima_graph,
-                                                // rnn_graph
-
-
-                                            ]}
-                                            layout={{
-                                                width: 550, height: 400, title: 'Time series data',
-                                                xaxis: {
-                                                    title: 'Time',
-                                                },
-                                                yaxis: {
-                                                    title: 'Data'
-                                                },
-                                            }}
-                                        />
-                                    </div>
-                                </Grid>
-                            </Box>
-                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
-                                <Grid
-                                    container
-                                    spacing={0}
-                                    direction="column"
-                                    alignItems="center"
-                                    justify="center"
-                                >
-                                    <div>
-                                        <Plot
-                                            data={[
-                                                {
-
-                                                    type: "scatter",
-                                                    mode: "lines",
-                                                    name: ' before prediction ',
-                                                    x: time_of_TS,
-                                                    y: data_of_TS,
-                                                    line: { color: '#17BECF' }
-                                                }
-                                                ,
-                                                arima_graph,
-                                                // rnn_graph
-
-
+                                                tes_graph,
+                                                tes_graph_0,
+                                                tes_graph_1,
+                                                tes_graph_2,
+                                                tes_graph_3,
                                             ]}
                                             layout={{
                                                 width: 550, height: 400, title: 'Time series data',

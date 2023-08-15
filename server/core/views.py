@@ -9,9 +9,14 @@ from rest_framework.views import APIView
 from .models import Times, Client, Employee
 from .serializers import SalesSerializer, ClientSerializer, EmployeeSerializer
 from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
+from statsmodels.tsa.holtwinters import SimpleExpSmoothing
+from statsmodels.tsa.seasonal import seasonal_decompose
+import statsmodels.tsa.api as smt
+import itertools
 from sklearn.metrics import mean_absolute_error, mean_squared_error, mean_absolute_percentage_error
 import json
-
+import warnings
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
@@ -24,6 +29,8 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 from pmdarima.arima import ADFTest
 from tsfresh import extract_features
+
+warnings.filterwarnings("ignore", category=FutureWarning,)
 
 
 class ClientView(viewsets.ModelViewSet):
@@ -486,6 +493,317 @@ class RNN(views.APIView):
             all_mae.append(round(mae, 2))
             all_mse.append(round(mse, 2))
             all_arrays.append(rnn_test.to_json())
+            values.reset_index(inplace=True)
+        return Response({
+            "data1": all_arrays,
+            "mae": all_mae,
+            "mse": all_mse,
+        })
+
+
+class SES(views.APIView):
+    parser_classes = [MultiPartParser]
+
+    def post(self, request, format=None):
+        file_obj = request.data['file']
+        timeColumn = request.data['timeColumn']
+        dataColumn = request.data['dataColumn']
+        test_size = request.data['test_size']
+        fill_method = ['0', 'mean', 'backward', 'forward']
+        all_arrays = []
+        all_mae = []
+        all_mse = []
+        test_size = float(test_size)
+        values = read_csv(file_obj)
+
+        def ses_optimizer(train, alphas, step):
+
+            best_alpha, best_mae = None, float("inf")
+
+            for alpha in alphas:
+                ses_model = SimpleExpSmoothing(
+                    train).fit(smoothing_level=alpha)
+                y_pred = ses_model.forecast(step)
+                mae = mean_absolute_error(test, y_pred)
+
+                if mae < best_mae:
+                    best_alpha, best_mae = alpha, mae
+
+            return best_alpha, best_mae
+
+        def ses_model_tuning(train, test, step, title="Model Tuning - Single Exponential Smoothing"):
+            alphas = np.arange(0.8, 1, 0.01)
+            best_alpha, best_mae = ses_optimizer(train, alphas, step=step)
+            final_model = SimpleExpSmoothing(
+                train).fit(smoothing_level=best_alpha)
+            y_pred = final_model.forecast(step)
+            mae = mean_absolute_error(test, y_pred)
+            mse = mean_squared_error(test, y_pred)
+            return y_pred, mae, mse
+
+        values[timeColumn] = pd.to_datetime(
+            values[timeColumn], errors='coerce')
+        values = values.rename(columns={timeColumn: 'Time'})
+        values = values.rename(columns={dataColumn: 'Data'})
+
+        if isinstance(values['Data'][0], str):
+            values['Data'] = values['Data'].apply(lambda x: float(
+                x) if x.replace('.', '', 1).isdigit() else None)
+        missing_values_count = values.isna().sum().sum()
+
+        freq = pd.infer_freq(values["Time"])
+
+        if missing_values_count != 0:
+            fill_method = ['0', 'mean', 'backward', 'forward']
+        else:
+            fill_method = ['1']
+        for method in fill_method:
+            if missing_values_count != 0:
+                if method == '0':
+                    values['Data'].fillna(0, inplace=True)
+                if method == 'mean':
+                    values['Data'].fillna(values['Data'].mean, inplace=True)
+                if method == 'forward':
+                    values['Data'].fillna(method='ffill', inplace=True)
+                if method == 'backward':
+                    values['Data'].fillna(method='bfill', inplace=True)
+
+            values.set_index('Time', inplace=True)
+
+            adf_test = ADFTest(alpha=0.05)
+            adf_test.should_diff(values)
+
+            from sklearn.model_selection import train_test_split
+            train, test = train_test_split(
+                values, test_size=test_size, shuffle=False)
+
+            # define model
+            model = SimpleExpSmoothing(
+                train, initialization_method="heuristic")
+            fit1 = model.fit(smoothing_level=0.2, optimized=False)
+
+            fcast1, mae, mse = ses_model_tuning(
+                train, test, step=test.shape[0])
+            prediction = pd.DataFrame(fcast1, index=test.index)
+
+            prediction.columns = ['Predictions']
+
+            # mae = mean_absolute_error(
+            #     test['Data'], prediction['Predictions'])
+
+            # mse = mean_squared_error(
+            #     test['Data'], prediction['Predictions'])
+            prediction.reset_index(inplace=True)
+
+            all_mae.append(round(mae, 2))
+            all_mse.append(round(mse, 2))
+            all_arrays.append(prediction.to_json())
+
+            values.reset_index(inplace=True)
+        return Response({
+            "data1": all_arrays,
+            "mae": all_mae,
+            "mse": all_mse,
+        })
+
+
+class DES(views.APIView):
+    parser_classes = [MultiPartParser]
+
+    def post(self, request, format=None):
+        file_obj = request.data['file']
+        timeColumn = request.data['timeColumn']
+        dataColumn = request.data['dataColumn']
+        test_size = request.data['test_size']
+        fill_method = ['0', 'mean', 'backward', 'forward']
+        all_arrays = []
+        all_mae = []
+        all_mse = []
+        test_size = float(test_size)
+        values = read_csv(file_obj)
+
+        def des_optimizer(train, alphas, betas, trend, step):
+
+            best_alpha, best_beta, best_mae = None, None, float("inf")
+
+            for alpha in alphas:
+                for beta in betas:
+                    des_model = ExponentialSmoothing(train, trend=trend).fit(
+                        smoothing_level=alpha, smoothing_slope=beta)
+                    y_pred = des_model.forecast(step)
+                    mae = mean_absolute_error(test, y_pred)
+                    if mae < best_mae:
+                        best_alpha, best_beta, best_mae = alpha, beta, mae
+
+            return best_alpha, best_beta, best_mae
+
+        def des_model_tuning(train, test, step, trend, title="Model Tuning - Double Exponential Smoothing"):
+            alphas = np.arange(0.01, 1, 0.10)
+            betas = np.arange(0.01, 1, 0.10)
+            best_alpha, best_beta, best_mae = des_optimizer(
+                train, alphas, betas, trend=trend, step=step)
+            final_model = ExponentialSmoothing(train, trend=trend).fit(
+                smoothing_level=best_alpha, smoothing_slope=best_beta)
+            y_pred = final_model.forecast(step)
+            mae = mean_absolute_error(test, y_pred)
+            mse = mean_squared_error(test, y_pred)
+            return y_pred, mae, mse
+
+        values[timeColumn] = pd.to_datetime(
+            values[timeColumn], errors='coerce')
+        values = values.rename(columns={timeColumn: 'Time'})
+        values = values.rename(columns={dataColumn: 'Data'})
+
+        if isinstance(values['Data'][0], str):
+            values['Data'] = values['Data'].apply(lambda x: float(
+                x) if x.replace('.', '', 1).isdigit() else None)
+        missing_values_count = values.isna().sum().sum()
+
+        freq = pd.infer_freq(values["Time"])
+
+        if missing_values_count != 0:
+            fill_method = ['0', 'mean', 'backward', 'forward']
+        else:
+            fill_method = ['1']
+        for method in fill_method:
+            if missing_values_count != 0:
+                if method == '0':
+                    values['Data'].fillna(0, inplace=True)
+                if method == 'mean':
+                    values['Data'].fillna(values['Data'].mean, inplace=True)
+                if method == 'forward':
+                    values['Data'].fillna(method='ffill', inplace=True)
+                if method == 'backward':
+                    values['Data'].fillna(method='bfill', inplace=True)
+
+            values.set_index('Time', inplace=True)
+
+            adf_test = ADFTest(alpha=0.05)
+            adf_test.should_diff(values)
+
+            from sklearn.model_selection import train_test_split
+            train, test = train_test_split(
+                values, test_size=test_size, shuffle=False)
+
+            # define model
+            model = SimpleExpSmoothing(
+                train, initialization_method="heuristic")
+            fit1 = model.fit(smoothing_level=0.2, optimized=False)
+
+            fcast1, mae, mse = des_model_tuning(
+                train, test, step=test.shape[0], trend='add')
+            prediction = pd.DataFrame(fcast1, index=test.index)
+
+            prediction.columns = ['Predictions']
+
+            prediction.reset_index(inplace=True)
+
+            all_mae.append(round(mae, 2))
+            all_mse.append(round(mse, 2))
+            all_arrays.append(prediction.to_json())
+
+            values.reset_index(inplace=True)
+        return Response({
+            "data1": all_arrays,
+            "mae": all_mae,
+            "mse": all_mse,
+        })
+
+
+class TES(views.APIView):
+    parser_classes = [MultiPartParser]
+
+    def post(self, request, format=None):
+        file_obj = request.data['file']
+        timeColumn = request.data['timeColumn']
+        dataColumn = request.data['dataColumn']
+        test_size = request.data['test_size']
+        fill_method = ['0', 'mean', 'backward', 'forward']
+        all_arrays = []
+        all_mae = []
+        all_mse = []
+        test_size = float(test_size)
+        values = read_csv(file_obj)
+
+        def tes_optimizer(train, abg, trend, seasonal,  seasonal_periods, step):
+            best_alpha, best_beta, best_gamma, best_mae = None, None, None, float(
+                "inf")
+            for comb in abg:
+                tes_model = ExponentialSmoothing(train, trend=trend, seasonal=seasonal, seasonal_periods=seasonal_periods).\
+                    fit(smoothing_level=comb[0], smoothing_slope=comb[1],
+                        smoothing_seasonal=comb[2])
+                y_pred = tes_model.forecast(step)
+                mae = mean_absolute_error(test, y_pred)
+                if mae < best_mae:
+                    best_alpha, best_beta, best_gamma, best_mae = comb[0], comb[1], comb[2], mae
+
+            return best_alpha, best_beta, best_gamma, best_mae
+
+        def tes_model_tuning(train, test, step, trend, seasonal, seasonal_periods, title="Model Tuning - Triple Exponential Smoothing"):
+            alphas = betas = gammas = np.arange(0.10, 1, 0.10)
+            abg = list(itertools.product(alphas, betas, gammas))
+            best_alpha, best_beta, best_gamma, best_mae = tes_optimizer(
+                train, abg=abg, trend=trend, seasonal=seasonal, seasonal_periods=seasonal_periods, step=step)
+            final_model = ExponentialSmoothing(train, trend=trend, seasonal=seasonal).fit(
+                smoothing_level=best_alpha, smoothing_slope=best_beta, smoothing_seasonal=best_gamma)
+            y_pred = final_model.forecast(step)
+            mae = mean_absolute_error(test, y_pred)
+            mse = mean_squared_error(test, y_pred)
+            return y_pred, mae, mse
+
+        values[timeColumn] = pd.to_datetime(
+            values[timeColumn], errors='coerce')
+        values = values.rename(columns={timeColumn: 'Time'})
+        values = values.rename(columns={dataColumn: 'Data'})
+
+        if isinstance(values['Data'][0], str):
+            values['Data'] = values['Data'].apply(lambda x: float(
+                x) if x.replace('.', '', 1).isdigit() else None)
+        missing_values_count = values.isna().sum().sum()
+
+        freq = pd.infer_freq(values["Time"])
+
+        if missing_values_count != 0:
+            fill_method = ['0', 'mean', 'backward', 'forward']
+        else:
+            fill_method = ['1']
+        for method in fill_method:
+            if missing_values_count != 0:
+                if method == '0':
+                    values['Data'].fillna(0, inplace=True)
+                if method == 'mean':
+                    values['Data'].fillna(values['Data'].mean, inplace=True)
+                if method == 'forward':
+                    values['Data'].fillna(method='ffill', inplace=True)
+                if method == 'backward':
+                    values['Data'].fillna(method='bfill', inplace=True)
+
+            values.set_index('Time', inplace=True)
+
+            adf_test = ADFTest(alpha=0.05)
+            adf_test.should_diff(values)
+
+            from sklearn.model_selection import train_test_split
+            train, test = train_test_split(
+                values, test_size=test_size, shuffle=False)
+
+            # define model
+            model = SimpleExpSmoothing(
+                train, initialization_method="heuristic")
+            fit1 = model.fit(smoothing_level=0.2, optimized=False)
+
+            fcast1, mae, mse = tes_model_tuning(
+                train, test, step=test.shape[0], trend='add', seasonal='add', seasonal_periods=12)
+            prediction = pd.DataFrame(fcast1, index=test.index)
+
+            prediction.columns = ['Predictions']
+
+            prediction.reset_index(inplace=True)
+
+            all_mae.append(round(mae, 2))
+            all_mse.append(round(mse, 2))
+            all_arrays.append(prediction.to_json())
+
             values.reset_index(inplace=True)
         return Response({
             "data1": all_arrays,
