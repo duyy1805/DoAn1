@@ -1823,6 +1823,12 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav li.ant-menu-it
   text-align: center !important;
 }
 
+
+.ant-table-thead>tr>td {
+  white-space: nowrap;
+  border: 1px solid #8db8f5;
+}
+
 .h-full {
   height: 100%;
 }

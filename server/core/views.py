@@ -16,6 +16,7 @@ import statsmodels.tsa.api as smt
 import itertools
 from sklearn.metrics import mean_absolute_error, mean_squared_error, mean_absolute_percentage_error
 import json
+import joblib
 import warnings
 from keras.models import Sequential
 from keras.layers import Dense
@@ -261,6 +262,19 @@ class AutoArima(views.APIView):
             prediction.columns = ['predicted_values']
             prediction.reset_index(inplace=True)
 
+            # Lưu mô hình vào thư mục "models"
+            model = arima_model
+            model_folder = "core/Models"
+            model_filename = f"arima_{method}_model.pkl"
+            model_path = f"{model_folder}/{model_filename}"
+
+            # Tạo thư mục nếu chưa tồn tại
+            import os
+            os.makedirs(model_folder, exist_ok=True)
+
+            # Lưu mô hình
+            joblib.dump(model, model_path)
+
             mae = mean_absolute_error(
                 test['Data'], prediction['predicted_values'])
 
@@ -465,6 +479,17 @@ class RNN(views.APIView):
                 (1, n_input, n_features))
             model.predict(last_train_batch)
 
+            # Lưu mô hình vào thư mục "models"
+            model_folder = "core/Models"
+            model_filename = f"rnn_{method}_model.pkl"
+            model_path = f"{model_folder}/{model_filename}"
+
+            # Tạo thư mục nếu chưa tồn tại
+            import os
+            os.makedirs(model_folder, exist_ok=True)
+
+            # Lưu mô hình
+            joblib.dump(model, model_path)
             test_predictions = []
 
             first_eval_batch = scaled_train[-n_input:]
@@ -790,6 +815,7 @@ class TES(views.APIView):
             # define model
             model = SimpleExpSmoothing(
                 train, initialization_method="heuristic")
+
             fit1 = model.fit(smoothing_level=0.2, optimized=False)
 
             fcast1, mae, mse = tes_model_tuning(
@@ -798,6 +824,113 @@ class TES(views.APIView):
 
             prediction.columns = ['Predictions']
 
+            prediction.reset_index(inplace=True)
+
+            all_mae.append(round(mae, 2))
+            all_mse.append(round(mse, 2))
+            all_arrays.append(prediction.to_json())
+
+            values.reset_index(inplace=True)
+        return Response({
+            "data1": all_arrays,
+            "mae": all_mae,
+            "mse": all_mse,
+        })
+
+
+class MA(views.APIView):
+    parser_classes = [MultiPartParser]
+
+    def post(self, request, format=None):
+        file_obj = request.data['file']
+        timeColumn = request.data['timeColumn']
+        dataColumn = request.data['dataColumn']
+        test_size = request.data['test_size']
+        fill_method = ['0', 'mean', 'backward', 'forward']
+        all_arrays = []
+        all_mae = []
+        all_mse = []
+        test_size = float(test_size)
+        values = read_csv(file_obj)
+
+        def ma_optimizer(data, test_size):
+            df1 = data.copy()
+            best_alpha, best_mae = None, float("inf")
+
+            for alpha in range(2, 13):
+                df1['moving_avg_forecast'] = values['Data'].rolling(
+                    alpha).mean()
+                train1, test1 = train_test_split(
+                    df1, test_size=test_size, shuffle=False)
+
+                y_hat_avg = test1.copy()
+                mae = mean_squared_error(
+                    test.Data, y_hat_avg.moving_avg_forecast)
+
+                if mae < best_mae:
+                    best_alpha, best_mae = alpha, mae
+
+            return best_alpha, best_mae
+
+        def ma_model_tuning(data, test_size, title="Model Tuning - Moving average"):
+            df1 = data.copy()
+            best_alpha, best_mae = ma_optimizer(data, test_size)
+
+            df1['moving_avg_forecast'] = values['Data'].rolling(
+                best_alpha).mean()
+            train1, test1 = train_test_split(
+                df1, test_size=test_size, shuffle=False)
+
+            y_hat_avg = test1.copy()
+            mae = mean_absolute_error(test.Data, y_hat_avg.moving_avg_forecast)
+            mse = mean_squared_error(test.Data, y_hat_avg.moving_avg_forecast)
+            y_hat_avg = y_hat_avg.moving_avg_forecast
+
+            return y_hat_avg, mae, mse
+
+        values[timeColumn] = pd.to_datetime(
+            values[timeColumn], errors='coerce')
+        values = values.rename(columns={timeColumn: 'Time'})
+        values = values.rename(columns={dataColumn: 'Data'})
+
+        if isinstance(values['Data'][0], str):
+            values['Data'] = values['Data'].apply(lambda x: float(
+                x) if x.replace('.', '', 1).isdigit() else None)
+        missing_values_count = values.isna().sum().sum()
+
+        freq = pd.infer_freq(values["Time"])
+
+        if missing_values_count != 0:
+            fill_method = ['0', 'mean', 'backward', 'forward']
+        else:
+            fill_method = ['1']
+        for method in fill_method:
+            if missing_values_count != 0:
+                if method == '0':
+                    values['Data'].fillna(0, inplace=True)
+                if method == 'mean':
+                    values['Data'].fillna(values['Data'].mean, inplace=True)
+                if method == 'forward':
+                    values['Data'].fillna(method='ffill', inplace=True)
+                if method == 'backward':
+                    values['Data'].fillna(method='bfill', inplace=True)
+
+            values.set_index('Time', inplace=True)
+
+            adf_test = ADFTest(alpha=0.05)
+            adf_test.should_diff(values)
+
+            from sklearn.model_selection import train_test_split
+            train, test = train_test_split(
+                values, test_size=test_size, shuffle=False)
+
+            # define model
+
+            fcast1, mae, mse = ma_model_tuning(values, test_size=test_size)
+
+            prediction = pd.DataFrame(fcast1, index=test.index)
+
+            prediction.columns = ['Predictions']
             prediction.reset_index(inplace=True)
 
             all_mae.append(round(mae, 2))

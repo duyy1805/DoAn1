@@ -51,12 +51,13 @@ const Step3 = (props) => {
         ses_graph, ses_graph_0, ses_graph_1, ses_graph_2, ses_graph_3,
         des_graph, des_graph_0, des_graph_1, des_graph_2, des_graph_3,
         tes_graph, tes_graph_0, tes_graph_1, tes_graph_2, tes_graph_3,
+        ma_graph, ma_graph_0, ma_graph_1, ma_graph_2, ma_graph_3,
         //error
         mae, mse, missing,
         column, timeColumn, dataColumn, time_of_TS, data_of_TS, predicted_auto_arima
     } = props;
     useEffect(() => {
-        console.log(ses_graph)
+        console.log(mae)
     }, [])
 
 
@@ -83,12 +84,12 @@ const Step3 = (props) => {
             {
                 key: '1',
                 err: 'MAE',
-                fill_1: mae[0], fill_2: mae[1], fill_3: mae[2], fill_4: mae[3], fill_5: mae[4]
+                fill_1: mae[0], fill_2: mae[1], fill_3: mae[2], fill_4: mae[3], fill_5: mae[4], fill_6: mae[5]
             },
             {
                 key: '2',
                 err: 'MSE',
-                fill_1: mse[0], fill_2: mse[1], fill_3: mse[2], fill_4: mse[3], fill_5: mse[4]
+                fill_1: mse[0], fill_2: mse[1], fill_3: mse[2], fill_4: mse[3], fill_5: mse[4], fill_6: mse[5]
             },
         ]
 
@@ -96,7 +97,7 @@ const Step3 = (props) => {
         [
             { title: "ARIMA", startKey: "fill_1", endKey: "fill_4" },
             { title: "RNN", startKey: "fill_5", endKey: "fill_8" },
-            { title: "3", startKey: "fill_9", endKey: "fill_12" },
+            { title: "MA", startKey: "fill_9", endKey: "fill_12" },
             { title: "SES", startKey: "fill_13", endKey: "fill_16" },
             { title: "DES", startKey: "fill_17", endKey: "fill_20" },
             { title: "TES", startKey: "fill_21", endKey: "fill_24" },
@@ -104,7 +105,7 @@ const Step3 = (props) => {
         [
             { title: "ARIMA", startKey: "fill_1", endKey: "fill_1" },
             { title: "RNN", startKey: "fill_2", endKey: "fill_2" },
-            { title: "3", startKey: "fill_3", endKey: "fill_3" },
+            { title: "MA", startKey: "fill_3", endKey: "fill_3" },
             { title: "SES", startKey: "fill_4", endKey: "fill_4" },
             { title: "DES", startKey: "fill_5", endKey: "fill_5" },
             { title: "TES", startKey: "fill_6", endKey: "fill_6" },
@@ -211,6 +212,13 @@ const Step3 = (props) => {
                                     alignItems="center"
                                     justify="center"
                                 >
+                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
+                                        <Button
+                                            type="primary"
+                                        >
+                                            Select
+                                        </Button>
+                                    </div>
                                     <div>
                                         <Plot
                                             data={[
@@ -252,6 +260,13 @@ const Step3 = (props) => {
                                     alignItems="center"
                                     justify="center"
                                 >
+                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
+                                        <Button
+                                            type="primary"
+                                        >
+                                            Select
+                                        </Button>
+                                    </div>
                                     <div>
                                         <Plot
                                             data={[
@@ -265,13 +280,14 @@ const Step3 = (props) => {
                                                     line: { color: '#17BECF' }
                                                 }
                                                 ,
-                                                arima_graph,
-                                                // rnn_graph
-
-
+                                                ma_graph,
+                                                ma_graph_0,
+                                                ma_graph_1,
+                                                ma_graph_2,
+                                                ma_graph_3,
                                             ]}
                                             layout={{
-                                                width: 550, height: 400, title: 'Time series data',
+                                                width: 550, height: 400, title: 'Moving average model',
                                                 xaxis: {
                                                     title: 'Time',
                                                 },
@@ -291,6 +307,13 @@ const Step3 = (props) => {
                                     alignItems="center"
                                     justify="center"
                                 >
+                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
+                                        <Button
+                                            type="primary"
+                                        >
+                                            Select
+                                        </Button>
+                                    </div>
                                     <div>
                                         <Plot
                                             data={[
@@ -333,6 +356,13 @@ const Step3 = (props) => {
                                     alignItems="center"
                                     justify="center"
                                 >
+                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
+                                        <Button
+                                            type="primary"
+                                        >
+                                            Select
+                                        </Button>
+                                    </div>
                                     <div>
                                         <Plot
                                             data={[
@@ -352,7 +382,7 @@ const Step3 = (props) => {
                                                 des_graph_3,
                                             ]}
                                             layout={{
-                                                width: 550, height: 400, title: 'Time series data',
+                                                width: 550, height: 400, title: 'DES Model',
                                                 xaxis: {
                                                     title: 'Time',
                                                 },
@@ -372,6 +402,13 @@ const Step3 = (props) => {
                                     alignItems="center"
                                     justify="center"
                                 >
+                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
+                                        <Button
+                                            type="primary"
+                                        >
+                                            Select
+                                        </Button>
+                                    </div>
                                     <div>
                                         <Plot
                                             data={[
@@ -391,7 +428,7 @@ const Step3 = (props) => {
                                                 tes_graph_3,
                                             ]}
                                             layout={{
-                                                width: 550, height: 400, title: 'Time series data',
+                                                width: 550, height: 400, title: 'TES Model',
                                                 xaxis: {
                                                     title: 'Time',
                                                 },
@@ -422,7 +459,7 @@ const Step3 = (props) => {
                             onClick={() => message.success('Processing complete!')}
                         // sx={{ backgroundColor: '#EB2CB2', }}
                         >
-                            Done
+                            Next
                         </Button>
                     </div>
                 </Box>
