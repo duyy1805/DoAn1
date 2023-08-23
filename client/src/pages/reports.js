@@ -32,8 +32,8 @@ import Plotly from "plotly.js-basic-dist";
 import { Steps, message, } from 'antd';
 import Step1 from './Steps/Step1';
 import Step2 from './Steps/Step2';
-// import Step3 from './Steps/Step3';
 import Step3 from './Steps/Step3';
+import Step4 from './Steps/Step4';
 // const Plot = createPlotlyComponent(Plotly);
 import { Fade, Slide } from "react-reveal";
 import { object } from 'prop-types';
@@ -1411,7 +1411,7 @@ export default class Reports extends Component {
       },
       {
         title: 'Step 4',
-        content: <Step3
+        content: <Step4
 
           future_values_auto_arima={this.state.future_values_auto_arima}
           future_values_arima={this.future_values_arima}
@@ -1439,7 +1439,7 @@ export default class Reports extends Component {
           auto_arima_graph_3={auto_arima_graph_3}
           rnn_graph={rnn_graph}
           rnn_graph_0={rnn_graph_0} rnn_graph_1={rnn_graph_1} rnn_graph_2={rnn_graph_2} rnn_graph_3={rnn_graph_3}
-          filename={this.state.filename}></Step3>,
+          filename={this.state.filename}></Step4>,
       },
     ];
 

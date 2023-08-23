@@ -33,6 +33,7 @@ import {
     InputNumber, Row, Col, Tabs, Badge, Form,
     Tag, Button, Checkbox, Input, message, Space, Table
 } from 'antd';
+import photo from '../../assets/images/logo.png';
 const { Column, ColumnGroup } = Table;
 
 const Plot = createPlotlyComponent(Plotly);
@@ -70,6 +71,8 @@ const Step3 = (props) => {
                 fill_5: mae[4], fill_6: mae[5], fill_7: mae[6], fill_8: mae[7],
                 fill_9: mae[8], fill_10: mae[9], fill_11: mae[10], fill_12: mae[11],
                 fill_13: mae[12], fill_14: mae[13], fill_15: mae[14], fill_16: mae[15],
+                fill_17: mae[16], fill_18: mae[17], fill_19: mae[18], fill_20: mae[19],
+                fill_21: mae[20], fill_22: mae[21], fill_23: mae[22], fill_24: mae[23],
             },
             {
                 key: '2',
@@ -78,6 +81,8 @@ const Step3 = (props) => {
                 fill_5: mse[4], fill_6: mse[5], fill_7: mse[6], fill_8: mse[7],
                 fill_9: mse[8], fill_10: mse[9], fill_11: mse[10], fill_12: mse[11],
                 fill_13: mse[12], fill_14: mse[13], fill_15: mse[14], fill_16: mse[15],
+                fill_17: mse[16], fill_18: mse[17], fill_19: mse[18], fill_20: mse[19],
+                fill_21: mse[20], fill_22: mse[21], fill_23: mse[22], fill_24: mse[23],
             },
         ] :
         [
@@ -464,7 +469,18 @@ const Step3 = (props) => {
                     </div>
                 </Box>
 
+                <div>
+                    <h2>bobbyhadz.com</h2>
 
+                    <a
+                        href={photo}
+                        download="photo"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        <button>Download photo</button>
+                    </a>
+                </div>
 
             </Container>
         </div >

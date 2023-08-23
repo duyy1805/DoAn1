@@ -1,0 +1,45 @@
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.image {
+    max-width: 100%;
+    height: auto;
+    transition: filter 0.3s;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    /* Thêm thuộc tính transition cho hiệu ứng */
+    transform: translateY(100%);
+    /* Bắt đầu overlay ở phía dưới */
+}
+
+.image-container:hover .overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.overlay a {
+    color: rgb(247, 84, 165);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+}
+
+.overlay i {
+    margin-right: 5px;
+}
