@@ -33,7 +33,8 @@ import {
     InputNumber, Row, Col, Tabs, Badge, Form,
     Tag, Button, Checkbox, Input, message, Space, Table
 } from 'antd';
-import photo from '../../assets/images/logo.png';
+// import photo1 from '../../assets/images/logo.png';
+// import photo2 from '../../assets/images/face-1.jpg';
 import "./styles.css"
 const { Column, ColumnGroup } = Table;
 
@@ -44,6 +45,27 @@ const onFinish = (values: any) => {
 
 const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
+};
+
+
+const handleDownloadClick = () => {
+    const JSZip = require('jszip'); // Import thư viện JSZip hoặc thư viện tương tự
+    const zip = new JSZip();
+
+    const photo1 = require('../../assets/images/logo.png');
+    const photo2 = require('../../assets/images/face-1.jpg');
+
+    // Thêm hình ảnh vào tệp ZIP
+    zip.file('image1.png', photo1, { binary: true });
+    zip.file('image2.png', photo2, { binary: true });
+
+    // Tạo tệp ZIP và tải xuống
+    zip.generateAsync({ type: 'blob' }).then((content) => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(content);
+        link.download = 'images.zip'; // Đặt tên tệp ZIP ở đây
+        link.click();
+    });
 };
 
 const Step4 = (props) => {
@@ -61,14 +83,19 @@ const Step4 = (props) => {
     useEffect(() => {
     }, [])
 
-
+    const selectedModel = 'auto_arima'
+    const selectedgraph = `${selectedModel}_graph`
+    const selectedgraph_0 = `${selectedModel}_graph_0`
+    const selectedgraph_1 = `${selectedModel}_graph_1`
+    const selectedgraph_2 = `${selectedModel}_graph_2`
+    const selectedgraph_3 = `${selectedModel}_graph_3`
     return (
         <div>
 
             <div>
                 <h2>Download</h2>
                 <a
-                    href={photo}
+                    // href={photo}
                     download="photo"
                     target="_blank"
                     rel="noreferrer"
@@ -89,13 +116,12 @@ const Step4 = (props) => {
                             line: { color: '#17BECF' }
                         }
                         ,
-                        auto_arima_graph,
-                        auto_arima_graph_0,
-                        auto_arima_graph_1,
-                        auto_arima_graph_2,
-                        auto_arima_graph_3,
+                        { selectedgraph },
+                        { selectedgraph_0 },
+                        { selectedgraph_1 },
+                        { selectedgraph_2 },
+                        { selectedgraph_3 },
                         // rnn_graph
-
 
                     ]}
                     layout={{
@@ -109,11 +135,9 @@ const Step4 = (props) => {
                     }}
                 />
                 <div className="overlay">
-                    <a href={photo} download>
-                        <Button type="primary">
-                            <i className="fa fa-download"></i> Download
-                        </Button>
-                    </a>
+                    <Button type="primary" onClick={handleDownloadClick}>
+                        <i className="fa fa-download"></i> Download Images
+                    </Button>
                 </div>
             </div>
         </div >

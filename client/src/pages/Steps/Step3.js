@@ -54,11 +54,10 @@ const Step3 = (props) => {
         tes_graph, tes_graph_0, tes_graph_1, tes_graph_2, tes_graph_3,
         ma_graph, ma_graph_0, ma_graph_1, ma_graph_2, ma_graph_3,
         //error
-        mae, mse, missing,
+        mae, mse, missing, selectModel,
         column, timeColumn, dataColumn, time_of_TS, data_of_TS, predicted_auto_arima
     } = props;
     useEffect(() => {
-        console.log(mae)
     }, [])
 
 
@@ -118,7 +117,10 @@ const Step3 = (props) => {
     const columnGroupsAndColumns = columnGroups.map(group => {
         const columns = [];
         for (let i = parseInt(group.startKey.split('_')[1]); i <= parseInt(group.endKey.split('_')[1]); i++) {
-            columns.push(<Column title={`Fill_${i}`} dataIndex={`fill_${i}`} key={`fill_${i}`} />);
+            if (missing)
+                columns.push(<Column title={`Fill_${i}`} dataIndex={`fill_${i}`} key={`fill_${i}`} />);
+            else
+                columns.push(<Column title={`...`} dataIndex={`fill_${i}`} key={`fill_${i}`} />);
         }
         return {
             groupTitle: group.title,
@@ -170,6 +172,7 @@ const Step3 = (props) => {
                                     <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
                                         <Button
                                             type="primary"
+                                            onClick={() => selectModel("auto_arima")}
                                         >
                                             Select
                                         </Button>
@@ -193,7 +196,6 @@ const Step3 = (props) => {
                                                 auto_arima_graph_2,
                                                 auto_arima_graph_3,
                                                 // rnn_graph
-
 
                                             ]}
                                             layout={{

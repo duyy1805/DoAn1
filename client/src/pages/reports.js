@@ -88,6 +88,7 @@ export default class Reports extends Component {
     mae: [],
     mse: [],
 
+    selectedModel: '',
     activeStep: 0,
     skipped: new Set(),
     FileList: [],
@@ -675,6 +676,12 @@ export default class Reports extends Component {
 
     this.setState({ time_of_predicted: time_of_predicted })
   }
+
+  selectModel = (values) => {
+    console.log(values)
+  }
+
+
   handleOnFileLoadArima = (values) => {
     var predicted_auto_arima, predicted_arima, prediction_arima
     // console.log(values)
@@ -1404,6 +1411,7 @@ export default class Reports extends Component {
           ma_graph={ma_graph}
           ma_graph_0={ma_graph_0} ma_graph_1={ma_graph_1} ma_graph_2={ma_graph_2} ma_graph_3={ma_graph_3}
           //error
+          selectModel={this.selectModel}
           mae={this.state.mae}
           mse={this.state.mse}
           missing={this.state.missing}
