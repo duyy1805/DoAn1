@@ -88,7 +88,7 @@ export default class Reports extends Component {
     mae: [],
     mse: [],
 
-    selectedModel: '',
+    selectedModel: [],
     activeStep: 0,
     skipped: new Set(),
     FileList: [],
@@ -309,11 +309,11 @@ export default class Reports extends Component {
 
   testAllModel = async () => {
     await this.handleOnFileLoadAutoArima()
-    await this.handleOnFileLoadRNN()
-    await this.handleOnFileLoadMA()
-    await this.handleOnFileLoadSES()
-    await this.handleOnFileLoadDES()
-    await this.handleOnFileLoadTES()
+    // await this.handleOnFileLoadRNN()
+    // await this.handleOnFileLoadMA()
+    // await this.handleOnFileLoadSES()
+    // await this.handleOnFileLoadDES()
+    // await this.handleOnFileLoadTES()
 
 
 
@@ -679,6 +679,23 @@ export default class Reports extends Component {
 
   selectModel = (values) => {
     console.log(values)
+    const graph = `${values}_graph`
+    const graph_0 = `${values}_graph_0`
+    const graph_1 = `${values}_graph_1`
+    const graph_2 = `${values}_graph_2`
+    const graph_3 = `${values}_graph_3`
+    const selectedModel = []
+    selectedModel.push(graph)
+    selectedModel.push(graph_0)
+    selectedModel.push(graph_1)
+    selectedModel.push(graph_2)
+    selectedModel.push(graph_3)
+    this.setState({ selectedModel: selectedModel, current: 3 }, () => {
+      // this.setState({ hidden2: true })
+      message.success("Complete")
+      // this.onChange(3)        
+      // this.render()
+    })
   }
 
 
@@ -1439,6 +1456,8 @@ export default class Reports extends Component {
 
           drawArima={this.drawArima}
           drawAuto_Arima={this.drawAuto_Arima}
+          missing={this.state.missing}
+          selectedModel={this.state.selectedModel}
           arima_graph={arima_graph}
           auto_arima_graph={auto_arima_graph}
           auto_arima_graph_0={auto_arima_graph_0}

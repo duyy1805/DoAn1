@@ -69,7 +69,7 @@ const handleDownloadClick = () => {
 };
 
 const Step4 = (props) => {
-    const { hidden_step1, hidden2, previousStep, handleSelectTime, future_values_auto_arima, future_values_arima, graph,
+    const { previousStep, graph,
         auto_arima_graph, auto_arima_graph_0, auto_arima_graph_1, auto_arima_graph_2, auto_arima_graph_3,
         arima_graph, rnn_graph, rnn_graph_0, rnn_graph_1, rnn_graph_2, rnn_graph_3,
         ses_graph, ses_graph_0, ses_graph_1, ses_graph_2, ses_graph_3,
@@ -77,71 +77,210 @@ const Step4 = (props) => {
         tes_graph, tes_graph_0, tes_graph_1, tes_graph_2, tes_graph_3,
         ma_graph, ma_graph_0, ma_graph_1, ma_graph_2, ma_graph_3,
         //error
-        mae, mse, missing,
-        column, timeColumn, dataColumn, time_of_TS, data_of_TS, predicted_auto_arima
+        mae, mse, missing, selectedModel,
+        time_of_TS, data_of_TS
     } = props;
     useEffect(() => {
+        console.log(selectedModel)
     }, [])
 
-    const selectedModel = 'auto_arima'
-    const selectedgraph = `${selectedModel}_graph`
-    const selectedgraph_0 = `${selectedModel}_graph_0`
-    const selectedgraph_1 = `${selectedModel}_graph_1`
-    const selectedgraph_2 = `${selectedModel}_graph_2`
-    const selectedgraph_3 = `${selectedModel}_graph_3`
+
     return (
         <div>
+            {!missing ? (
+                <CardContent style={{ backgroundColor: "transparent", display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', marginTop: 10 }}>
+                    <Box sx={{ m: 3 }} style={{ margin: 2 }}>
+                        <div>
+                            <div className="image-container">
+                                <Plot
+                                    data={[
+                                        {
 
-            <div>
-                <h2>Download</h2>
-                <a
-                    // href={photo}
-                    download="photo"
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    <Button>Download Model</Button>
-                </a>
-            </div>
-            <div className="image-container">
-                <Plot
-                    data={[
-                        {
+                                            type: "scatter",
+                                            mode: "lines",
+                                            name: 'Original data',
+                                            x: time_of_TS,
+                                            y: data_of_TS,
+                                            line: { color: '#17BECF' }
+                                        }
+                                        ,
+                                        eval(selectedModel[0]),
+                                        // rnn_graph
 
-                            type: "scatter",
-                            mode: "lines",
-                            name: 'Original data',
-                            x: time_of_TS,
-                            y: data_of_TS,
-                            line: { color: '#17BECF' }
-                        }
-                        ,
-                        { selectedgraph },
-                        { selectedgraph_0 },
-                        { selectedgraph_1 },
-                        { selectedgraph_2 },
-                        { selectedgraph_3 },
-                        // rnn_graph
+                                    ]}
+                                    layout={{
+                                        width: 550, height: 400, title: 'ARIMA Model',
+                                        xaxis: {
+                                            title: 'Time',
+                                        },
+                                        yaxis: {
+                                            title: 'Data'
+                                        },
+                                    }}
+                                />
+                                <div className="overlay">
+                                    <Button type="primary" onClick={handleDownloadClick}>
+                                        <i className="fa fa-download"></i> Download model
+                                    </Button>
+                                </div>
+                            </div>
+                        </div >
+                    </Box>
+                </CardContent>)
+                :
+                (
+                    <CardContent style={{ backgroundColor: "transparent", display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', marginTop: 10 }}>
+                        <Box sx={{ m: 3 }} style={{ margin: 2 }}>
+                            <div>
+                                <div className="image-container">
+                                    <Plot
+                                        data={[
+                                            {
 
-                    ]}
-                    layout={{
-                        width: 550, height: 400, title: 'ARIMA Model',
-                        xaxis: {
-                            title: 'Time',
-                        },
-                        yaxis: {
-                            title: 'Data'
-                        },
-                    }}
-                />
-                <div className="overlay">
-                    <Button type="primary" onClick={handleDownloadClick}>
-                        <i className="fa fa-download"></i> Download Images
-                    </Button>
-                </div>
-            </div>
-        </div >
+                                                type: "scatter",
+                                                mode: "lines",
+                                                name: 'Original data',
+                                                x: time_of_TS,
+                                                y: data_of_TS,
+                                                line: { color: '#17BECF' }
+                                            }
+                                            ,
+                                            eval(selectedModel[1]),
+                                            // rnn_graph
 
+                                        ]}
+                                        layout={{
+                                            width: 550, height: 400, title: 'ARIMA Model',
+                                            xaxis: {
+                                                title: 'Time',
+                                            },
+                                            yaxis: {
+                                                title: 'Data'
+                                            },
+                                        }}
+                                    />
+                                    <div className="overlay">
+                                        <Button type="primary" onClick={handleDownloadClick}>
+                                            <i className="fa fa-download"></i> Download model
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div >
+                        </Box>
+                        <Box sx={{ m: 3 }} style={{ margin: 2 }}>
+                            <div>
+                                <div className="image-container">
+                                    <Plot
+                                        data={[
+                                            {
+
+                                                type: "scatter",
+                                                mode: "lines",
+                                                name: 'Original data',
+                                                x: time_of_TS,
+                                                y: data_of_TS,
+                                                line: { color: '#17BECF' }
+                                            }
+                                            ,
+                                            eval(selectedModel[2]),
+                                            // rnn_graph
+
+                                        ]}
+                                        layout={{
+                                            width: 550, height: 400, title: 'ARIMA Model',
+                                            xaxis: {
+                                                title: 'Time',
+                                            },
+                                            yaxis: {
+                                                title: 'Data'
+                                            },
+                                        }}
+                                    />
+                                    <div className="overlay">
+                                        <Button type="primary" onClick={handleDownloadClick}>
+                                            <i className="fa fa-download"></i> Download model
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div >
+                        </Box>
+                        <Box sx={{ m: 3 }} style={{ margin: 2 }}>
+                            <div>
+                                <div className="image-container">
+                                    <Plot
+                                        data={[
+                                            {
+
+                                                type: "scatter",
+                                                mode: "lines",
+                                                name: 'Original data',
+                                                x: time_of_TS,
+                                                y: data_of_TS,
+                                                line: { color: '#17BECF' }
+                                            }
+                                            ,
+                                            eval(selectedModel[3]),
+                                            // rnn_graph
+
+                                        ]}
+                                        layout={{
+                                            width: 550, height: 400, title: 'ARIMA Model',
+                                            xaxis: {
+                                                title: 'Time',
+                                            },
+                                            yaxis: {
+                                                title: 'Data'
+                                            },
+                                        }}
+                                    />
+                                    <div className="overlay">
+                                        <Button type="primary" onClick={handleDownloadClick}>
+                                            <i className="fa fa-download"></i> Download model
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div >
+                        </Box>
+                        <Box sx={{ m: 3 }} style={{ margin: 2 }}>
+                            <div>
+                                <div className="image-container">
+                                    <Plot
+                                        data={[
+                                            {
+
+                                                type: "scatter",
+                                                mode: "lines",
+                                                name: 'Original data',
+                                                x: time_of_TS,
+                                                y: data_of_TS,
+                                                line: { color: '#17BECF' }
+                                            }
+                                            ,
+                                            eval(selectedModel[4]),
+                                            // rnn_graph
+
+                                        ]}
+                                        layout={{
+                                            width: 550, height: 400, title: 'ARIMA Model',
+                                            xaxis: {
+                                                title: 'Time',
+                                            },
+                                            yaxis: {
+                                                title: 'Data'
+                                            },
+                                        }}
+                                    />
+                                    <div className="overlay">
+                                        <Button type="primary" onClick={handleDownloadClick}>
+                                            <i className="fa fa-download"></i> Download model
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div >
+                        </Box>
+                    </CardContent>)
+            }
+        </div>
     );
 };
 

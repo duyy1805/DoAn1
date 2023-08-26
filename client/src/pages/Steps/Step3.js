@@ -211,7 +211,7 @@ const Step3 = (props) => {
                                     </div>
                                 </Grid>
                             </Box>
-                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
                                 <Grid
                                     container
                                     spacing={0}
@@ -259,7 +259,7 @@ const Step3 = (props) => {
                                     </div>
                                 </Grid>
                             </Box>
-                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
                                 <Grid
                                     container
                                     spacing={0}
@@ -306,7 +306,7 @@ const Step3 = (props) => {
                                     </div>
                                 </Grid>
                             </Box>
-                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
                                 <Grid
                                     container
                                     spacing={0}
@@ -355,7 +355,7 @@ const Step3 = (props) => {
                                     </div>
                                 </Grid>
                             </Box>
-                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
                                 <Grid
                                     container
                                     spacing={0}
@@ -401,7 +401,7 @@ const Step3 = (props) => {
                                     </div>
                                 </Grid>
                             </Box>
-                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
                                 <Grid
                                     container
                                     spacing={0}
