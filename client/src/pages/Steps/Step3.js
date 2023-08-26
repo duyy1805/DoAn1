@@ -222,6 +222,7 @@ const Step3 = (props) => {
                                     <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
                                         <Button
                                             type="primary"
+                                            onClick={() => selectModel("rnn")}
                                         >
                                             Select
                                         </Button>
@@ -270,6 +271,7 @@ const Step3 = (props) => {
                                     <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
                                         <Button
                                             type="primary"
+                                            onClick={() => selectModel("ma")}
                                         >
                                             Select
                                         </Button>
@@ -317,6 +319,7 @@ const Step3 = (props) => {
                                     <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
                                         <Button
                                             type="primary"
+                                            onClick={() => selectModel("ses")}
                                         >
                                             Select
                                         </Button>
@@ -366,6 +369,7 @@ const Step3 = (props) => {
                                     <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
                                         <Button
                                             type="primary"
+                                            onClick={() => selectModel("des")}
                                         >
                                             Select
                                         </Button>
@@ -412,6 +416,7 @@ const Step3 = (props) => {
                                     <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
                                         <Button
                                             type="primary"
+                                            onClick={() => selectModel("tes")}
                                         >
                                             Select
                                         </Button>
