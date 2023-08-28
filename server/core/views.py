@@ -264,8 +264,8 @@ class AutoArima(views.APIView):
 
             # Lưu mô hình vào thư mục "models"
             model = arima_model
-            model_folder = "core/Models"
-            model_filename = f"arima_{method}_model.pkl"
+            model_folder = "../client/src/Models"
+            model_filename = f"auto_arima_{method}_model.pkl"
             model_path = f"{model_folder}/{model_filename}"
 
             # Tạo thư mục nếu chưa tồn tại
@@ -298,7 +298,6 @@ class AutoArima(views.APIView):
             all_arrays.append(prediction.to_json())
             values.reset_index(inplace=True)
 
-        print(all_arrays)
         ###############################################################################
 
         return Response({

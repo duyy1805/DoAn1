@@ -309,11 +309,11 @@ export default class Reports extends Component {
 
   testAllModel = async () => {
     await this.handleOnFileLoadAutoArima()
-    await this.handleOnFileLoadRNN()
-    await this.handleOnFileLoadMA()
-    await this.handleOnFileLoadSES()
-    await this.handleOnFileLoadDES()
-    await this.handleOnFileLoadTES()
+    // await this.handleOnFileLoadRNN()
+    // await this.handleOnFileLoadMA()
+    // await this.handleOnFileLoadSES()
+    // await this.handleOnFileLoadDES()
+    // await this.handleOnFileLoadTES()
 
 
 
@@ -690,6 +690,7 @@ export default class Reports extends Component {
     selectedModel.push(graph_1)
     selectedModel.push(graph_2)
     selectedModel.push(graph_3)
+    selectedModel.push(values)
     this.setState({ selectedModel: selectedModel, current: 3 }, () => {
       // this.setState({ hidden2: true })
       message.success("Complete")

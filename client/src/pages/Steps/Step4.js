@@ -48,26 +48,6 @@ const onFinishFailed = (errorInfo: any) => {
 };
 
 
-const handleDownloadClick = () => {
-    const JSZip = require('jszip'); // Import thư viện JSZip hoặc thư viện tương tự
-    const zip = new JSZip();
-
-    const photo1 = require('../../assets/images/logo.png');
-    const photo2 = require('../../assets/images/face-1.jpg');
-
-    // Thêm hình ảnh vào tệp ZIP
-    zip.file('image1.png', photo1, { binary: true });
-    zip.file('image2.png', photo2, { binary: true });
-
-    // Tạo tệp ZIP và tải xuống
-    zip.generateAsync({ type: 'blob' }).then((content) => {
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(content);
-        link.download = 'images.zip'; // Đặt tên tệp ZIP ở đây
-        link.click();
-    });
-};
-
 const Step4 = (props) => {
     const { previousStep, graph,
         auto_arima_graph, auto_arima_graph_0, auto_arima_graph_1, auto_arima_graph_2, auto_arima_graph_3,
@@ -80,6 +60,26 @@ const Step4 = (props) => {
         mae, mse, missing, selectedModel,
         time_of_TS, data_of_TS
     } = props;
+    const handleDownloadClick = (values) => {
+        const JSZip = require('jszip'); // Import thư viện JSZip hoặc thư viện tương tự
+        const zip = new JSZip();
+
+        const model_link = `../../Models/${values}_model_pkl`
+        const photo1 = require(`../../Models/${values}_model.pkl`);
+        const photo2 = require(`../../Models/${selectedModel[5]}.py`);
+
+        // Thêm hình ảnh vào tệp ZIP
+        zip.file('model.pkl', photo1, { binary: true });
+        zip.file('image2.png', photo2, { binary: true });
+
+        // Tạo tệp ZIP và tải xuống
+        zip.generateAsync({ type: 'blob' }).then((content) => {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = 'images.zip'; // Đặt tên tệp ZIP ở đây
+            link.click();
+        });
+    };
     useEffect(() => {
         console.log(selectedModel)
     }, [])
@@ -119,7 +119,7 @@ const Step4 = (props) => {
                                     }}
                                 />
                                 <div className="overlay">
-                                    <Button type="primary" onClick={handleDownloadClick}>
+                                    <Button type="primary" onClick={() => handleDownloadClick(`${selectedModel[5]}_1`)}>
                                         <i className="fa fa-download"></i> Download model
                                     </Button>
                                 </div>
@@ -160,7 +160,7 @@ const Step4 = (props) => {
                                         }}
                                     />
                                     <div className="overlay">
-                                        <Button type="primary" onClick={handleDownloadClick}>
+                                        <Button type="primary" onClick={() => handleDownloadClick(`${selectedModel[5]}_0`)}>
                                             <i className="fa fa-download"></i> Download model
                                         </Button>
                                     </div>
@@ -197,7 +197,7 @@ const Step4 = (props) => {
                                         }}
                                     />
                                     <div className="overlay">
-                                        <Button type="primary" onClick={handleDownloadClick}>
+                                        <Button type="primary" onClick={() => handleDownloadClick(`${selectedModel[5]}_mean`)}>
                                             <i className="fa fa-download"></i> Download model
                                         </Button>
                                     </div>
@@ -234,7 +234,7 @@ const Step4 = (props) => {
                                         }}
                                     />
                                     <div className="overlay">
-                                        <Button type="primary" onClick={handleDownloadClick}>
+                                        <Button type="primary" onClick={() => handleDownloadClick(`${selectedModel[5]}_forward`)}>
                                             <i className="fa fa-download"></i> Download model
                                         </Button>
                                     </div>
@@ -271,7 +271,7 @@ const Step4 = (props) => {
                                         }}
                                     />
                                     <div className="overlay">
-                                        <Button type="primary" onClick={handleDownloadClick}>
+                                        <Button type="primary" onClick={() => handleDownloadClick(`${selectedModel[5]}_backward`)}>
                                             <i className="fa fa-download"></i> Download model
                                         </Button>
                                     </div>
