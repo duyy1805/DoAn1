@@ -69,16 +69,20 @@ const Step4 = (props) => {
         const photo2 = require(`../../Models/${selectedModel[5]}.py`);
 
         // Thêm hình ảnh vào tệp ZIP
-        zip.file('model.pkl', photo1, { binary: true });
-        zip.file('forecast.py', photo2, { binary: true });
+        const downloadLink1 = document.createElement('a');
+        downloadLink1.href = photo1;
+        downloadLink1.download = 'model.pkl';
+        downloadLink1.target = '_blank';
+        downloadLink1.rel = 'noreferrer';
 
-        // Tạo tệp ZIP và tải xuống
-        zip.generateAsync({ type: 'blob' }).then((content) => {
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(content);
-            link.download = 'images.zip'; // Đặt tên tệp ZIP ở đây
-            link.click();
-        });
+        const downloadLink2 = document.createElement('a');
+        downloadLink2.href = photo2;
+        downloadLink2.download = 'forecast.py';
+        downloadLink2.target = '_blank';
+        downloadLink2.rel = 'noreferrer';
+
+        downloadLink1.click();
+        downloadLink2.click();
     };
     useEffect(() => {
         console.log(selectedModel)
