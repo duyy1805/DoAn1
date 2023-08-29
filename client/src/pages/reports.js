@@ -309,11 +309,11 @@ export default class Reports extends Component {
 
   testAllModel = async () => {
     // await this.handleOnFileLoadAutoArima()
-    await this.handleOnFileLoadRNN()
+    // await this.handleOnFileLoadRNN()
     // await this.handleOnFileLoadMA()
     // await this.handleOnFileLoadSES()
     // await this.handleOnFileLoadDES()
-    // await this.handleOnFileLoadTES()
+    await this.handleOnFileLoadTES()
 
 
 
@@ -1425,7 +1425,7 @@ export default class Reports extends Component {
           des_graph={des_graph}
           des_graph_0={des_graph_0} des_graph_1={des_graph_1} des_graph_2={des_graph_2} des_graph_3={des_graph_3}
           tes_graph={tes_graph}
-          tes_graph_0={ses_graph_0} tes_graph_1={tes_graph_1} tes_graph_2={tes_graph_2} tes_graph_3={tes_graph_3}
+          tes_graph_0={tes_graph_0} tes_graph_1={tes_graph_1} tes_graph_2={tes_graph_2} tes_graph_3={tes_graph_3}
           ma_graph={ma_graph}
           ma_graph_0={ma_graph_0} ma_graph_1={ma_graph_1} ma_graph_2={ma_graph_2} ma_graph_3={ma_graph_3}
           //error
@@ -1467,6 +1467,14 @@ export default class Reports extends Component {
           auto_arima_graph_3={auto_arima_graph_3}
           rnn_graph={rnn_graph}
           rnn_graph_0={rnn_graph_0} rnn_graph_1={rnn_graph_1} rnn_graph_2={rnn_graph_2} rnn_graph_3={rnn_graph_3}
+          ses_graph={ses_graph}
+          ses_graph_0={ses_graph_0} ses_graph_1={ses_graph_1} ses_graph_2={ses_graph_2} ses_graph_3={ses_graph_3}
+          des_graph={des_graph}
+          des_graph_0={des_graph_0} des_graph_1={des_graph_1} des_graph_2={des_graph_2} des_graph_3={des_graph_3}
+          tes_graph={tes_graph}
+          tes_graph_0={tes_graph_0} tes_graph_1={tes_graph_1} tes_graph_2={tes_graph_2} tes_graph_3={tes_graph_3}
+          ma_graph={ma_graph}
+          ma_graph_0={ma_graph_0} ma_graph_1={ma_graph_1} ma_graph_2={ma_graph_2} ma_graph_3={ma_graph_3}
           filename={this.state.filename}></Step4>,
       },
     ];

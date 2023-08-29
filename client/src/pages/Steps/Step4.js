@@ -85,7 +85,7 @@ const Step4 = (props) => {
         downloadLink2.click();
     };
     useEffect(() => {
-        console.log(selectedModel)
+        console.log(tes_graph_1)
     }, [])
 
 
