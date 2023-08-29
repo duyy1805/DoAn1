@@ -70,7 +70,7 @@ const Step4 = (props) => {
 
         // Thêm hình ảnh vào tệp ZIP
         zip.file('model.pkl', photo1, { binary: true });
-        zip.file('image2.png', photo2, { binary: true });
+        zip.file('forecast.py', photo2, { binary: true });
 
         // Tạo tệp ZIP và tải xuống
         zip.generateAsync({ type: 'blob' }).then((content) => {

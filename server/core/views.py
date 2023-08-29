@@ -231,7 +231,7 @@ class AutoArima(views.APIView):
         for method in fill_method:
             if missing_values_count != 0:
                 if method == '0':
-                    values['Data'].fillna(0, inplace=True)
+                    values['Data'].interpolate(method='linear', inplace=True)
                 if method == 'mean':
                     values['Data'].fillna(values['Data'].mean, inplace=True)
                 if method == 'forward':
@@ -346,7 +346,7 @@ class Arima(views.APIView):
             # if fill_method == 'delete':
             #     values = values[~(values.isna().any(axis=1))]
             if fill_method == '0':
-                values['Data'].fillna(0, inplace=True)
+                values['Data'].interpolate(method='linear', inplace=True)
             if fill_method == 'mean':
                 values['Data'].fillna(values['Data'].mean, inplace=True)
             if fill_method == 'forward':
@@ -428,7 +428,7 @@ class RNN(views.APIView):
         for method in fill_method:
             if missing_values_count != 0:
                 if method == '0':
-                    values['Data'].fillna(0, inplace=True)
+                    values['Data'].interpolate(method='linear', inplace=True)
                 if method == 'mean':
                     values['Data'].fillna(values['Data'].mean, inplace=True)
                 if method == 'forward':
@@ -479,7 +479,7 @@ class RNN(views.APIView):
             model.predict(last_train_batch)
 
             # Lưu mô hình vào thư mục "models"
-            model_folder = "core/Models"
+            model_folder = "../client/src/Models"
             model_filename = f"rnn_{method}_model.pkl"
             model_path = f"{model_folder}/{model_filename}"
 
@@ -488,7 +488,7 @@ class RNN(views.APIView):
             os.makedirs(model_folder, exist_ok=True)
 
             # Lưu mô hình
-            joblib.dump(model, model_path)
+            joblib.dump((model, scaler), model_path)
             test_predictions = []
 
             first_eval_batch = scaled_train[-n_input:]
@@ -584,7 +584,7 @@ class SES(views.APIView):
         for method in fill_method:
             if missing_values_count != 0:
                 if method == '0':
-                    values['Data'].fillna(0, inplace=True)
+                    values['Data'].interpolate(method='linear', inplace=True)
                 if method == 'mean':
                     values['Data'].fillna(values['Data'].mean, inplace=True)
                 if method == 'forward':
@@ -692,7 +692,7 @@ class DES(views.APIView):
         for method in fill_method:
             if missing_values_count != 0:
                 if method == '0':
-                    values['Data'].fillna(0, inplace=True)
+                    values['Data'].interpolate(method='linear', inplace=True)
                 if method == 'mean':
                     values['Data'].fillna(values['Data'].mean, inplace=True)
                 if method == 'forward':
@@ -794,7 +794,7 @@ class TES(views.APIView):
         for method in fill_method:
             if missing_values_count != 0:
                 if method == '0':
-                    values['Data'].fillna(0, inplace=True)
+                    values['Data'].interpolate(method='linear', inplace=True)
                 if method == 'mean':
                     values['Data'].fillna(values['Data'].mean, inplace=True)
                 if method == 'forward':
@@ -906,7 +906,7 @@ class MA(views.APIView):
         for method in fill_method:
             if missing_values_count != 0:
                 if method == '0':
-                    values['Data'].fillna(0, inplace=True)
+                    values['Data'].interpolate(method='linear', inplace=True)
                 if method == 'mean':
                     values['Data'].fillna(values['Data'].mean, inplace=True)
                 if method == 'forward':
