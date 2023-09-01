@@ -560,6 +560,19 @@ class SES(views.APIView):
             best_alpha, best_mae = ses_optimizer(train, alphas, step=step)
             final_model = SimpleExpSmoothing(
                 train).fit(smoothing_level=best_alpha)
+
+            # Lưu mô hình vào thư mục "models"
+            model_folder = "../client/src/Models"
+            model_filename = f"ses_{method}_model.pkl"
+            model_path = f"{model_folder}/{model_filename}"
+
+            # Tạo thư mục nếu chưa tồn tại
+            import os
+            os.makedirs(model_folder, exist_ok=True)
+
+            # Lưu mô hình
+            joblib.dump((final_model, best_alpha), model_path)
+
             y_pred = final_model.forecast(step)
             mae = mean_absolute_error(test, y_pred)
             mse = mean_squared_error(test, y_pred)
@@ -602,9 +615,6 @@ class SES(views.APIView):
                 values, test_size=test_size, shuffle=False)
 
             # define model
-            model = SimpleExpSmoothing(
-                train, initialization_method="heuristic")
-            fit1 = model.fit(smoothing_level=0.2, optimized=False)
 
             fcast1, mae, mse = ses_model_tuning(
                 train, test, step=test.shape[0])
@@ -668,6 +678,19 @@ class DES(views.APIView):
                 train, alphas, betas, trend=trend, step=step)
             final_model = ExponentialSmoothing(train, trend=trend).fit(
                 smoothing_level=best_alpha, smoothing_slope=best_beta)
+
+            # Lưu mô hình vào thư mục "models"
+            model_folder = "../client/src/Models"
+            model_filename = f"des_{method}_model.pkl"
+            model_path = f"{model_folder}/{model_filename}"
+
+            # Tạo thư mục nếu chưa tồn tại
+            import os
+            os.makedirs(model_folder, exist_ok=True)
+
+            # Lưu mô hình
+            joblib.dump((final_model, best_alpha, best_beta), model_path)
+
             y_pred = final_model.forecast(step)
             mae = mean_absolute_error(test, y_pred)
             mse = mean_squared_error(test, y_pred)
@@ -770,6 +793,20 @@ class TES(views.APIView):
                 train, abg=abg, trend=trend, seasonal=seasonal, seasonal_periods=seasonal_periods, step=step)
             final_model = ExponentialSmoothing(train, trend=trend, seasonal=seasonal).fit(
                 smoothing_level=best_alpha, smoothing_slope=best_beta, smoothing_seasonal=best_gamma)
+
+            # Lưu mô hình vào thư mục "models"
+            model_folder = "../client/src/Models"
+            model_filename = f"tes_{method}_model.pkl"
+            model_path = f"{model_folder}/{model_filename}"
+
+            # Tạo thư mục nếu chưa tồn tại
+            import os
+            os.makedirs(model_folder, exist_ok=True)
+
+            # Lưu mô hình
+            joblib.dump((final_model, best_alpha,
+                        best_beta, best_gamma), model_path)
+
             y_pred = final_model.forecast(step)
             mae = mean_absolute_error(test, y_pred)
             mse = mean_squared_error(test, y_pred)

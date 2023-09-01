@@ -311,9 +311,9 @@ export default class Reports extends Component {
     // await this.handleOnFileLoadAutoArima()
     // await this.handleOnFileLoadRNN()
     // await this.handleOnFileLoadMA()
-    // await this.handleOnFileLoadSES()
+    await this.handleOnFileLoadSES()
     // await this.handleOnFileLoadDES()
-    await this.handleOnFileLoadTES()
+    // await this.handleOnFileLoadTES()
 
 
 
@@ -815,7 +815,7 @@ export default class Reports extends Component {
       this.state.missing ? {
         type: "scatter",
         mode: "lines",
-        name: 'Filling with 0',
+        name: 'Filling with linear interpolation',
         x: this.state.time_of_predicted,
         y: this.state.predicted_auto_arima_0,
         line: { color: '#FF0000' }
@@ -850,7 +850,7 @@ export default class Reports extends Component {
         name: 'Filling with forward value',
         x: this.state.time_of_predicted,
         y: this.state.predicted_auto_arima_2,
-        line: { color: '#FFDDDD' }
+        line: { color: '#E6792F' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -866,7 +866,7 @@ export default class Reports extends Component {
         name: 'Filling with backward values',
         x: this.state.time_of_predicted,
         y: this.state.predicted_auto_arima_3,
-        line: { color: '#fd70a1' }
+        line: { color: '#eaed11' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -911,7 +911,7 @@ export default class Reports extends Component {
       this.state.missing ? {
         type: "scatter",
         mode: "lines",
-        name: 'Filling with 0',
+        name: 'Filling with linear interpolation',
         x: this.state.time_of_predicted,
         y: this.state.predicted_RNN_0,
         line: { color: '#FF0000' }
@@ -946,7 +946,7 @@ export default class Reports extends Component {
         name: 'Filling with forward value',
         x: this.state.time_of_predicted,
         y: this.state.predicted_RNN_2,
-        line: { color: '#FFDDDD' }
+        line: { color: '#E6792F' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -962,7 +962,7 @@ export default class Reports extends Component {
         name: 'Filling with backward values',
         x: this.state.time_of_predicted,
         y: this.state.predicted_RNN_3,
-        line: { color: '#fd70a1' }
+        line: { color: '#eaed11' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -992,7 +992,7 @@ export default class Reports extends Component {
       this.state.missing ? {
         type: "scatter",
         mode: "lines",
-        name: 'Filling with 0',
+        name: 'Filling with linear interpolation',
         x: this.state.time_of_predicted,
         y: this.state.predicted_SES_0,
         line: { color: '#FF0000' }
@@ -1027,7 +1027,7 @@ export default class Reports extends Component {
         name: 'Filling with forward value',
         x: this.state.time_of_predicted,
         y: this.state.predicted_SES_2,
-        line: { color: '#FFDDDD' }
+        line: { color: '#E6792F' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -1043,7 +1043,7 @@ export default class Reports extends Component {
         name: 'Filling with backward values',
         x: this.state.time_of_predicted,
         y: this.state.predicted_SES_3,
-        line: { color: '#fd70a1' }
+        line: { color: '#eaed11' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -1073,7 +1073,7 @@ export default class Reports extends Component {
       this.state.missing ? {
         type: "scatter",
         mode: "lines",
-        name: 'Filling with 0',
+        name: 'Filling with linear interpolation',
         x: this.state.time_of_predicted,
         y: this.state.predicted_DES_0,
         line: { color: '#FF0000' }
@@ -1108,7 +1108,7 @@ export default class Reports extends Component {
         name: 'Filling with forward value',
         x: this.state.time_of_predicted,
         y: this.state.predicted_DES_2,
-        line: { color: '#FFDDDD' }
+        line: { color: '#E6792F' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -1124,7 +1124,7 @@ export default class Reports extends Component {
         name: 'Filling with backward values',
         x: this.state.time_of_predicted,
         y: this.state.predicted_DES_3,
-        line: { color: '#fd70a1' }
+        line: { color: '#eaed11' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -1154,7 +1154,7 @@ export default class Reports extends Component {
       this.state.missing ? {
         type: "scatter",
         mode: "lines",
-        name: 'Filling with 0',
+        name: 'Filling with linear interpolation',
         x: this.state.time_of_predicted,
         y: this.state.predicted_TES_0,
         line: { color: '#FF0000' }
@@ -1189,7 +1189,7 @@ export default class Reports extends Component {
         name: 'Filling with forward value',
         x: this.state.time_of_predicted,
         y: this.state.predicted_TES_2,
-        line: { color: '#FFDDDD' }
+        line: { color: '#E6792F' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -1205,7 +1205,7 @@ export default class Reports extends Component {
         name: 'Filling with backward values',
         x: this.state.time_of_predicted,
         y: this.state.predicted_TES_3,
-        line: { color: '#fd70a1' }
+        line: { color: '#eaed11' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -1234,7 +1234,7 @@ export default class Reports extends Component {
       this.state.missing ? {
         type: "scatter",
         mode: "lines",
-        name: 'Filling with 0',
+        name: 'Filling with linear interpolation',
         x: this.state.time_of_predicted,
         y: this.state.predicted_MA_0,
         line: { color: '#FF0000' }
@@ -1269,7 +1269,7 @@ export default class Reports extends Component {
         name: 'Filling with forward value',
         x: this.state.time_of_predicted,
         y: this.state.predicted_MA_2,
-        line: { color: '#FFDDDD' }
+        line: { color: '#E6792F' }
       } : {
         type: "scatter",
         mode: "lines",
@@ -1285,7 +1285,7 @@ export default class Reports extends Component {
         name: 'Filling with backward values',
         x: this.state.time_of_predicted,
         y: this.state.predicted_MA_3,
-        line: { color: '#fd70a1' }
+        line: { color: '#eaed11' }
       } : {
         type: "scatter",
         mode: "lines",
