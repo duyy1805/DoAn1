@@ -127,7 +127,50 @@ const Step3 = (props) => {
             columns: columns,
         };
     });
+    const model_name = ['Arima', 'RNN', 'MA', 'SES', 'DES', 'TES'];
+    const trace0 = {
+        x: model_name,
+        y: [mae[0], mae[1], mae[2], mae[3], mae[4], mae[5]],
+        type: 'bar',
+        name: 'Phố A',
+    };
 
+    const trace1 = {
+        x: model_name,
+        y: [mae[0], mae[4], mae[8], mae[12], mae[16], mae[20]],
+        type: 'bar',
+        name: 'Filling with linear interpolation',
+    };
+
+    const trace2 = {
+        x: model_name,
+        y: [mae[1], mae[5], mae[9], mae[13], mae[17], mae[21]],
+        type: 'bar',
+        name: 'Filling with mean value',
+    };
+
+    const trace3 = {
+        x: model_name,
+        y: [mae[2], mae[6], mae[10], mae[14], mae[18], mae[22]],
+        type: 'bar',
+        name: 'Filling with forward value',
+    };
+    const trace4 = {
+        x: model_name,
+        y: [mae[3], mae[7], mae[11], mae[15], mae[19], mae[23]],
+        type: 'bar',
+        name: 'Filling with backward values',
+    };
+    const data_mae = [trace0];
+    const data_mae1 = [trace1, trace2, trace3, trace4];
+
+    // Thiết lập layout cho biểu đồ
+    const layout1 = {
+        title: 'Biểu đồ Cột',
+        xaxis: { title: 'Dữ liệu' },
+        yaxis: { title: 'Giá trị MAE' },
+        barmode: 'group'
+    };
     return (
         <div>
             <Container style={{ padding: 0, maxWidth: 1700 }}>
@@ -135,6 +178,12 @@ const Step3 = (props) => {
                     style={{ marginTop: 24 }}
                 >
                     <Card style={{ backgroundColor: "transparent" }}>
+                        {missing ? (
+                            <Plot data={data_mae1} layout={layout1} />
+                        ) :
+                            <Plot data={data_mae} layout={layout1} />
+                        }
+                        {/* <Plot data={data_mae} layout={layout} /> */}
                         <Card sx={{ m: 0 }} style={{ width: 1650, boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px", marginLeft: 20, backgroundColor: '#1677ff' }}>
                             <CardContent sx={{ width: "1700px", backgroundColor: '#fafafa', marginLeft: 4 }} style={{ padding: 0, paddingLeft: 5 }}>
                                 <Typography component="div" sx={{ textAlign: '', p: 1, fontSize: '1.5rem', }}>

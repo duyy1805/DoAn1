@@ -917,6 +917,17 @@ class MA(views.APIView):
             train1, test1 = train_test_split(
                 df1, test_size=test_size, shuffle=False)
 
+            # Lưu mô hình vào thư mục "models"
+            model_folder = "../client/src/Models"
+            model_filename = f"ma_{method}_model.pkl"
+            model_path = f"{model_folder}/{model_filename}"
+
+            # Tạo thư mục nếu chưa tồn tại
+            import os
+            os.makedirs(model_folder, exist_ok=True)
+
+            # Lưu mô hình
+            joblib.dump(best_alpha, model_path)
             y_hat_avg = test1.copy()
             mae = mean_absolute_error(test.Data, y_hat_avg.moving_avg_forecast)
             mse = mean_squared_error(test.Data, y_hat_avg.moving_avg_forecast)
