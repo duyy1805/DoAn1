@@ -161,8 +161,43 @@ const Step3 = (props) => {
         type: 'bar',
         name: 'Filling with backward values',
     };
+    const trace00 = {
+        x: model_name,
+        y: [mse[0], mse[1], mse[2], mse[3], mse[4], mse[5]],
+        type: 'bar',
+        name: 'Phố A',
+    };
+
+    const trace11 = {
+        x: model_name,
+        y: [mse[0], mse[4], mse[8], mse[12], mse[16], mse[20]],
+        type: 'bar',
+        name: 'Filling with linear interpolation',
+    };
+
+    const trace22 = {
+        x: model_name,
+        y: [mse[1], mse[5], mse[9], mse[13], mse[17], mse[21]],
+        type: 'bar',
+        name: 'Filling with mean value',
+    };
+
+    const trace33 = {
+        x: model_name,
+        y: [mse[2], mse[6], mse[10], mse[14], mse[18], mse[22]],
+        type: 'bar',
+        name: 'Filling with forward value',
+    };
+    const trace44 = {
+        x: model_name,
+        y: [mse[3], mse[7], mse[11], mse[15], mse[19], mse[23]],
+        type: 'bar',
+        name: 'Filling with backward values',
+    };
     const data_mae = [trace0];
     const data_mae1 = [trace1, trace2, trace3, trace4];
+    const data_mse = [trace00];
+    const data_mse1 = [trace11, trace22, trace33, trace44];
 
     // Thiết lập layout cho biểu đồ
     const layout1 = {
@@ -178,11 +213,38 @@ const Step3 = (props) => {
                     style={{ marginTop: 24 }}
                 >
                     <Card style={{ backgroundColor: "transparent" }}>
-                        {missing ? (
-                            <Plot data={data_mae1} layout={layout1} />
-                        ) :
-                            <Plot data={data_mae} layout={layout1} />
-                        }
+                        <CardContent style={{ backgroundColor: "transparent", display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', marginTop: 10 }}>
+                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    {missing ? (
+                                        <Plot data={data_mae1} layout={layout1} />
+                                    ) :
+                                        <Plot data={data_mae} layout={layout1} />
+                                    }
+                                </Grid>
+                            </Box>
+                            <Box sx={{ m: 3 }} style={{ margin: 0 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    {missing ? (
+                                        <Plot data={data_mse1} layout={layout1} />
+                                    ) :
+                                        <Plot data={data_mse} layout={layout1} />
+                                    }
+                                </Grid>
+                            </Box>
+                        </CardContent>
                         {/* <Plot data={data_mae} layout={layout} /> */}
                         <Card sx={{ m: 0 }} style={{ width: 1650, boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px", marginLeft: 20, backgroundColor: '#1677ff' }}>
                             <CardContent sx={{ width: "1700px", backgroundColor: '#fafafa', marginLeft: 4 }} style={{ padding: 0, paddingLeft: 5 }}>
