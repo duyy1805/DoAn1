@@ -143,7 +143,7 @@ const Step2 = (props) => {
                                         onClick={testAllModel}
                                     // sx={{ backgroundColor: '#EB2CB2', }}
                                     >
-                                        Next
+                                        Train
                                     </Button>
                                 </Slide>
                             </div>
