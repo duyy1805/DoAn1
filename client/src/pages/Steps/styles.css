@@ -43,3 +43,17 @@
 .overlay i {
     margin-right: 5px;
 }
+
+.test_size .ant-form-item-required {
+    font-size: 23px !important;
+}
+
+.ant-form-item-label {
+    display: flex !important;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.ant-input-number-input {
+    height: 50px !important;
+}

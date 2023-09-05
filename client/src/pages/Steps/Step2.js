@@ -32,7 +32,7 @@ import {
 import { InputNumber, Select, Form, Button, } from 'antd';
 
 import { Fade, Slide, Zoom, LightSpeed, Bounce } from "react-reveal";
-
+import './styles.css'
 // const Plot = createPlotlyComponent(Plotly);
 const onFinish = (values: any) => {
     console.log('Success:', values);
@@ -87,7 +87,7 @@ const Step2 = (props) => {
                                             autoComplete="off"
                                             disable="false"
                                         >
-                                            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
+                                            <div className='test_size' style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
                                                 <Form.Item
                                                     label="Test size"
                                                     name="test_size"
@@ -96,30 +96,11 @@ const Step2 = (props) => {
                                                 >
                                                     <InputNumber
                                                         defaultValue={0.2}
-                                                        max={1} min={0} step={0.01}
+                                                        max={1} min={0} step={0.01} size="large"
                                                         value={test_size}
                                                         onChange={(value) => (handleUpdateTestSize(value))}
                                                     />
                                                 </Form.Item>
-                                                {/* <Form.Item
-                                                label="Filling missing data method"
-                                                name="fill"
-                                                style={{ marginRight: '100px' }}
-                                                rules={[{ required: true, message: 'Please input!' }]}
-                                            >
-                                                <Select
-                                                    defaultValue="0"
-                                                    style={{ width: 180 }}
-                                                    onChange={(value) => handleFillMethod(value)}
-                                                    options={[
-                                                        { value: 'delete', label: 'Delete mising column' },
-                                                        { value: '0', label: 'Fill with 0' },
-                                                        { value: 'mean', label: 'Fill with mean values' },
-                                                        { value: 'forward', label: 'Forward fill' },
-                                                        { value: 'backward', label: 'backward fill' },
-                                                    ]}
-                                                />
-                                            </Form.Item> */}
                                             </div>
                                         </Form>
                                     </CardContent>

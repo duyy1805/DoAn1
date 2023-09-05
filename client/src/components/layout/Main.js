@@ -120,7 +120,7 @@ function Main({ children }) {
 
           <li>
             <a href="/#contact">
-              Contact
+              Project
             </a>
           </li>
         </ul>
