@@ -214,13 +214,23 @@ const Step3 = (props) => {
 
     // Thiết lập layout cho biểu đồ
     const layout1 = {
-        title: 'MAE Value',
-        // xaxis: { title: 'Dữ liệu' },
-        // yaxis: { title: 'Value' },
+        title: {
+            text: 'MAE Value',
+            font: {
+                size: 25,
+                weight: 'bolder' // Làm cho tiêu đề in đậm
+            }
+        },
         barmode: 'group'
     };
     const layout2 = {
-        title: 'MSE Value',
+        title: {
+            text: 'MSE Value',
+            font: {
+                size: 25,
+                weight: 'bolder' // Làm cho tiêu đề in đậm
+            }
+        },
         // xaxis: { title: 'Dữ liệu' },
         // yaxis: { title: 'Value' },
         barmode: 'group'
@@ -327,7 +337,13 @@ const Step3 = (props) => {
                                                 ma_graph_3,
                                             ]}
                                             layout={{
-                                                width: 550, height: 400, title: 'Moving average model',
+                                                width: 550, height: 400, title: {
+                                                    text: 'MA Model',
+                                                    font: {
+                                                        size: 25,
+                                                        weight: 'bold' // Làm cho tiêu đề in đậm
+                                                    }
+                                                },
                                                 xaxis: {
                                                     title: 'Time',
                                                 },
@@ -377,7 +393,13 @@ const Step3 = (props) => {
 
                                             ]}
                                             layout={{
-                                                width: 550, height: 400, title: 'ARIMA Model',
+                                                width: 550, height: 400, title: {
+                                                    text: 'ARIMA Model',
+                                                    font: {
+                                                        size: 25,
+                                                        weight: 'bold' // Làm cho tiêu đề in đậm
+                                                    }
+                                                },
                                                 xaxis: {
                                                     title: 'Time',
                                                 },
@@ -426,7 +448,13 @@ const Step3 = (props) => {
                                                 rnn_graph_3,
                                             ]}
                                             layout={{
-                                                width: 550, height: 400, title: 'RNN Model',
+                                                width: 550, height: 400, title: {
+                                                    text: 'RNN Model',
+                                                    font: {
+                                                        size: 25,
+                                                        weight: 'bold' // Làm cho tiêu đề in đậm
+                                                    }
+                                                },
                                                 xaxis: {
                                                     title: 'Time',
                                                 },
@@ -476,7 +504,13 @@ const Step3 = (props) => {
 
                                             ]}
                                             layout={{
-                                                width: 550, height: 400, title: 'SES Model',
+                                                width: 550, height: 400, title: {
+                                                    text: 'SES Model',
+                                                    font: {
+                                                        size: 25,
+                                                        weight: 'bold' // Làm cho tiêu đề in đậm
+                                                    }
+                                                },
                                                 xaxis: {
                                                     title: 'Time',
                                                 },
@@ -523,7 +557,13 @@ const Step3 = (props) => {
                                                 des_graph_3,
                                             ]}
                                             layout={{
-                                                width: 550, height: 400, title: 'DES Model',
+                                                width: 550, height: 400, title: {
+                                                    text: 'DES Model',
+                                                    font: {
+                                                        size: 25,
+                                                        weight: 'bold' // Làm cho tiêu đề in đậm
+                                                    }
+                                                },
                                                 xaxis: {
                                                     title: 'Time',
                                                 },
@@ -570,7 +610,13 @@ const Step3 = (props) => {
                                                 tes_graph_3,
                                             ]}
                                             layout={{
-                                                width: 550, height: 400, title: 'TES Model',
+                                                width: 550, height: 400, title: {
+                                                    text: 'TES Model',
+                                                    font: {
+                                                        size: 25,
+                                                        weight: 'bold' // Làm cho tiêu đề in đậm
+                                                    }
+                                                },
                                                 xaxis: {
                                                     title: 'Time',
                                                 },

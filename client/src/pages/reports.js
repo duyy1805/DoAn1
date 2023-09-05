@@ -1507,15 +1507,15 @@ export default class Reports extends Component {
                     },
                     {
                       title: 'Step 2',
-                      description: "Data preprocessing",
+                      description: "Data Preprocessing",
                     },
                     {
                       title: 'Step 3',
-                      description: "Select Time Series Models",
+                      description: "Select Forecasting Models",
                     },
                     {
                       title: 'Step 4',
-                      description: "Download models",
+                      description: "Download Models",
                     },
                   ]}
                 />
