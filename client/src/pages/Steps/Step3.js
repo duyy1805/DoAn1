@@ -201,9 +201,15 @@ const Step3 = (props) => {
 
     // Thiết lập layout cho biểu đồ
     const layout1 = {
-        title: 'Biểu đồ Cột',
-        xaxis: { title: 'Dữ liệu' },
-        yaxis: { title: 'Giá trị MAE' },
+        title: 'MAE',
+        // xaxis: { title: 'Dữ liệu' },
+        yaxis: { title: 'Value' },
+        barmode: 'group'
+    };
+    const layout2 = {
+        title: 'MSE',
+        // xaxis: { title: 'Dữ liệu' },
+        yaxis: { title: 'Value' },
         barmode: 'group'
     };
     return (
@@ -213,6 +219,13 @@ const Step3 = (props) => {
                     style={{ marginTop: 24 }}
                 >
                     <Card style={{ backgroundColor: "transparent" }}>
+                        <Card sx={{ m: 0 }} style={{ width: 1650, boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px", marginLeft: 20, backgroundColor: '#1677ff' }}>
+                            <CardContent sx={{ width: "1700px", backgroundColor: '#fafafa', marginLeft: 4 }} style={{ padding: 0, paddingLeft: 5 }}>
+                                <Typography component="div" sx={{ textAlign: '', p: 1, fontSize: '1.5rem', }}>
+                                    Comparision Of Time-Series Forecasting Models
+                                </Typography>
+                            </CardContent>
+                        </Card>
                         <CardContent style={{ backgroundColor: "transparent", display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', marginTop: 10 }}>
                             <Box sx={{ m: 3 }} style={{ margin: 0 }}>
                                 <Grid
@@ -225,7 +238,7 @@ const Step3 = (props) => {
                                     {missing ? (
                                         <Plot data={data_mae1} layout={layout1} />
                                     ) :
-                                        <Plot data={data_mae} layout={layout1} />
+                                        <Plot data={data_mae} layout={layout2} />
                                     }
                                 </Grid>
                             </Box>
@@ -246,13 +259,6 @@ const Step3 = (props) => {
                             </Box>
                         </CardContent>
                         {/* <Plot data={data_mae} layout={layout} /> */}
-                        <Card sx={{ m: 0 }} style={{ width: 1650, boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px", marginLeft: 20, backgroundColor: '#1677ff' }}>
-                            <CardContent sx={{ width: "1700px", backgroundColor: '#fafafa', marginLeft: 4 }} style={{ padding: 0, paddingLeft: 5 }}>
-                                <Typography component="div" sx={{ textAlign: '', p: 1, fontSize: '1.5rem', }}>
-                                    Comparision Of Time-Series Forecasting Models
-                                </Typography>
-                            </CardContent>
-                        </Card>
                         <CardContent style={{ backgroundColor: "transparent", marginTop: 10 }}>
                             <Table style={{ tableLayout: "auto" }} dataSource={data} pagination={false} scroll={{ x: 1600 }} >
                                 <Column title="" dataIndex="err" key="err" />
