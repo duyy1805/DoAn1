@@ -123,7 +123,7 @@ function Main({ children }) {
             </a>
           </li>
           <li>
-            <a href="/dashboard">
+            <a href="/dashboard" style={{ color: '#fe6928' }}>
               Project
             </a>
           </li>
