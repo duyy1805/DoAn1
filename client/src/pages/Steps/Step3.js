@@ -99,17 +99,17 @@ const Step3 = (props) => {
 
     var columnGroups = missing ?
         [
-            { title: "ARIMA", startKey: "fill_1", endKey: "fill_4" },
-            { title: "RNN", startKey: "fill_5", endKey: "fill_8" },
-            { title: "MA", startKey: "fill_9", endKey: "fill_12" },
+            { title: "MA", startKey: "fill_1", endKey: "fill_4" },
+            { title: "ARIMA", startKey: "fill_5", endKey: "fill_8" },
+            { title: "RNN", startKey: "fill_9", endKey: "fill_12" },
             { title: "SES", startKey: "fill_13", endKey: "fill_16" },
             { title: "DES", startKey: "fill_17", endKey: "fill_20" },
             { title: "TES", startKey: "fill_21", endKey: "fill_24" },
         ] :
         [
-            { title: "ARIMA", startKey: "fill_1", endKey: "fill_1" },
-            { title: "RNN", startKey: "fill_2", endKey: "fill_2" },
-            { title: "MA", startKey: "fill_3", endKey: "fill_3" },
+            { title: "MA", startKey: "fill_1", endKey: "fill_1" },
+            { title: "ARIMA", startKey: "fill_2", endKey: "fill_2" },
+            { title: "RNN", startKey: "fill_3", endKey: "fill_3" },
             { title: "SES", startKey: "fill_4", endKey: "fill_4" },
             { title: "DES", startKey: "fill_5", endKey: "fill_5" },
             { title: "TES", startKey: "fill_6", endKey: "fill_6" },
@@ -117,17 +117,30 @@ const Step3 = (props) => {
     const columnGroupsAndColumns = columnGroups.map(group => {
         const columns = [];
         for (let i = parseInt(group.startKey.split('_')[1]); i <= parseInt(group.endKey.split('_')[1]); i++) {
-            if (missing)
-                columns.push(<Column title={`Fill_${i}`} dataIndex={`fill_${i}`} key={`fill_${i}`} />);
+            if (missing) {
+                let title;
+                if (i % 4 === 1) {
+                    title = 'fill_linear';
+                } else if (i % 4 === 2) {
+                    title = 'fill_mean';
+                }
+                else if (i % 4 === 3) {
+                    title = 'fill_backward';
+                } else if (i % 4 === 0) {
+                    title = 'fill_forward';
+                }
+                columns.push(<Column title={title} dataIndex={`fill_${i}`} key={`fill_${i}`} />);
+            }
             else
-                columns.push(<Column title={`...`} dataIndex={`fill_${i}`} key={`fill_${i}`} />);
+                // columns.push(<Column title={`...`} dataIndex={`fill_${i}`} key={`fill_${i}`} />);
+                ;
         }
         return {
             groupTitle: group.title,
             columns: columns,
         };
     });
-    const model_name = ['Arima', 'RNN', 'MA', 'SES', 'DES', 'TES'];
+    const model_name = ['MA', 'ARIMA', 'RNN', 'SES', 'DES', 'TES'];
     const trace0 = {
         x: model_name,
         y: [mae[0], mae[1], mae[2], mae[3], mae[4], mae[5]],
@@ -201,15 +214,15 @@ const Step3 = (props) => {
 
     // Thiết lập layout cho biểu đồ
     const layout1 = {
-        title: 'MAE',
+        title: 'MAE Value',
         // xaxis: { title: 'Dữ liệu' },
-        yaxis: { title: 'Value' },
+        // yaxis: { title: 'Value' },
         barmode: 'group'
     };
     const layout2 = {
-        title: 'MSE',
+        title: 'MSE Value',
         // xaxis: { title: 'Dữ liệu' },
-        yaxis: { title: 'Value' },
+        // yaxis: { title: 'Value' },
         barmode: 'group'
     };
     return (
@@ -238,7 +251,7 @@ const Step3 = (props) => {
                                     {missing ? (
                                         <Plot data={data_mae1} layout={layout1} />
                                     ) :
-                                        <Plot data={data_mae} layout={layout2} />
+                                        <Plot data={data_mae} layout={layout1} />
                                     }
                                 </Grid>
                             </Box>
@@ -251,9 +264,9 @@ const Step3 = (props) => {
                                     justify="center"
                                 >
                                     {missing ? (
-                                        <Plot data={data_mse1} layout={layout1} />
+                                        <Plot data={data_mse1} layout={layout2} />
                                     ) :
-                                        <Plot data={data_mse} layout={layout1} />
+                                        <Plot data={data_mse} layout={layout2} />
                                     }
                                 </Grid>
                             </Box>
@@ -278,6 +291,54 @@ const Step3 = (props) => {
                             </CardContent>
                         </Card>
                         <CardContent style={{ backgroundColor: "transparent", display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', marginTop: 10 }}>
+                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => selectModel("ma")}
+                                        >
+                                            Select
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: 'Original series',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                ma_graph,
+                                                ma_graph_0,
+                                                ma_graph_1,
+                                                ma_graph_2,
+                                                ma_graph_3,
+                                            ]}
+                                            layout={{
+                                                width: 550, height: 400, title: 'Moving average model',
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
                             <Box sx={{ m: 3 }} style={{ margin: 2 }}>
                                 <Grid
                                     container
@@ -366,54 +427,6 @@ const Step3 = (props) => {
                                             ]}
                                             layout={{
                                                 width: 550, height: 400, title: 'RNN Model',
-                                                xaxis: {
-                                                    title: 'Time',
-                                                },
-                                                yaxis: {
-                                                    title: 'Data'
-                                                },
-                                            }}
-                                        />
-                                    </div>
-                                </Grid>
-                            </Box>
-                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
-                                <Grid
-                                    container
-                                    spacing={0}
-                                    direction="column"
-                                    alignItems="center"
-                                    justify="center"
-                                >
-                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
-                                        <Button
-                                            type="primary"
-                                            onClick={() => selectModel("ma")}
-                                        >
-                                            Select
-                                        </Button>
-                                    </div>
-                                    <div>
-                                        <Plot
-                                            data={[
-                                                {
-
-                                                    type: "scatter",
-                                                    mode: "lines",
-                                                    name: 'Original series',
-                                                    x: time_of_TS,
-                                                    y: data_of_TS,
-                                                    line: { color: '#17BECF' }
-                                                }
-                                                ,
-                                                ma_graph,
-                                                ma_graph_0,
-                                                ma_graph_1,
-                                                ma_graph_2,
-                                                ma_graph_3,
-                                            ]}
-                                            layout={{
-                                                width: 550, height: 400, title: 'Moving average model',
                                                 xaxis: {
                                                     title: 'Time',
                                                 },
@@ -592,19 +605,6 @@ const Step3 = (props) => {
                         </Button>
                     </div>
                 </Box>
-
-                <div>
-                    <h2>bobbyhadz.com</h2>
-
-                    <a
-                        href={photo}
-                        download="photo"
-                        target="_blank"
-                        rel="noreferrer"
-                    >
-                        <button>Download photo</button>
-                    </a>
-                </div>
 
             </Container>
         </div >

@@ -33,8 +33,6 @@ import {
     InputNumber, Row, Col, Tabs, Badge, Form,
     Tag, Button, Checkbox, Input, message, Space, Table
 } from 'antd';
-// import photo1 from '../../assets/images/logo.png';
-// import photo2 from '../../assets/images/face-1.jpg';
 import "./styles.css"
 const { Column, ColumnGroup } = Table;
 
@@ -113,7 +111,7 @@ const Step4 = (props) => {
 
                                     ]}
                                     layout={{
-                                        width: 550, height: 400, title: 'ARIMA Model',
+                                        width: 550, height: 400, title: `${selectedModel[5].toUpperCase()} Model`,
                                         xaxis: {
                                             title: 'Time',
                                         },
@@ -154,7 +152,7 @@ const Step4 = (props) => {
 
                                         ]}
                                         layout={{
-                                            width: 550, height: 400, title: 'ARIMA Model',
+                                            width: 550, height: 400, title: `${selectedModel[5].toUpperCase()} Model`,
                                             xaxis: {
                                                 title: 'Time',
                                             },
@@ -191,7 +189,7 @@ const Step4 = (props) => {
 
                                         ]}
                                         layout={{
-                                            width: 550, height: 400, title: 'ARIMA Model',
+                                            width: 550, height: 400, title: `${selectedModel[5].toUpperCase()} Model`,
                                             xaxis: {
                                                 title: 'Time',
                                             },
@@ -228,7 +226,7 @@ const Step4 = (props) => {
 
                                         ]}
                                         layout={{
-                                            width: 550, height: 400, title: 'ARIMA Model',
+                                            width: 550, height: 400, title: `${selectedModel[5].toUpperCase()} Model`,
                                             xaxis: {
                                                 title: 'Time',
                                             },
@@ -265,7 +263,7 @@ const Step4 = (props) => {
 
                                         ]}
                                         layout={{
-                                            width: 550, height: 400, title: 'ARIMA Model',
+                                            width: 550, height: 400, title: `${selectedModel[5].toUpperCase()} Model`,
                                             xaxis: {
                                                 title: 'Time',
                                             },
