@@ -253,10 +253,10 @@ const Step1 = (props) => {
                               <Descriptions.Item label="Missing values">{response_data.missing_values_count}</Descriptions.Item>
                               <Descriptions.Item label="Sum values">{response_data.sum_values}</Descriptions.Item>
                               <Descriptions.Item label="Max value">{response_data.max_values}</Descriptions.Item>
-                              <Descriptions.Item label="Min value" span={2}>
+                              <Descriptions.Item label="Min value" >
                                 {response_data.min_values}
                               </Descriptions.Item>
-                              <Descriptions.Item label="Mean values" span={3}>
+                              <Descriptions.Item label="Mean values" >
                                 {response_data.mean_values}
                               </Descriptions.Item>
                               <Descriptions.Item label="Meadian">{response_data.median_values}</Descriptions.Item>
