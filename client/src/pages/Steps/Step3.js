@@ -132,8 +132,8 @@ const Step3 = (props) => {
                 columns.push(<Column title={title} dataIndex={`fill_${i}`} key={`fill_${i}`} />);
             }
             else
-                // columns.push(<Column title={`...`} dataIndex={`fill_${i}`} key={`fill_${i}`} />);
-                ;
+                columns.push(<Column dataIndex={`fill_${i}`} key={`fill_${i}`} />);
+            ;
         }
         return {
             groupTitle: group.title,
@@ -283,15 +283,27 @@ const Step3 = (props) => {
                         </CardContent>
                         {/* <Plot data={data_mae} layout={layout} /> */}
                         <CardContent style={{ backgroundColor: "transparent", marginTop: 10 }}>
-                            <Table style={{ tableLayout: "auto" }} dataSource={data} pagination={false} scroll={{ x: 1600 }} >
-                                <Column title="" dataIndex="err" key="err" />
-                                {columnGroupsAndColumns.map(groupWithColumns => (
-                                    <ColumnGroup title={groupWithColumns.groupTitle}>
-                                        {groupWithColumns.columns}
-                                    </ColumnGroup>
-                                ))}
+                            {missing ? (
+                                <Table style={{ tableLayout: "auto" }} dataSource={data} pagination={false} scroll={{ x: 1600 }} >
+                                    <Column title="" dataIndex="err" key="err" />
+                                    {columnGroups.map(groupWithColumns => (
+                                        <ColumnGroup title={groupWithColumns.groupTitle}>
+                                            {groupWithColumns.columns}
+                                        </ColumnGroup>
+                                    ))}
 
-                            </Table>
+                                </Table>
+                            ) :
+                                <Table style={{ tableLayout: "auto" }} dataSource={data} pagination={false} scroll={{ x: 1600 }} >
+                                    <Column title="" dataIndex="err" key="err" />
+                                    {columnGroups.map(groupWithColumns => (
+                                        <Column title={groupWithColumns.title} dataIndex={groupWithColumns.startKey}>
+                                            {/* {groupWithColumns.columns} */}
+                                        </Column>
+                                    ))}
+
+                                </Table>
+                            }
                         </CardContent>
                         <Card sx={{ m: 0 }} style={{ width: 1650, boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)", borderRadius: "12px", marginLeft: 20, backgroundColor: '#1677ff' }}>
                             <CardContent sx={{ width: "1700px", backgroundColor: '#fafafa', marginLeft: 4 }} style={{ padding: 0, paddingLeft: 5 }}>

@@ -205,7 +205,7 @@ class AutoArima(views.APIView):
         timeColumn = request.data['timeColumn']
         dataColumn = request.data['dataColumn']
         test_size = request.data['test_size']
-        fill_method = ['0', 'mean', 'backward', 'forward']
+        fill_method = ['linear', 'mean', 'backward', 'forward']
         all_arrays = []
         all_mae = []
         all_mse = []
@@ -223,14 +223,14 @@ class AutoArima(views.APIView):
         missing_values_count = values.isna().sum().sum()
 
         if missing_values_count != 0:
-            fill_method = ['0', 'mean', 'backward', 'forward']
+            fill_method = ['linear', 'mean', 'backward', 'forward']
         else:
             fill_method = ['1']
 
         freq = pd.infer_freq(values["Time"])
         for method in fill_method:
             if missing_values_count != 0:
-                if method == '0':
+                if method == 'linear':
                     values['Data'].interpolate(method='linear', inplace=True)
                 if method == 'mean':
                     values['Data'].fillna(values['Data'].mean, inplace=True)
@@ -402,7 +402,7 @@ class RNN(views.APIView):
         timeColumn = request.data['timeColumn']
         dataColumn = request.data['dataColumn']
         test_size = request.data['test_size']
-        fill_method = ['0', 'mean', 'backward', 'forward']
+        fill_method = ['linear', 'mean', 'backward', 'forward']
         all_arrays = []
         all_mae = []
         all_mse = []
@@ -422,12 +422,12 @@ class RNN(views.APIView):
         freq = pd.infer_freq(values["Time"])
 
         if missing_values_count != 0:
-            fill_method = ['0', 'mean', 'backward', 'forward']
+            fill_method = ['linear', 'mean', 'backward', 'forward']
         else:
             fill_method = ['1']
         for method in fill_method:
             if missing_values_count != 0:
-                if method == '0':
+                if method == 'linear':
                     values['Data'].interpolate(method='linear', inplace=True)
                 if method == 'mean':
                     values['Data'].fillna(values['Data'].mean, inplace=True)
@@ -533,7 +533,7 @@ class SES(views.APIView):
         timeColumn = request.data['timeColumn']
         dataColumn = request.data['dataColumn']
         test_size = request.data['test_size']
-        fill_method = ['0', 'mean', 'backward', 'forward']
+        fill_method = ['linear', 'mean', 'backward', 'forward']
         all_arrays = []
         all_mae = []
         all_mse = []
@@ -591,12 +591,12 @@ class SES(views.APIView):
         freq = pd.infer_freq(values["Time"])
 
         if missing_values_count != 0:
-            fill_method = ['0', 'mean', 'backward', 'forward']
+            fill_method = ['linear', 'mean', 'backward', 'forward']
         else:
             fill_method = ['1']
         for method in fill_method:
             if missing_values_count != 0:
-                if method == '0':
+                if method == 'linear':
                     values['Data'].interpolate(method='linear', inplace=True)
                 if method == 'mean':
                     values['Data'].fillna(values['Data'].mean, inplace=True)
@@ -649,7 +649,7 @@ class DES(views.APIView):
         timeColumn = request.data['timeColumn']
         dataColumn = request.data['dataColumn']
         test_size = request.data['test_size']
-        fill_method = ['0', 'mean', 'backward', 'forward']
+        fill_method = ['linear', 'mean', 'backward', 'forward']
         all_arrays = []
         all_mae = []
         all_mse = []
@@ -709,12 +709,12 @@ class DES(views.APIView):
         freq = pd.infer_freq(values["Time"])
 
         if missing_values_count != 0:
-            fill_method = ['0', 'mean', 'backward', 'forward']
+            fill_method = ['linear', 'mean', 'backward', 'forward']
         else:
             fill_method = ['1']
         for method in fill_method:
             if missing_values_count != 0:
-                if method == '0':
+                if method == 'linear':
                     values['Data'].interpolate(method='linear', inplace=True)
                 if method == 'mean':
                     values['Data'].fillna(values['Data'].mean, inplace=True)
@@ -765,7 +765,7 @@ class TES(views.APIView):
         timeColumn = request.data['timeColumn']
         dataColumn = request.data['dataColumn']
         test_size = request.data['test_size']
-        fill_method = ['0', 'mean', 'backward', 'forward']
+        fill_method = ['linear', 'mean', 'backward', 'forward']
         all_arrays = []
         all_mae = []
         all_mse = []
@@ -825,12 +825,12 @@ class TES(views.APIView):
         freq = pd.infer_freq(values["Time"])
 
         if missing_values_count != 0:
-            fill_method = ['0', 'mean', 'backward', 'forward']
+            fill_method = ['linear', 'mean', 'backward', 'forward']
         else:
             fill_method = ['1']
         for method in fill_method:
             if missing_values_count != 0:
-                if method == '0':
+                if method == 'linear':
                     values['Data'].interpolate(method='linear', inplace=True)
                 if method == 'mean':
                     values['Data'].fillna(values['Data'].mean, inplace=True)
@@ -882,7 +882,7 @@ class MA(views.APIView):
         timeColumn = request.data['timeColumn']
         dataColumn = request.data['dataColumn']
         test_size = request.data['test_size']
-        fill_method = ['0', 'mean', 'backward', 'forward']
+        fill_method = ['linear', 'mean', 'backward', 'forward']
         all_arrays = []
         all_mae = []
         all_mse = []
@@ -948,12 +948,12 @@ class MA(views.APIView):
         freq = pd.infer_freq(values["Time"])
 
         if missing_values_count != 0:
-            fill_method = ['0', 'mean', 'backward', 'forward']
+            fill_method = ['linear', 'mean', 'backward', 'forward']
         else:
             fill_method = ['1']
         for method in fill_method:
             if missing_values_count != 0:
-                if method == '0':
+                if method == 'linear':
                     values['Data'].interpolate(method='linear', inplace=True)
                 if method == 'mean':
                     values['Data'].fillna(values['Data'].mean, inplace=True)
