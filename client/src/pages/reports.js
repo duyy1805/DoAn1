@@ -1497,7 +1497,7 @@ export default class Reports extends Component {
                 {/* <Divider /> */}
                 <Steps
                   current={this.state.current}
-                  onChange={this.onChange}
+                  // onChange={this.onChange}
                   direction="horizontal"
                   style={{ marginTop: "24px", width: '1200px', background: '#f9f9f9 ', padding: '20px', paddingLeft: "40px", borderRadius: '12px', boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.1)" }}
                   items={[

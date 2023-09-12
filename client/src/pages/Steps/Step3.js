@@ -286,7 +286,7 @@ const Step3 = (props) => {
                             {missing ? (
                                 <Table style={{ tableLayout: "auto" }} dataSource={data} pagination={false} scroll={{ x: 1600 }} >
                                     <Column title="" dataIndex="err" key="err" />
-                                    {columnGroups.map(groupWithColumns => (
+                                    {columnGroupsAndColumns.map(groupWithColumns => (
                                         <ColumnGroup title={groupWithColumns.groupTitle}>
                                             {groupWithColumns.columns}
                                         </ColumnGroup>
