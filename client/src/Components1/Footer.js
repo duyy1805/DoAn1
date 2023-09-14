@@ -25,10 +25,7 @@ class Footer extends Component {
               <ul className="copyright">
                 <li>&copy; Copyright 2023 Diễm Linh Cơ</li>
                 <li>
-                  {/* Design by{" Diễm Linh Cơ "} */}
-                  <a title="Styleshout" href="http://www.styleshout.com/">
-                    Styleshout
-                  </a>
+                  Design by{" Diễm Linh Cơ "}
                 </li>
               </ul>
             </div>

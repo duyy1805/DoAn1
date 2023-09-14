@@ -990,3 +990,65 @@ class MA(views.APIView):
             "mae": all_mae,
             "mse": all_mse,
         })
+
+
+class Forecasting(views.APIView):
+    parser_classes = [MultiPartParser]
+
+    def post(self, request, format=None):
+        n_input = 12
+        n_features = 1
+
+        file_obj = request.data['file']
+        timeColumn = request.data['timeColumn']
+        dataColumn = request.data['dataColumn']
+        rnn_model_name = "./core/Models/model.pkl"
+        time_series_file = file_obj
+        rnn_model, scaler = joblib.load(rnn_model_name)
+        n_periods = int(request.data['n_periods'])
+        values = pd.read_csv(time_series_file)
+        values = values.rename(columns={timeColumn: 'Time'})
+        values = values.rename(columns={dataColumn: 'Data'})
+
+        if isinstance(values['Data'][0], str):
+            values['Data'] = values['Data'].apply(lambda x: float(
+                x) if x.replace('.', '', 1).isdigit() else None)
+        missing_values_count = values.isna().sum().sum()
+
+        if missing_values_count != 0:
+            if 'rnn_0_model.pkl' in rnn_model_name:
+                values['Data'].interpolate(method='linear', inplace=True)
+            if 'rnn_mean_model.pkl' in rnn_model_name:
+                values['Data'].fillna(values['Data'].mean(), inplace=True)
+            if 'rnn_forward_model.pkl' in rnn_model_name:
+                values['Data'].fillna(method='ffill', inplace=True)
+            if 'rnn_backward_model.pkl' in rnn_model_name:
+                values['Data'].fillna(method='bfill', inplace=True)
+
+        values.set_index('Time', inplace=True)
+
+        scaled_train = scaler.transform(values)
+
+        test_predictions = []
+        first_eval_batch = scaled_train[-n_input:]
+        current_batch = first_eval_batch.reshape((1, n_input, n_features))
+        for i in range(n_periods):
+            # get the prediction value for the first batch
+            current_pred = rnn_model.predict(current_batch)[0]
+
+            # append the prediction into the array
+            test_predictions.append(current_pred)
+
+            # use the prediction to update the batch and remove the first value
+            current_batch = np.append(current_batch[:, 1:, :], [
+                [current_pred]], axis=1)
+
+        predictions = scaler.inverse_transform(test_predictions)
+
+        # Print the predictions
+        print("Predictions:", [[round(value[0], 2)] for value in predictions])
+        flattened_predictions = [
+            item for sublist in [[round(value[0], 2)] for value in predictions] for item in sublist]
+        return Response({
+            "predictions": flattened_predictions,
+        })
