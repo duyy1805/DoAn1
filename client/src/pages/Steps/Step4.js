@@ -162,7 +162,7 @@ const Step4 = (props) => {
                                         }}
                                     />
                                     <div className="overlay">
-                                        <Button type="primary" onClick={() => handleDownloadClick(`${selectedModel[5]}_0`)}>
+                                        <Button type="primary" onClick={() => handleDownloadClick(`${selectedModel[5]}_linear`)}>
                                             <i className="fa fa-download"></i> Download model
                                         </Button>
                                     </div>
