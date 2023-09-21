@@ -693,7 +693,7 @@ export default class Reports extends Component {
     selectedModel.push(values)
     this.setState({ selectedModel: selectedModel, current: 3 }, () => {
       // this.setState({ hidden2: true })
-      message.success("Complete")
+      // message.success("Complete")
       // this.onChange(3)        
       // this.render()
     })

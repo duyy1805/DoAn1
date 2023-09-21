@@ -659,7 +659,7 @@ const Step3 = (props) => {
                             onClick={() => message.success('Processing complete!')}
                         // sx={{ backgroundColor: '#EB2CB2', }}
                         >
-                            Next
+                            Done
                         </Button>
                     </div>
                 </Box>

@@ -282,6 +282,24 @@ const Step4 = (props) => {
                         </Box>
                     </CardContent>)
             }
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', padding: '0px 16px' }}>
+                <Button
+                    // type="primary"
+                    // variant="contained"
+                    onClick={previousStep}
+                // sx={{ backgroundColor: '#EB2CB2', }}
+                >
+                    Previous
+                </Button>
+                <Button
+                    type="primary"
+                    // variant="contained"
+                    onClick={() => message.success('Processing complete!')}
+                // sx={{ backgroundColor: '#EB2CB2', }}
+                >
+                    Done
+                </Button>
+            </div>
         </div>
     );
 };

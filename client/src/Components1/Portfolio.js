@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Zmage from "react-zmage";
 import Fade from "react-reveal";
+import ReactPlayer from 'react-player';
+import anime from "F:/AEP/Data chuẩn bị/vermeil1.mp4"
 
 let id = 0;
 class Portfolio extends Component {
@@ -31,7 +33,18 @@ class Portfolio extends Component {
                 id="portfolio-wrapper"
                 className="bgrid-quarters s-bgrid-thirds cf"
               >
-                {projects}
+                <div >
+                  <ReactPlayer
+                    style={{ boxShadow: "0px 2px 6px 4px rgba(0, 0, 0, 0.3)" }}
+                    url={anime} // Đường dẫn đến video
+                    width="100%"
+                    height={500}
+                    playing={false} // Đặt giá trị false để tắt video ban đầu
+                    loop="true"
+                    controls // Hiển thị nút điều khiển video
+                  />
+                </div>
+                {/* <video style={{ width: '100%' }} src={anime} autoPlay loop muted /> */}
               </div>
             </div>
           </div>
