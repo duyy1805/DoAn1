@@ -45,5 +45,5 @@ spritesmith.scss
 
 # templated email
 tmp_email/
+/client/src/Models
 
-/client/src/Models/
