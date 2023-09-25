@@ -308,14 +308,12 @@ export default class Reports extends Component {
   };
 
   testAllModel = async () => {
-    await this.handleOnFileLoadMA()
-    await this.handleOnFileLoadAutoArima()
-    await this.handleOnFileLoadRNN()
     await this.handleOnFileLoadSES()
     await this.handleOnFileLoadDES()
     await this.handleOnFileLoadTES()
-
-
+    await this.handleOnFileLoadMA()
+    await this.handleOnFileLoadAutoArima()
+    await this.handleOnFileLoadRNN()
 
     this.setState({ auto_arima: true, arima: true, current: 2 }, () => {
       this.setState({ hidden2: true })

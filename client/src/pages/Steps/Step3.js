@@ -79,20 +79,20 @@ const Step3 = (props) => {
 
     var columnGroups = missing ?
         [
-            { title: "SMA", startKey: "fill_1", endKey: "fill_4" },
-            { title: "ARIMA", startKey: "fill_5", endKey: "fill_8" },
-            { title: "RNN", startKey: "fill_9", endKey: "fill_12" },
-            { title: "SES", startKey: "fill_13", endKey: "fill_16" },
-            { title: "DES", startKey: "fill_17", endKey: "fill_20" },
-            { title: "TES", startKey: "fill_21", endKey: "fill_24" },
+            { title: "SES", startKey: "fill_1", endKey: "fill_4" },
+            { title: "DES", startKey: "fill_5", endKey: "fill_8" },
+            { title: "TES", startKey: "fill_9", endKey: "fill_12" },
+            { title: "SMA", startKey: "fill_13", endKey: "fill_16" },
+            { title: "ARIMA", startKey: "fill_17", endKey: "fill_20" },
+            { title: "RNN", startKey: "fill_21", endKey: "fill_24" },
         ] :
         [
-            { title: "SMA", startKey: "fill_1", endKey: "fill_1" },
-            { title: "ARIMA", startKey: "fill_2", endKey: "fill_2" },
-            { title: "RNN", startKey: "fill_3", endKey: "fill_3" },
-            { title: "SES", startKey: "fill_4", endKey: "fill_4" },
-            { title: "DES", startKey: "fill_5", endKey: "fill_5" },
-            { title: "TES", startKey: "fill_6", endKey: "fill_6" },
+            { title: "SES", startKey: "fill_1", endKey: "fill_1" },
+            { title: "DES", startKey: "fill_2", endKey: "fill_2" },
+            { title: "TES", startKey: "fill_3", endKey: "fill_3" },
+            { title: "SMA", startKey: "fill_4", endKey: "fill_4" },
+            { title: "ARIMA", startKey: "fill_5", endKey: "fill_5" },
+            { title: "RNN", startKey: "fill_6", endKey: "fill_6" },
         ]
     const columnGroupsAndColumns = columnGroups.map(group => {
         const columns = [];
@@ -120,7 +120,7 @@ const Step3 = (props) => {
             columns: columns,
         };
     });
-    const model_name = ['MA', 'ARIMA', 'RNN', 'SES', 'DES', 'TES'];
+    const model_name = ['SES', 'DES', 'TES', 'SMA', 'ARIMA', 'RNN',];
     const trace0 = {
         x: model_name,
         y: [mae[0], mae[1], mae[2], mae[3], mae[4], mae[5]],
@@ -304,6 +304,168 @@ const Step3 = (props) => {
                                     <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
                                         <Button
                                             type="primary"
+                                            onClick={() => selectModel("ses")}
+                                        >
+                                            Select
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: 'Original series',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                ses_graph,
+                                                ses_graph_0,
+                                                ses_graph_1,
+                                                ses_graph_2,
+                                                ses_graph_3,
+
+
+                                            ]}
+                                            layout={{
+                                                width: 550, height: 400, title: {
+                                                    text: 'SES Model',
+                                                    font: {
+                                                        size: 25,
+                                                        weight: 'bold' // Làm cho tiêu đề in đậm
+                                                    }
+                                                },
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
+                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => selectModel("des")}
+                                        >
+                                            Select
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: 'Original series',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                des_graph,
+                                                des_graph_0,
+                                                des_graph_1,
+                                                des_graph_2,
+                                                des_graph_3,
+                                            ]}
+                                            layout={{
+                                                width: 550, height: 400, title: {
+                                                    text: 'DES Model',
+                                                    font: {
+                                                        size: 25,
+                                                        weight: 'bold' // Làm cho tiêu đề in đậm
+                                                    }
+                                                },
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
+                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => selectModel("tes")}
+                                        >
+                                            Select
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <Plot
+                                            data={[
+                                                {
+                                                    type: "scatter",
+                                                    mode: "lines",
+                                                    name: 'Original series',
+                                                    x: time_of_TS,
+                                                    y: data_of_TS,
+                                                    line: { color: '#17BECF' }
+                                                }
+                                                ,
+                                                tes_graph,
+                                                tes_graph_0,
+                                                tes_graph_1,
+                                                tes_graph_2,
+                                                tes_graph_3,
+                                            ]}
+                                            layout={{
+                                                width: 550, height: 400, title: {
+                                                    text: 'TES Model',
+                                                    font: {
+                                                        size: 25,
+                                                        weight: 'bold' // Làm cho tiêu đề in đậm
+                                                    }
+                                                },
+                                                xaxis: {
+                                                    title: 'Time',
+                                                },
+                                                yaxis: {
+                                                    title: 'Data'
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </Box>
+                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
+                                <Grid
+                                    container
+                                    spacing={0}
+                                    direction="column"
+                                    alignItems="center"
+                                    justify="center"
+                                >
+                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
+                                        <Button
+                                            type="primary"
                                             onClick={() => selectModel("sma")}
                                         >
                                             Select
@@ -458,168 +620,7 @@ const Step3 = (props) => {
                                     </div>
                                 </Grid>
                             </Box>
-                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
-                                <Grid
-                                    container
-                                    spacing={0}
-                                    direction="column"
-                                    alignItems="center"
-                                    justify="center"
-                                >
-                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
-                                        <Button
-                                            type="primary"
-                                            onClick={() => selectModel("ses")}
-                                        >
-                                            Select
-                                        </Button>
-                                    </div>
-                                    <div>
-                                        <Plot
-                                            data={[
-                                                {
 
-                                                    type: "scatter",
-                                                    mode: "lines",
-                                                    name: 'Original series',
-                                                    x: time_of_TS,
-                                                    y: data_of_TS,
-                                                    line: { color: '#17BECF' }
-                                                }
-                                                ,
-                                                ses_graph,
-                                                ses_graph_0,
-                                                ses_graph_1,
-                                                ses_graph_2,
-                                                ses_graph_3,
-
-
-                                            ]}
-                                            layout={{
-                                                width: 550, height: 400, title: {
-                                                    text: 'SES Model',
-                                                    font: {
-                                                        size: 25,
-                                                        weight: 'bold' // Làm cho tiêu đề in đậm
-                                                    }
-                                                },
-                                                xaxis: {
-                                                    title: 'Time',
-                                                },
-                                                yaxis: {
-                                                    title: 'Data'
-                                                },
-                                            }}
-                                        />
-                                    </div>
-                                </Grid>
-                            </Box>
-                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
-                                <Grid
-                                    container
-                                    spacing={0}
-                                    direction="column"
-                                    alignItems="center"
-                                    justify="center"
-                                >
-                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
-                                        <Button
-                                            type="primary"
-                                            onClick={() => selectModel("des")}
-                                        >
-                                            Select
-                                        </Button>
-                                    </div>
-                                    <div>
-                                        <Plot
-                                            data={[
-                                                {
-                                                    type: "scatter",
-                                                    mode: "lines",
-                                                    name: 'Original series',
-                                                    x: time_of_TS,
-                                                    y: data_of_TS,
-                                                    line: { color: '#17BECF' }
-                                                }
-                                                ,
-                                                des_graph,
-                                                des_graph_0,
-                                                des_graph_1,
-                                                des_graph_2,
-                                                des_graph_3,
-                                            ]}
-                                            layout={{
-                                                width: 550, height: 400, title: {
-                                                    text: 'DES Model',
-                                                    font: {
-                                                        size: 25,
-                                                        weight: 'bold' // Làm cho tiêu đề in đậm
-                                                    }
-                                                },
-                                                xaxis: {
-                                                    title: 'Time',
-                                                },
-                                                yaxis: {
-                                                    title: 'Data'
-                                                },
-                                            }}
-                                        />
-                                    </div>
-                                </Grid>
-                            </Box>
-                            <Box sx={{ m: 3 }} style={{ margin: 2 }}>
-                                <Grid
-                                    container
-                                    spacing={0}
-                                    direction="column"
-                                    alignItems="center"
-                                    justify="center"
-                                >
-                                    <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
-                                        <Button
-                                            type="primary"
-                                            onClick={() => selectModel("tes")}
-                                        >
-                                            Select
-                                        </Button>
-                                    </div>
-                                    <div>
-                                        <Plot
-                                            data={[
-                                                {
-                                                    type: "scatter",
-                                                    mode: "lines",
-                                                    name: 'Original series',
-                                                    x: time_of_TS,
-                                                    y: data_of_TS,
-                                                    line: { color: '#17BECF' }
-                                                }
-                                                ,
-                                                tes_graph,
-                                                tes_graph_0,
-                                                tes_graph_1,
-                                                tes_graph_2,
-                                                tes_graph_3,
-                                            ]}
-                                            layout={{
-                                                width: 550, height: 400, title: {
-                                                    text: 'TES Model',
-                                                    font: {
-                                                        size: 25,
-                                                        weight: 'bold' // Làm cho tiêu đề in đậm
-                                                    }
-                                                },
-                                                xaxis: {
-                                                    title: 'Time',
-                                                },
-                                                yaxis: {
-                                                    title: 'Data'
-                                                },
-                                            }}
-                                        />
-                                    </div>
-                                </Grid>
-                            </Box>
 
                         </CardContent>
                         <Divider />
