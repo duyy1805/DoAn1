@@ -919,7 +919,7 @@ class MA(views.APIView):
 
             # Lưu mô hình vào thư mục "models"
             model_folder = "../client/src/Models"
-            model_filename = f"ma_{method}_model.pkl"
+            model_filename = f"sma_{method}_model.pkl"
             model_path = f"{model_folder}/{model_filename}"
 
             # Tạo thư mục nếu chưa tồn tại

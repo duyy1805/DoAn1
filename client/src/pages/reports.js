@@ -1214,7 +1214,7 @@ export default class Reports extends Component {
         y: [],
         line: { color: '#17BECF' }
       }
-    var ma_graph =
+    var sma_graph =
       !this.state.missing ? {
         type: "scatter",
         mode: "lines",
@@ -1230,7 +1230,7 @@ export default class Reports extends Component {
         y: [],
         line: { color: '#17BECF' }
       }
-    var ma_graph_0 =
+    var sma_graph_0 =
       this.state.missing ? {
         type: "scatter",
         mode: "lines",
@@ -1246,7 +1246,7 @@ export default class Reports extends Component {
         y: [],
         line: { color: '#17BECF' }
       }
-    var ma_graph_1 =
+    var sma_graph_1 =
       this.state.missing ? {
         type: "scatter",
         mode: "lines",
@@ -1262,7 +1262,7 @@ export default class Reports extends Component {
         y: [],
         line: { color: '#17BECF' }
       }
-    var ma_graph_2 =
+    var sma_graph_2 =
       this.state.missing ? {
         type: "scatter",
         mode: "lines",
@@ -1278,7 +1278,7 @@ export default class Reports extends Component {
         y: [],
         line: { color: '#17BECF' }
       }
-    var ma_graph_3 =
+    var sma_graph_3 =
       this.state.missing ? {
         type: "scatter",
         mode: "lines",
@@ -1426,8 +1426,8 @@ export default class Reports extends Component {
           des_graph_0={des_graph_0} des_graph_1={des_graph_1} des_graph_2={des_graph_2} des_graph_3={des_graph_3}
           tes_graph={tes_graph}
           tes_graph_0={tes_graph_0} tes_graph_1={tes_graph_1} tes_graph_2={tes_graph_2} tes_graph_3={tes_graph_3}
-          ma_graph={ma_graph}
-          ma_graph_0={ma_graph_0} ma_graph_1={ma_graph_1} ma_graph_2={ma_graph_2} ma_graph_3={ma_graph_3}
+          sma_graph={sma_graph}
+          sma_graph_0={sma_graph_0} sma_graph_1={sma_graph_1} sma_graph_2={sma_graph_2} sma_graph_3={sma_graph_3}
           //error
           selectModel={this.selectModel}
           mae={this.state.mae}
@@ -1473,8 +1473,8 @@ export default class Reports extends Component {
           des_graph_0={des_graph_0} des_graph_1={des_graph_1} des_graph_2={des_graph_2} des_graph_3={des_graph_3}
           tes_graph={tes_graph}
           tes_graph_0={tes_graph_0} tes_graph_1={tes_graph_1} tes_graph_2={tes_graph_2} tes_graph_3={tes_graph_3}
-          ma_graph={ma_graph}
-          ma_graph_0={ma_graph_0} ma_graph_1={ma_graph_1} ma_graph_2={ma_graph_2} ma_graph_3={ma_graph_3}
+          sma_graph={sma_graph}
+          sma_graph_0={sma_graph_0} sma_graph_1={sma_graph_1} sma_graph_2={sma_graph_2} sma_graph_3={sma_graph_3}
           filename={this.state.filename}></Step4>,
       },
     ];

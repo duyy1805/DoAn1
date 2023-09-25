@@ -1,39 +1,18 @@
-import React, { Component, useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
-import DownloadIcon from '@material-ui/icons/PictureAsPdf';
-import LoadingOverlay from 'react-loading-overlay';
+import React, { useEffect, useState } from 'react';
 import {
     Box,
     Container,
     Card,
     CardContent,
-    Button as ButtonMui,
     Grid,
-    MenuItem,
     Divider,
-    Select,
-    FormControl,
-    InputLabel,
-    FormHelperText,
     Typography,
-    Step,
-    StepLabel,
-    Stepper,
-    StepContent
-
-
 } from '@material-ui/core';
-import Papa from "papaparse";
-import { CSVReader } from 'react-papaparse';
-import axios from 'axios';
 import Plotly from "plotly.js-basic-dist";
 import createPlotlyComponent from "react-plotly.js/factory";
-import { number } from 'prop-types';
 import {
-    InputNumber, Row, Col, Tabs, Badge, Form,
-    Tag, Button, Checkbox, Input, message, Space, Table
+    Button, message, Table
 } from 'antd';
-import photo from '../../assets/images/logo.png';
 const { Column, ColumnGroup } = Table;
 
 const Plot = createPlotlyComponent(Plotly);
@@ -46,18 +25,19 @@ const onFinishFailed = (errorInfo: any) => {
 };
 
 const Step3 = (props) => {
-    const { hidden_step1, hidden2, previousStep, handleSelectTime, future_values_auto_arima, future_values_arima, graph,
+    const { hidden_step1, hidden2, previousStep, future_values_arima, graph,
         auto_arima_graph, auto_arima_graph_0, auto_arima_graph_1, auto_arima_graph_2, auto_arima_graph_3,
         arima_graph, rnn_graph, rnn_graph_0, rnn_graph_1, rnn_graph_2, rnn_graph_3,
         ses_graph, ses_graph_0, ses_graph_1, ses_graph_2, ses_graph_3,
         des_graph, des_graph_0, des_graph_1, des_graph_2, des_graph_3,
         tes_graph, tes_graph_0, tes_graph_1, tes_graph_2, tes_graph_3,
-        ma_graph, ma_graph_0, ma_graph_1, ma_graph_2, ma_graph_3,
+        sma_graph, sma_graph_0, sma_graph_1, sma_graph_2, sma_graph_3,
         //error
         mae, mse, missing, selectModel,
         column, timeColumn, dataColumn, time_of_TS, data_of_TS, predicted_auto_arima
     } = props;
     useEffect(() => {
+        console.log(sma_graph)
     }, [])
 
 
@@ -99,7 +79,7 @@ const Step3 = (props) => {
 
     var columnGroups = missing ?
         [
-            { title: "MA", startKey: "fill_1", endKey: "fill_4" },
+            { title: "SMA", startKey: "fill_1", endKey: "fill_4" },
             { title: "ARIMA", startKey: "fill_5", endKey: "fill_8" },
             { title: "RNN", startKey: "fill_9", endKey: "fill_12" },
             { title: "SES", startKey: "fill_13", endKey: "fill_16" },
@@ -107,7 +87,7 @@ const Step3 = (props) => {
             { title: "TES", startKey: "fill_21", endKey: "fill_24" },
         ] :
         [
-            { title: "MA", startKey: "fill_1", endKey: "fill_1" },
+            { title: "SMA", startKey: "fill_1", endKey: "fill_1" },
             { title: "ARIMA", startKey: "fill_2", endKey: "fill_2" },
             { title: "RNN", startKey: "fill_3", endKey: "fill_3" },
             { title: "SES", startKey: "fill_4", endKey: "fill_4" },
@@ -324,7 +304,7 @@ const Step3 = (props) => {
                                     <div style={{ position: 'absolute', zIndex: 99, marginLeft: 460, marginTop: 350 }}>
                                         <Button
                                             type="primary"
-                                            onClick={() => selectModel("ma")}
+                                            onClick={() => selectModel("sma")}
                                         >
                                             Select
                                         </Button>
@@ -342,15 +322,15 @@ const Step3 = (props) => {
                                                     line: { color: '#17BECF' }
                                                 }
                                                 ,
-                                                ma_graph,
-                                                ma_graph_0,
-                                                ma_graph_1,
-                                                ma_graph_2,
-                                                ma_graph_3,
+                                                sma_graph,
+                                                sma_graph_0,
+                                                sma_graph_1,
+                                                sma_graph_2,
+                                                sma_graph_3,
                                             ]}
                                             layout={{
                                                 width: 550, height: 400, title: {
-                                                    text: 'MA Model',
+                                                    text: 'SMA Model',
                                                     font: {
                                                         size: 25,
                                                         weight: 'bold' // Làm cho tiêu đề in đậm

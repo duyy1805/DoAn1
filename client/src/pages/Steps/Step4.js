@@ -53,7 +53,7 @@ const Step4 = (props) => {
         ses_graph, ses_graph_0, ses_graph_1, ses_graph_2, ses_graph_3,
         des_graph, des_graph_0, des_graph_1, des_graph_2, des_graph_3,
         tes_graph, tes_graph_0, tes_graph_1, tes_graph_2, tes_graph_3,
-        ma_graph, ma_graph_0, ma_graph_1, ma_graph_2, ma_graph_3,
+        sma_graph, sma_graph_0, sma_graph_1, sma_graph_2, sma_graph_3,
         //error
         mae, mse, missing, selectedModel,
         time_of_TS, data_of_TS
