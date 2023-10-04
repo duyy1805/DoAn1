@@ -556,7 +556,7 @@ class SES(views.APIView):
             return best_alpha, best_mae
 
         def ses_model_tuning(train, test, step, title="Model Tuning - Single Exponential Smoothing"):
-            alphas = np.arange(0.01, 1, 0.01)
+            alphas = np.arange(0.8, 1, 0.01)
             best_alpha, best_mae = ses_optimizer(train, alphas, step=step)
             final_model = SimpleExpSmoothing(
                 train).fit(smoothing_level=best_alpha)
@@ -672,8 +672,8 @@ class DES(views.APIView):
             return best_alpha, best_beta, best_mae
 
         def des_model_tuning(train, test, step, trend, title="Model Tuning - Double Exponential Smoothing"):
-            alphas = np.arange(0.01, 1, 0.010)
-            betas = np.arange(0.01, 1, 0.010)
+            alphas = np.arange(0.01, 1, 0.10)
+            betas = np.arange(0.01, 1, 0.10)
             best_alpha, best_beta, best_mae = des_optimizer(
                 train, alphas, betas, trend=trend, step=step)
             final_model = ExponentialSmoothing(train, trend=trend).fit(
@@ -787,7 +787,7 @@ class TES(views.APIView):
             return best_alpha, best_beta, best_gamma, best_mae
 
         def tes_model_tuning(train, test, step, trend, seasonal, seasonal_periods, title="Model Tuning - Triple Exponential Smoothing"):
-            alphas = betas = gammas = np.arange(0.010, 1, 0.010)
+            alphas = betas = gammas = np.arange(0.10, 1, 0.10)
             abg = list(itertools.product(alphas, betas, gammas))
             best_alpha, best_beta, best_gamma, best_mae = tes_optimizer(
                 train, abg=abg, trend=trend, seasonal=seasonal, seasonal_periods=seasonal_periods, step=step)
