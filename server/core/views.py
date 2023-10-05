@@ -216,7 +216,7 @@ class AutoArima(views.APIView):
             values[timeColumn], errors='coerce')
         values = values.rename(columns={timeColumn: 'Time'})
         values = values.rename(columns={dataColumn: 'Data'})
-
+        values = values[['Time', 'Data']]
         if isinstance(values['Data'][0], str):
             values['Data'] = values['Data'].apply(lambda x: float(
                 x) if x.replace('.', '', 1).isdigit() else None)
@@ -413,7 +413,7 @@ class RNN(views.APIView):
             values[timeColumn], errors='coerce')
         values = values.rename(columns={timeColumn: 'Time'})
         values = values.rename(columns={dataColumn: 'Data'})
-
+        values = values[['Time', 'Data']]
         if isinstance(values['Data'][0], str):
             values['Data'] = values['Data'].apply(lambda x: float(
                 x) if x.replace('.', '', 1).isdigit() else None)
@@ -582,7 +582,7 @@ class SES(views.APIView):
             values[timeColumn], errors='coerce')
         values = values.rename(columns={timeColumn: 'Time'})
         values = values.rename(columns={dataColumn: 'Data'})
-
+        values = values[['Time', 'Data']]
         if isinstance(values['Data'][0], str):
             values['Data'] = values['Data'].apply(lambda x: float(
                 x) if x.replace('.', '', 1).isdigit() else None)
@@ -618,6 +618,7 @@ class SES(views.APIView):
 
             fcast1, mae, mse = ses_model_tuning(
                 train, test, step=test.shape[0])
+            fcast1.index = test.index
             prediction = pd.DataFrame(fcast1, index=test.index)
 
             prediction.columns = ['Predictions']
@@ -700,7 +701,7 @@ class DES(views.APIView):
             values[timeColumn], errors='coerce')
         values = values.rename(columns={timeColumn: 'Time'})
         values = values.rename(columns={dataColumn: 'Data'})
-
+        values = values[['Time', 'Data']]
         if isinstance(values['Data'][0], str):
             values['Data'] = values['Data'].apply(lambda x: float(
                 x) if x.replace('.', '', 1).isdigit() else None)
@@ -739,6 +740,7 @@ class DES(views.APIView):
 
             fcast1, mae, mse = des_model_tuning(
                 train, test, step=test.shape[0], trend='add')
+            fcast1.index = test.index
             prediction = pd.DataFrame(fcast1, index=test.index)
 
             prediction.columns = ['Predictions']
@@ -776,9 +778,8 @@ class TES(views.APIView):
             best_alpha, best_beta, best_gamma, best_mae = None, None, None, float(
                 "inf")
             for comb in abg:
-                tes_model = ExponentialSmoothing(train, trend=trend, seasonal=seasonal, seasonal_periods=seasonal_periods).\
-                    fit(smoothing_level=comb[0], smoothing_slope=comb[1],
-                        smoothing_seasonal=comb[2])
+                tes_model = ExponentialSmoothing(train, trend=trend, seasonal=seasonal, seasonal_periods=seasonal_periods).fit(smoothing_level=comb[0], smoothing_slope=comb[1],
+                                                                                                                               smoothing_seasonal=comb[2])
                 y_pred = tes_model.forecast(step)
                 mae = mean_absolute_error(test, y_pred)
                 if mae < best_mae:
@@ -791,7 +792,7 @@ class TES(views.APIView):
             abg = list(itertools.product(alphas, betas, gammas))
             best_alpha, best_beta, best_gamma, best_mae = tes_optimizer(
                 train, abg=abg, trend=trend, seasonal=seasonal, seasonal_periods=seasonal_periods, step=step)
-            final_model = ExponentialSmoothing(train, trend=trend, seasonal=seasonal).fit(
+            final_model = ExponentialSmoothing(train, trend=trend, seasonal=seasonal, seasonal_periods=seasonal_periods).fit(
                 smoothing_level=best_alpha, smoothing_slope=best_beta, smoothing_seasonal=best_gamma)
 
             # Lưu mô hình vào thư mục "models"
@@ -816,7 +817,7 @@ class TES(views.APIView):
             values[timeColumn], errors='coerce')
         values = values.rename(columns={timeColumn: 'Time'})
         values = values.rename(columns={dataColumn: 'Data'})
-
+        values = values[['Time', 'Data']]
         if isinstance(values['Data'][0], str):
             values['Data'] = values['Data'].apply(lambda x: float(
                 x) if x.replace('.', '', 1).isdigit() else None)
@@ -856,6 +857,7 @@ class TES(views.APIView):
 
             fcast1, mae, mse = tes_model_tuning(
                 train, test, step=test.shape[0], trend='add', seasonal='add', seasonal_periods=12)
+            fcast1.index = test.index
             prediction = pd.DataFrame(fcast1, index=test.index)
 
             prediction.columns = ['Predictions']
@@ -939,7 +941,7 @@ class MA(views.APIView):
             values[timeColumn], errors='coerce')
         values = values.rename(columns={timeColumn: 'Time'})
         values = values.rename(columns={dataColumn: 'Data'})
-
+        values = values[['Time', 'Data']]
         if isinstance(values['Data'][0], str):
             values['Data'] = values['Data'].apply(lambda x: float(
                 x) if x.replace('.', '', 1).isdigit() else None)

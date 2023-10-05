@@ -37,7 +37,7 @@ const Step3 = (props) => {
         column, timeColumn, dataColumn, time_of_TS, data_of_TS, predicted_auto_arima
     } = props;
     useEffect(() => {
-        console.log(sma_graph)
+        console.log(ses_graph)
     }, [])
 
 
